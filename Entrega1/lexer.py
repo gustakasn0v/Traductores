@@ -29,7 +29,7 @@ palabrasReservadas = {
 
 # Defino formalmente los tokens como una lista
 tokens = ['NUMBER','MINUS','EQUAL','PLUS','GREAT','GREATEQ','LESS','LESSEQ',
-          'RESERVED'] + list(palabrasReservadas);
+          'RESERVED','VAR_IDENTIFIER'] + list(palabrasReservadas.values());
           
 
 # Estas son las formulas reconocedoras de tokens que solo necesiten una regexp
@@ -40,7 +40,7 @@ t_GREAT = r'\>'
 t_GREATEQ = r'\>='
 t_LESS = r'\<'
 t_LESSEQ = r'\<='
-t_ignore  = ' \t'
+t_ignore  = ' \t \n'
 
 
 # A continuacion las formulas reconocedoras de tokens que requieran procedimientos
@@ -48,13 +48,13 @@ t_ignore  = ' \t'
 #Especificacion del token para numeros.
 def t_NUMBER(t):
   r'\d+'
-  t.value = int(t.value)
+  t.value = int(t.value,)
   return t
 
 #Especificacion del token para palabras reservadas del lenguaje
 def t_RESERVED(t):
-  r'[a-zA-Z]*[0-9]*'
-  t.type = reserved.get(t.value)
+  r'[a-zA-Z_][a-zA-Z_0-9]*'
+  t.type = palabrasReservadas.get(t.value,'VAR_IDENTIFIER')
   return t
 
 #Definicion de errores para palabras no reconocidas
@@ -67,13 +67,14 @@ lexer = lex.lex()
 
 def main():
   a = 2
-  string = "1-2"
+  string = "program pedro begin declare hola end"
   lexer.input(string)
   while 1:
     mytoken = lexer.token()
     if not mytoken:
       break
-    print(mytoken.value)
+    print "El nombre es " + mytoken.type + " y el contenido es " + str(mytoken.value)
+    
 
 if __name__ == "__main__":
   main()
