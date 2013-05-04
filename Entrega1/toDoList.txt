@@ -1,0 +1,5 @@
+-) Ver si estan todos los símbolos de comparación
+-) Double check de las palabras reservadas, a ver si falta una
+-) Token para comentarios (que pasa con el fin de linea?)
+-) Revisar cosas que se ignoran (solo tengo espacios, tab y saltos de linea)
+-) Correr casos de prueba (propios y de la página)
