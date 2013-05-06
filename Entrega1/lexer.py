@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import ply.lex as lex
-
+#import re
 
 # Defino un diccionario para las palabras reservadas. Se usa en el metodo de 
 # identificacion t_RESERVED
@@ -47,11 +47,10 @@ t_INTERSECTION = r'<>'
 t_EQEQ = r'=='
 t_NEQEQ = r'/='
 t_IN = r'\>\>'
-#t_STRING = r'\"([^\"\\]|(\\\")|((\\)n)|(\\))*\"'
-t_STRING = r'\"[^\"]*[^\\]\"'
+#t_STRING = r'\"[^\\\"]*\"'
 t_LPAREN = r'\('
 t_RPAREN = r'\)'
-t_ignore  = ' \t \n'
+t_ignore  = ' \t'
 
 
 # A continuacion las formulas reconocedoras de tokens que requieran procedimientos
@@ -61,6 +60,11 @@ def t_NUMBER(t):
   r'\d+'
   t.value = int(t.value,)
   return t
+
+# Define a rule so we can track line numbers
+def t_newline(t):
+  r'\n+'
+  t.lexer.lineno = len(t.value)
 
 def t_COMMA(t):
   r','
@@ -76,6 +80,26 @@ def t_COMMENT(t):
   return t
 
 
+
+def t_STRING(t):
+  r'\"(\\n|\\\\|\\\"|[^\\\"])*\"'
+
+  
+  return t
+  
+# Calcula la columna donde esta ubicado un token
+def find_column(input,token):
+  last_cr = input.rfind('\n',0,token.lexpos)
+  if last_cr < 0:
+    last_cr = 0
+  column = (token.lexpos - last_cr) + 1
+  return column
+
+# Define a rule so we can track line numbers
+#def t_newline(t):
+#  r'\n+'
+#  t.lexer.lineno = len(t.value)
+
 #Especificacion del token para palabras reservadas del lenguaje
 def t_RESERVED(t):
   r'[a-zA-Z_][a-zA-Z_0-9]*'
@@ -88,23 +112,16 @@ def t_RESERVED(t):
 def t_error(t):
   print("Illegal expression")
   t.lexer.skip(1)
-	
-	
+
+string = str(open('entrada','r').read())
+#print string.read()
+print string
 lexer = lex.lex()
+lexer.input(string)
+while 1:
+  mytoken = lexer.token()
+  if not mytoken:
+    break
+  print mytoken
+   #print str(lexer.lineno)
 
-def main():
-  a = 2
-  string = '''program begin declare a,b,c as range \n a = a >> b  \n write("hola")  \n ///esto es , comentario \n a/=b end \n
-"hola esto \\" es" \n es"'''
-  print string
-
-  lexer.input(string)
-  while 1:
-    mytoken = lexer.token()
-    if not mytoken:
-      break
-    #print "El nombre es " + mytoken.type + " y el contenido es " + str(mytoken.value)
-    print mytoken
-
-if __name__ == "__main__":
-  main()
