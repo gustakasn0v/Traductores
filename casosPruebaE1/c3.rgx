@@ -1,0 +1,28 @@
+//Caso 3: Un programa que calcula el n-esimo numero perfecto.
+// No posee errores lexicograficos.
+
+// Se dice que un numero es perfecto cuando es igual a la suma
+// de todos sus divisores propios positivos.
+
+program
+begin
+    declare N, x, y as int
+    write "Ingrese el valor de N: ";
+    read N;
+    x = 1;
+    y = 1;
+    
+    for contador in 1..N do
+        begin
+            x = x*2
+        end
+    ;
+    
+    for contador in 1..N+1 do
+        begin
+            y = y*2
+        end
+    ;
+    
+    writeln "El ", N, " numero perfecto es: ", (x*(y-1))
+end

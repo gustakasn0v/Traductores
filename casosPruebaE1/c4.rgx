@@ -1,0 +1,68 @@
+//Caso 4, con errores
+
+progam
+begin
+{
+    begin
+        declare %h, &s as int;
+        declare ^m, ^n as range
+        m = 1..7;
+        n = 42..42;
+        
+        begin
+            declare var1, var2 as bool
+            var1 = true;
+            var2 = false;
+            if (var1 or false) then
+                if $(var2 and var2) then
+                    writeln "llegue hasta aqui"
+                else
+                    writeln "noup, llegue hasta aqui"
+            else
+                if var1 != var2 then
+                    begin
+                        declare var1 as int
+                        var1 = var1 % 2,
+                        /* Hola no soy un comentario */
+                    end
+                else
+                    var7 := var1 || var2
+            elif (True and TRUE && falsE) then write "Not here my friend."
+        end;
+        
+        for @ in m do
+            bejin
+                declare ), ~, \ as int
+                begin
+                    declare a, b, c as rangex;
+                            x as int
+                    read x;
+                    read a;
+                    read b;
+                    read c;
+                    read nacanaca;
+                    //Esta ñ deberia ser ignorada, igual que este ¡
+                    case x of
+                        a -> write "me meti en a: ", a
+                        b -> writeln 'me meti en b con problemas'
+                        c -> writeee "no puedo decir nada"
+                    end
+                end
+            end
+        end;
+        
+        begin
+            declare rangoA, _rangoB as range;
+                    enteroA, _enteroB as int;
+                    boolA, _boolB as bool
+            begin
+                boolA = rangoA == rangoB;
+                boolA = enteroA \= _enteroB;
+                boolA = enteroA /= _enteroB;
+                boolA = enteroA > _boolB;
+                boolA = _enteroB < enteroA;
+                boolA -= not((enteroA >= _enteroB) or (enteroA <= _enteroB))
+            end
+        end
+}
+end

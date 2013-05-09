@@ -1,0 +1,30 @@
+//Caso 1, tiene errores
+
+Program // Nótese que esto NO es la palabra clave 'program'
+Begin
+    declare x, exponente as int
+    read exponente;
+    x = x^exponente;
+    read READ;
+    
+    begin
+        _declare x as Boolean
+        If x { 
+            print "writeln \" Hola Mundo! \" " 
+        } else {
+            writeln "esto es un salto de linea: \n\n\n\\",
+                    "en verdad fueron 3 saltos + 1 backslash"
+        }
+    end
+    
+    begin
+        Declare Ratoi, _length As Int;
+                _top as Bool;
+                Bottom as Range
+                
+        ratoi = 5;
+        writeln ratoi;
+        _top = Not((False And True) Or top) and bottom
+        _length = length(1..100)
+    end
+End

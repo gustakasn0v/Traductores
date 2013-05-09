@@ -1,0 +1,53 @@
+//Caso 2, tiene errores
+
+
+program
+    declare rangoA, _rangoB as range;
+    enteroA, _enteroB, entero as int;
+    boolA, _boolB as bool
+
+    begin
+        declare ola, ke, ase as int
+        ola := 5*ke;
+        ke = 1++;
+        ase = #46;
+        //Hola, soy un comentario
+        writeLn ola, ke, ase;
+    write "JOJOOJO!@#$%";
+        ase = ola mod ke;
+        begin
+            declare chais as bool
+            chais = tRuE!!;
+            if chais then writeln ola else writeln "JEJE"
+        end
+        #0l4 Qu3 453...?
+    end;
+    
+    begin
+        declare x as int;
+        write length(rangoA);
+        writeln Length(_rangoB);
+        x = ratoi(1..7);
+        x = top(_rangoB);
+        x = bottom(rangoA)
+    end;        
+
+    begin
+        rangoA = rangoA .. (1..5);
+        rangoA = _rangoB .. rangoA;
+        rangoA = rangoA + _rangoB;
+        rangoA = rangoA ++ (-100..-1);
+        rangoA = rangoA -_rangoB;
+        rangoA = rangoA <> (-5..75);
+        rangoA = rangoA >< _rangoB;
+        rangoA = rangoA * 8;
+        rangoA = rangoA ** _rangoB;
+        boolA = 7 >> rangoA;
+        _boolB = _rangoB << 7;
+    end;
+        
+    ¿begin
+        enteroA+=enteroA*_enteroB;
+        enteroA = (5%10)/_enteroB,
+        _enteroB= [5]*(enteroA:1)+(a..b);
+    end?
