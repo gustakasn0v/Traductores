@@ -31,13 +31,16 @@ palabrasReservadas = {
 }
 
 # Defino formalmente los tokens como una lista
-tokens = ['NUMBER','MINUS','EQUAL','PLUS','GREAT','GREATEQ','LESS','LESSEQ','INTERSECTION',
-          'RESERVED','VAR_IDENTIFIER','COMMENT','COMMA','SEMICOLON','EQEQ','NEQEQ','IN','STRING','LPAREN','RPAREN'] + list(palabrasReservadas.values());
+tokens = ['NUMBER','MINUS','EQUAL','TIMES','DIVIDE','MOD','PLUS','GREAT','GREATEQ','LESS','LESSEQ','INTERSECTION',
+          'RESERVED','RANGE','VAR_IDENTIFIER','COMMENT','COMMA','SEMICOLON','EQEQ','NEQEQ','IN','STRING','LPAREN','RPAREN'] + list(palabrasReservadas.values());
           
 
 # Estas son las formulas reconocedoras de tokens que solo necesiten una regexp
 t_MINUS = r'\-'
 t_EQUAL = r'='
+t_TIMES = r'\*'
+t_DIVIDE = r'/'
+t_MOD = r'\%'
 t_PLUS = r'\+'
 t_GREAT = r'>'
 t_GREATEQ = r'>='
@@ -47,9 +50,9 @@ t_INTERSECTION = r'<>'
 t_EQEQ = r'=='
 t_NEQEQ = r'/='
 t_IN = r'\>\>'
-#t_STRING = r'\"[^\\\"]*\"'
 t_LPAREN = r'\('
 t_RPAREN = r'\)'
+t_RANGE = r'\.\.'
 t_ignore  = ' \t'
 
 
@@ -110,18 +113,15 @@ def t_RESERVED(t):
 
 #Definicion de errores para palabras no reconocidas
 def t_error(t):
-  print("Illegal expression")
+  print("Error: caracter inesperado " + t.value[0] + " en tus nalgas"),
   t.lexer.skip(1)
 
-string = str(open('entrada','r').read())
-#print string.read()
-print string
+string = str(open('c2.rgx','r').read())
+print(string)
 lexer = lex.lex()
 lexer.input(string)
 while 1:
   mytoken = lexer.token()
   if not mytoken:
     break
-  print mytoken
-   #print str(lexer.lineno)
 
