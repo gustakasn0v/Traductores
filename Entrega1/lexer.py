@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import ply.lex as lex
-#import re
+import sys
 
 # Defino un diccionario para las palabras reservadas. Se usa en el metodo de 
 # identificacion t_RESERVED
@@ -67,7 +67,7 @@ def t_NUMBER(t):
 # Define a rule so we can track line numbers
 def t_newline(t):
   r'\n+'
-  t.lexer.lineno = len(t.value)
+  t.lexer.lineno += len(t.value)
 
 def t_COMMA(t):
   r','
@@ -80,14 +80,10 @@ def t_SEMICOLON(t):
 #Definicion de una expresion regular para comentarios de rangeX
 def t_COMMENT(t):
   r'//.*'
-  return t
-
-
+  
 
 def t_STRING(t):
   r'\"(\\n|\\\\|\\\"|[^\\\"])*\"'
-
-  
   return t
   
 # Calcula la columna donde esta ubicado un token
@@ -100,8 +96,8 @@ def find_column(input,token):
 
 # Define a rule so we can track line numbers
 #def t_newline(t):
-#  r'\n+'
-#  t.lexer.lineno = len(t.value)
+  #r'\n+'
+  #t.lexer.lineno += len(t.value)
 
 #Especificacion del token para palabras reservadas del lenguaje
 def t_RESERVED(t):
@@ -109,19 +105,33 @@ def t_RESERVED(t):
   t.type = palabrasReservadas.get(t.value,'VAR_IDENTIFIER')
   return t
 
-
-
 #Definicion de errores para palabras no reconocidas
 def t_error(t):
-  print("Error: caracter inesperado " + t.value[0] + " en tus nalgas"),
+  print("Error: caracter inesperado " + t.value[0] + " en la linea " + str(t.lineno) + ", columna " + str(find_column(t.lexer.lexdata,t)-1)) 
+  t.lexer.cl=1
   t.lexer.skip(1)
+  
+def main():
+  if (len(sys.argv) != 2):
+    print("Usage: python leyer.py nombreArchivo")
+    return -1
+  string = str(open(str(sys.argv[1]),'r').read())
+  lexer = lex.lex()
+  lexer.cl = 0
+  lexer.input(string)
+  out=""
+  while 1:
+    mytoken = lexer.token()
+    if not mytoken:
+      break
+    out= out + str(mytoken.type)
+    if (str(mytoken.type) == "VAR_IDENTIFIER"):
+      out += " < "+ str(mytoken.value) + " > " 
+    out += " (Linea " + str(mytoken.lineno) + ", Columna " + str(find_column(lexer.lexdata,mytoken)-1) + ')\n'
+      
+  if (lexer.cl!=1):
+    lexer.cl=0
+    print(out),
 
-string = str(open('c2.rgx','r').read())
-print(string)
-lexer = lex.lex()
-lexer.input(string)
-while 1:
-  mytoken = lexer.token()
-  if not mytoken:
-    break
-
+if __name__ == '__main__':
+  main()
