@@ -1,6 +1,8 @@
 IngenieriaDelSoftware
 =====================
 Proyecto 1 : Interpretador del Lenguaje RangeX
+Wilmer Bandres - carnet 1010055
+Gustavo El Khoury - carnet 1010226
 
 -)Descripción: Este proyecto consiste en implementar, utilizando el lenguaje
   imperativo Python, una versión simplificada de un interpretador para el 
