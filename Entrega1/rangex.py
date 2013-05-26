@@ -1,3 +1,7 @@
+# Proyecto Traductores e Interpretadores. Entrega 1
+# Realizado por:
+# Wilmer Bandres. 1010055
+# Gustavo El Khoury. 1010226
 # -*- coding: utf-8 -*-
 import ply.lex as lex
 import sys
@@ -27,10 +31,14 @@ palabrasReservadas = {
   'while'   : 'INST_while',
   'or'      : 'OR',
   'and'     : 'AND',
-  'not'     : 'NOT'
+  'not'     : 'NOT',
+  'rtoi'	: 'RTOI',
+  'length'  : 'LENGTH',
+  'top'     : 'TOP',
+  'bottom'  : 'BOTTOM'
 }
 
-# Defino formalmente los tokens como una lista
+# Defino formalmente los tokens como una lista, y le concateno el diccionario
 tokens = ['NUMBER','MINUS','EQUAL','TIMES','DIVIDE','MOD','PLUS','GREAT','GREATEQ','LESS','LESSEQ','INTERSECTION',
           'RESERVED','RANGE','VAR_IDENTIFIER','COMMENT','COMMA','SEMICOLON','EQEQ','NEQEQ','IN','STRING','LPAREN','RPAREN'] + list(palabrasReservadas.values());
           
@@ -58,46 +66,43 @@ t_ignore  = ' \t'
 
 # A continuacion las formulas reconocedoras de tokens que requieran procedimientos
 
-#Especificacion del token para numeros.
+# Especificacion del token para numeros.
 def t_NUMBER(t):
   r'\d+'
   t.value = int(t.value,)
   return t
 
-# Define a rule so we can track line numbers
+# Especificacion del token que detecta saltos de linea
 def t_newline(t):
   r'\n+'
   t.lexer.lineno += len(t.value)
 
+# Especificacion del token que detecta comas
 def t_COMMA(t):
   r','
   return t
 
+# Especificacion del token que detecta punto y comas
 def t_SEMICOLON(t):
   r';'
   return t
 
-#Definicion de una expresion regular para comentarios de rangeX
+# Definicion del token para comentarios de rangeX
 def t_COMMENT(t):
   r'//.*'
   
-
+# Definicion del token que reconoce strings. Acepta comillas escapadas
 def t_STRING(t):
   r'\"(\\n|\\\\|\\\"|[^\\\"])*\"'
   return t
   
 # Calcula la columna donde esta ubicado un token
 def find_column(input,token):
-  last_cr = input.rfind('\n',0,token.lexpos)
-  if last_cr < 0:
-    last_cr = 0
-  column = (token.lexpos - last_cr) + 1
+  ultimoSalto = input.rfind('\n',0,token.lexpos)
+  if ultimoSalto < 0:
+    ultimoSalto = 0
+  column = (token.lexpos - ultimoSalto) + 1
   return column
-
-# Define a rule so we can track line numbers
-#def t_newline(t):
-  #r'\n+'
-  #t.lexer.lineno += len(t.value)
 
 #Especificacion del token para palabras reservadas del lenguaje
 def t_RESERVED(t):
@@ -115,8 +120,14 @@ def main():
   if (len(sys.argv) != 2):
     print("Usage: python leyer.py nombreArchivo")
     return -1
+  
+  # Se abre el archivo con permisos de lectura
   string = str(open(str(sys.argv[1]),'r').read())
+  
+  # Se crea el lexer
   lexer = lex.lex()
+  
+  # Variable que determina si hubo un error procesando la entrada
   lexer.cl = 0
   lexer.input(string)
   out=""
@@ -125,6 +136,8 @@ def main():
     if not mytoken:
       break
     out= out + str(mytoken.type)
+    
+    # Se colocan los nombres de variables entre < y >
     if (str(mytoken.type) == "VAR_IDENTIFIER"):
       out += " < "+ str(mytoken.value) + " > " 
     out += " (Linea " + str(mytoken.lineno) + ", Columna " + str(find_column(lexer.lexdata,mytoken)-1) + ')\n'
