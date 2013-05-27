@@ -1,4 +1,4 @@
-IngenieriaDelSoftware
+Traductores e Interpretadores
 =====================
 Proyecto 1 : Interpretador del Lenguaje RangeX
 Wilmer Bandres - carnet 1010055
