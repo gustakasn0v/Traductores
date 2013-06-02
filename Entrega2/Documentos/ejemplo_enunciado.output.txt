@@ -1,0 +1,119 @@
+BLOQUE
+  READ
+    variable: a
+  SEPARADOR
+  READ
+    variable: b
+  SEPARADOR
+  ASIGNACION
+    var: x
+    val: EXPRESION_BIN
+           operador: construccion
+           operando izq: VARIABLE
+                           nombre: a
+           operando der: VARIABLE
+                           nombre: b
+  SEPARADOR
+  ITERACION_DET
+    variable: i
+    rango: VARIABLE
+             nombre: x
+    instruccion: WRITELN
+                    expresion: CADENA 
+                                 valor: Variable "i" es igual a:
+                    expresion: VARIABLE
+                                 nombre: i				  
+  SEPARADOR
+  READ
+    variable: b
+  SEPARADOR
+  ITERACION_DET
+    variable: j
+    rango: VARIABLE
+             nombre: y
+    instruccion: WRITE
+                    expresion: VARIABLE
+                                 nombre: j				  
+                    expresion: CADENA 
+                                 valor: ,
+  SEPARADOR
+  ASIGNACION
+    var: a
+    val: EXPRESION_BIN
+           operador: suma
+           operando izq: CONSTANTE_ENTERA
+                           valor: 3
+           operando der: VARIABLE
+                           nombre: b
+  SEPARADOR
+  ASIGNACION
+    var: b
+    val: EXPRESION_UN
+           operador: menos unario
+           operando: CONSTANTE_ENT
+                       valor: 4
+  SEPARADOR
+  CASE
+    exp: VARIABLE
+           nombre: b
+    caso: 
+      ran: VARIABLE
+             nombre: x
+      ins: WRITELN
+              expresion: VARIABLE
+                           nombre: b
+    caso: 
+      ran: VARIABLE
+             nombre: y
+      ins: WRITELN
+              expresion: VARIABLE
+                           nombre: a
+    caso: 
+      ran: EXPRESION_BIN
+             operador: construccion
+             operando izq: VARIABLE
+                             nombre: a
+             operando der: VARIABLE
+                             nombre: b	
+      ins: BLOQUE
+             WRITELN
+               expresion: VARIABLE
+                            nombre: a
+               expresion: VARIABLE
+                            nombre: b						  
+             SEPARADOR
+             ASIGNACION
+               var: z
+               val: EXPRESION_BIN
+                      operador: interseccion
+                      operando izq: VARIABLE
+                                      nombre: x
+                      operando der: VARIABLE
+                                      nombre: y
+             SEPARADOR
+             WRITELN
+               expresion: FUNCION_EMB
+                      nombre: bottom
+                      argumento: VARIABLE
+                                         nombre: z
+               expresion: CADENA 
+                            valor: ..
+               expresion: FUNCION_EMB
+                      nombre: top
+                      argumento: VARIABLE
+                                         nombre: z
+  SEPARADOR
+  ITERACION_INDET
+    condicion: EXPRESION_BIN
+                 operador: menor que
+                 operando izq: VARIABLE
+                                 nombre: i
+                 operando der: CONSTANTE_ENT
+                                 valor: 10
+    instruccion: BLOQUE
+                   READ
+                     variable: i
+                   SEPARADOR
+                   WRITE
+                     expresion: CADENA
+                                  valor: Still here!

@@ -1,0 +1,30 @@
+####################################
+#  Traductores e Interpretadores   #
+#             Entrega 2            #
+#         Gramática asociada       #
+####################################
+# Realizada por:                   #
+# Wilmer Bandres 10-10055          #
+# Gustavo El Khoury 10-10226       #
+####################################
+
+S               -> INST_PROGRAM VAR_IDENTIFIER Bloque_Inst
+
+Bloque_Inst     -> INST_BEGIN Lista_Inst INST_END
+
+Lista_Inst      -> Inst; | Inst ; Lista_Inst
+
+Inst            -> Inst_Declare | Inst_Asignacion | Inst_Lectura | Inst_Salida
+                   Inst_If | Inst Case | Inst_For | Inst_While
+               
+Inst_Declare    -> INST_DECLARE Lista_Declare
+
+Lista_Declare   -> Lista_Variables INST_AS Tipo
+
+Tipo            -> TYPEDEF_INT | TYPEDEF_BOOL | TYPEDEF_RANGE
+
+Lista_Variables -> VAR_IDENTIFIER | VAR_IDENTIFIER ; Lista_Variables
+
+Inst_Asignacion -> VAR_IDENTIFIER = Expresion
+
+Expresion       -> Expresion_Booleana | Expresion_Aritmetica | Rango

@@ -8,7 +8,7 @@ import ply.yacc as yacc
 from lexer import tokens
 
 def p_program_structure(p):
-    'programa : INST_PROGRAM VAR_IDENTIFIER; '
+    'programa : INST_PROGRAM2 VAR_IDENTIFIER; '
     
     yacc.yacc()
     
