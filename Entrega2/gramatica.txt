@@ -15,7 +15,7 @@ Bloque_Inst     -> INST_BEGIN Lista_Inst INST_END
 Lista_Inst      -> Inst; | Inst ; Lista_Inst
 
 Inst            -> Inst_Declare | Inst_Asignacion | Inst_Lectura | Inst_Salida
-                   Inst_If | Inst Case | Inst_For | Inst_While
+                   Inst_If | Inst_Case | Inst_For | Inst_While
                
 Inst_Declare    -> INST_DECLARE Lista_Declare
 
@@ -27,4 +27,34 @@ Lista_Variables -> VAR_IDENTIFIER | VAR_IDENTIFIER ; Lista_Variables
 
 Inst_Asignacion -> VAR_IDENTIFIER = Expresion
 
-Expresion       -> Expresion_Booleana | Expresion_Aritmetica | Rango
+Expresion       -> Expresion_Bool | Expresion_Aritm | Rango
+
+Inst_Lectura    -> INST_READ VAR_IDENTIFIER
+
+Inst_Salida     -> INST_WRITE Lista_cStrings
+
+Lista_cStrings  -> VarString | VarString ; Lista_cStrings
+
+VarString       -> VAR_IDENTIFIER | STRING
+
+Inst_If         -> INST_IF Expresion_Booleana THEN ResultIf SiNo
+
+SiNo            -> lambda | INST_ELSE ResultBlock
+
+ResultBlock     -> Inst | Bloque_Inst
+
+Inst_Case       -> INST_CASE Expresion_Aritm OF ListaRangos
+
+ListaRangos     -> RangoAccion | RangoAccion ListaRangos
+
+RangoAccion     -> Rango CASE_ASSIGN Inst
+
+Inst_For        -> INST_FOR VAR_IDENTIFIER INST_IN Rango INST_DO ResultBlock
+
+Inst_For        -> INST_WHILE Expresion_Bool INST_DO ResultBlock
+
+Expresion_Bool
+
+Expresion_Aritm
+
+Rango 
