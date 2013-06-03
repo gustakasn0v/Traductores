@@ -7,8 +7,27 @@
 import ply.yacc as yacc
 from lexer import tokens
 
-def p_program_structure(p):
-    'programa : INST_PROGRAM2 VAR_IDENTIFIER; '
+
+def p_program(p):
+    'program : INST_PROGRAM VAR_IDENTIFIER SEMICOLON'
+    p[0] = p[1] + p[2] + p[3]
+    #print p
     
-    yacc.yacc()
+
+def p_error(p):
+    print "Syntax error in input!"
+
+# Build the parser
+parser = yacc.yacc()
+
+while True:
+   try:
+       s = raw_input('calc > ')
+   except EOFError:
+       break
+   if not s: continue
+   result = parser.parse(s)
+   print result
+
+
     
