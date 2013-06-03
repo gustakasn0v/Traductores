@@ -1,0 +1,156 @@
+Created by PLY version 3.4 (http://www.dabeaz.com/ply)
+
+Unused terminals:
+
+    GREAT
+    INST_DECLARE
+    INST_IN
+    INST_WRITE
+    LESS
+    EQEQ
+    TOP
+    NUMBER
+    INST_END
+    INST_FOR
+    INST_WHILE
+    INST_READ
+    INST_BEGIN
+    MINUS
+    STRING
+    COMMENT
+    INTERSECTION
+    RPAREN
+    NEQEQ
+    TYPEDEF_RANGE
+    INST_OF
+    INST_AS
+    PLUS
+    COMMA
+    CASE_ASSIGN
+    INST_ELSE
+    RESERVED
+    DIVIDE
+    TYPEDEF_BOOL
+    EQUAL
+    RANGE
+    INST_DO
+    LPAREN
+    IN
+    TIMES
+    INST_CASE
+    AND
+    INST_THEN
+    INST_IF
+    GREATEQ
+    BOTTOM
+    TYPEDEF_INT
+    LENGTH
+    LESSEQ
+    RTOI
+    NOT
+    INST_WRITELN
+    OR
+    MOD
+
+Grammar
+
+Rule 0     S' -> program
+Rule 1     program -> INST_PROGRAM VAR_IDENTIFIER SEMICOLON
+
+Terminals, with rules where they appear
+
+AND                  : 
+BOTTOM               : 
+CASE_ASSIGN          : 
+COMMA                : 
+COMMENT              : 
+DIVIDE               : 
+EQEQ                 : 
+EQUAL                : 
+GREAT                : 
+GREATEQ              : 
+IN                   : 
+INST_AS              : 
+INST_BEGIN           : 
+INST_CASE            : 
+INST_DECLARE         : 
+INST_DO              : 
+INST_ELSE            : 
+INST_END             : 
+INST_FOR             : 
+INST_IF              : 
+INST_IN              : 
+INST_OF              : 
+INST_PROGRAM         : 1
+INST_READ            : 
+INST_THEN            : 
+INST_WHILE           : 
+INST_WRITE           : 
+INST_WRITELN         : 
+INTERSECTION         : 
+LENGTH               : 
+LESS                 : 
+LESSEQ               : 
+LPAREN               : 
+MINUS                : 
+MOD                  : 
+NEQEQ                : 
+NOT                  : 
+NUMBER               : 
+OR                   : 
+PLUS                 : 
+RANGE                : 
+RESERVED             : 
+RPAREN               : 
+RTOI                 : 
+SEMICOLON            : 1
+STRING               : 
+TIMES                : 
+TOP                  : 
+TYPEDEF_BOOL         : 
+TYPEDEF_INT          : 
+TYPEDEF_RANGE        : 
+VAR_IDENTIFIER       : 1
+error                : 
+
+Nonterminals, with rules where they appear
+
+program              : 0
+
+Parsing method: LALR
+
+state 0
+
+    (0) S' -> . program
+    (1) program -> . INST_PROGRAM VAR_IDENTIFIER SEMICOLON
+
+    INST_PROGRAM    shift and go to state 2
+
+    program                        shift and go to state 1
+
+state 1
+
+    (0) S' -> program .
+
+
+
+state 2
+
+    (1) program -> INST_PROGRAM . VAR_IDENTIFIER SEMICOLON
+
+    VAR_IDENTIFIER  shift and go to state 3
+
+
+state 3
+
+    (1) program -> INST_PROGRAM VAR_IDENTIFIER . SEMICOLON
+
+    SEMICOLON       shift and go to state 4
+
+
+state 4
+
+    (1) program -> INST_PROGRAM VAR_IDENTIFIER SEMICOLON .
+
+    $end            reduce using rule 1 (program -> INST_PROGRAM VAR_IDENTIFIER SEMICOLON .)
+

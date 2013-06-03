@@ -21,12 +21,16 @@ def p_error(p):
 parser = yacc.yacc()
 
 while True:
-   try:
-       s = raw_input('calc > ')
-   except EOFError:
-       break
-   if not s: continue
-   result = parser.parse(s)
+    
+   #try:
+   #    s = raw_input('calc > ')
+   #except EOFError:
+   #    break
+   #if not s: continue
+   string = str(open('prueba1.txt','r').read())
+   print string
+   
+   result = parser.parse(string)
    print result
 
 
