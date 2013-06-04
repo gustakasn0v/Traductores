@@ -1,0 +1,5 @@
+program
+begin
+	declare x1,x2,x3 as int;
+	declare x1,x2 as range
+end
