@@ -3,34 +3,27 @@ Created by PLY version 3.4 (http://www.dabeaz.com/ply)
 Unused terminals:
 
     GREAT
-    INST_DECLARE
     INST_IN
     INST_WRITE
     LESS
     EQEQ
     TOP
     NUMBER
-    INST_END
     INST_FOR
     INST_WHILE
     INST_READ
-    INST_BEGIN
     MINUS
     STRING
     COMMENT
     INTERSECTION
     RPAREN
     NEQEQ
-    TYPEDEF_RANGE
     INST_OF
-    INST_AS
     PLUS
-    COMMA
     CASE_ASSIGN
     INST_ELSE
     RESERVED
     DIVIDE
-    TYPEDEF_BOOL
     EQUAL
     RANGE
     INST_DO
@@ -43,7 +36,6 @@ Unused terminals:
     INST_IF
     GREATEQ
     BOTTOM
-    TYPEDEF_INT
     LENGTH
     LESSEQ
     RTOI
@@ -55,14 +47,26 @@ Unused terminals:
 Grammar
 
 Rule 0     S' -> program
-Rule 1     program -> INST_PROGRAM VAR_IDENTIFIER SEMICOLON
+Rule 1     program -> INST_PROGRAM Bloque_Inst
+Rule 2     Bloque_Inst -> INST_BEGIN Lista_Inst INST_END
+Rule 3     Bloque_Inst -> Inst
+Rule 4     Lista_Inst -> Inst
+Rule 5     Lista_Inst -> Inst SEMICOLON Lista_Inst
+Rule 6     Inst -> Inst_Declare
+Rule 7     Inst_Declare -> INST_DECLARE Lista_Declare
+Rule 8     Lista_Declare -> Lista_Variables INST_AS Tipo
+Rule 9     Lista_Variables -> VAR_IDENTIFIER
+Rule 10    Lista_Variables -> VAR_IDENTIFIER COMMA Lista_Variables
+Rule 11    Tipo -> TYPEDEF_INT
+Rule 12    Tipo -> TYPEDEF_BOOL
+Rule 13    Tipo -> TYPEDEF_RANGE
 
 Terminals, with rules where they appear
 
 AND                  : 
 BOTTOM               : 
 CASE_ASSIGN          : 
-COMMA                : 
+COMMA                : 10
 COMMENT              : 
 DIVIDE               : 
 EQEQ                 : 
@@ -70,13 +74,13 @@ EQUAL                :
 GREAT                : 
 GREATEQ              : 
 IN                   : 
-INST_AS              : 
-INST_BEGIN           : 
+INST_AS              : 8
+INST_BEGIN           : 2
 INST_CASE            : 
-INST_DECLARE         : 
+INST_DECLARE         : 7
 INST_DO              : 
 INST_ELSE            : 
-INST_END             : 
+INST_END             : 2
 INST_FOR             : 
 INST_IF              : 
 INST_IN              : 
@@ -103,18 +107,25 @@ RANGE                :
 RESERVED             : 
 RPAREN               : 
 RTOI                 : 
-SEMICOLON            : 1
+SEMICOLON            : 5
 STRING               : 
 TIMES                : 
 TOP                  : 
-TYPEDEF_BOOL         : 
-TYPEDEF_INT          : 
-TYPEDEF_RANGE        : 
-VAR_IDENTIFIER       : 1
+TYPEDEF_BOOL         : 12
+TYPEDEF_INT          : 11
+TYPEDEF_RANGE        : 13
+VAR_IDENTIFIER       : 9 10
 error                : 
 
 Nonterminals, with rules where they appear
 
+Bloque_Inst          : 1
+Inst                 : 3 4 5
+Inst_Declare         : 6
+Lista_Declare        : 7
+Lista_Inst           : 2 5
+Lista_Variables      : 8 10
+Tipo                 : 8
 program              : 0
 
 Parsing method: LALR
@@ -122,7 +133,7 @@ Parsing method: LALR
 state 0
 
     (0) S' -> . program
-    (1) program -> . INST_PROGRAM VAR_IDENTIFIER SEMICOLON
+    (1) program -> . INST_PROGRAM Bloque_Inst
 
     INST_PROGRAM    shift and go to state 2
 
@@ -136,21 +147,199 @@ state 1
 
 state 2
 
-    (1) program -> INST_PROGRAM . VAR_IDENTIFIER SEMICOLON
+    (1) program -> INST_PROGRAM . Bloque_Inst
+    (2) Bloque_Inst -> . INST_BEGIN Lista_Inst INST_END
+    (3) Bloque_Inst -> . Inst
+    (6) Inst -> . Inst_Declare
+    (7) Inst_Declare -> . INST_DECLARE Lista_Declare
 
-    VAR_IDENTIFIER  shift and go to state 3
+    INST_BEGIN      shift and go to state 7
+    INST_DECLARE    shift and go to state 5
 
+    Inst                           shift and go to state 6
+    Inst_Declare                   shift and go to state 3
+    Bloque_Inst                    shift and go to state 4
 
 state 3
 
-    (1) program -> INST_PROGRAM VAR_IDENTIFIER . SEMICOLON
+    (6) Inst -> Inst_Declare .
 
-    SEMICOLON       shift and go to state 4
+    SEMICOLON       reduce using rule 6 (Inst -> Inst_Declare .)
+    INST_END        reduce using rule 6 (Inst -> Inst_Declare .)
+    $end            reduce using rule 6 (Inst -> Inst_Declare .)
 
 
 state 4
 
-    (1) program -> INST_PROGRAM VAR_IDENTIFIER SEMICOLON .
+    (1) program -> INST_PROGRAM Bloque_Inst .
 
-    $end            reduce using rule 1 (program -> INST_PROGRAM VAR_IDENTIFIER SEMICOLON .)
+    $end            reduce using rule 1 (program -> INST_PROGRAM Bloque_Inst .)
+
+
+state 5
+
+    (7) Inst_Declare -> INST_DECLARE . Lista_Declare
+    (8) Lista_Declare -> . Lista_Variables INST_AS Tipo
+    (9) Lista_Variables -> . VAR_IDENTIFIER
+    (10) Lista_Variables -> . VAR_IDENTIFIER COMMA Lista_Variables
+
+    VAR_IDENTIFIER  shift and go to state 8
+
+    Lista_Variables                shift and go to state 9
+    Lista_Declare                  shift and go to state 10
+
+state 6
+
+    (3) Bloque_Inst -> Inst .
+
+    $end            reduce using rule 3 (Bloque_Inst -> Inst .)
+
+
+state 7
+
+    (2) Bloque_Inst -> INST_BEGIN . Lista_Inst INST_END
+    (4) Lista_Inst -> . Inst
+    (5) Lista_Inst -> . Inst SEMICOLON Lista_Inst
+    (6) Inst -> . Inst_Declare
+    (7) Inst_Declare -> . INST_DECLARE Lista_Declare
+
+    INST_DECLARE    shift and go to state 5
+
+    Inst_Declare                   shift and go to state 3
+    Inst                           shift and go to state 11
+    Lista_Inst                     shift and go to state 12
+
+state 8
+
+    (9) Lista_Variables -> VAR_IDENTIFIER .
+    (10) Lista_Variables -> VAR_IDENTIFIER . COMMA Lista_Variables
+
+    INST_AS         reduce using rule 9 (Lista_Variables -> VAR_IDENTIFIER .)
+    COMMA           shift and go to state 13
+
+
+state 9
+
+    (8) Lista_Declare -> Lista_Variables . INST_AS Tipo
+
+    INST_AS         shift and go to state 14
+
+
+state 10
+
+    (7) Inst_Declare -> INST_DECLARE Lista_Declare .
+
+    SEMICOLON       reduce using rule 7 (Inst_Declare -> INST_DECLARE Lista_Declare .)
+    INST_END        reduce using rule 7 (Inst_Declare -> INST_DECLARE Lista_Declare .)
+    $end            reduce using rule 7 (Inst_Declare -> INST_DECLARE Lista_Declare .)
+
+
+state 11
+
+    (4) Lista_Inst -> Inst .
+    (5) Lista_Inst -> Inst . SEMICOLON Lista_Inst
+
+    INST_END        reduce using rule 4 (Lista_Inst -> Inst .)
+    SEMICOLON       shift and go to state 15
+
+
+state 12
+
+    (2) Bloque_Inst -> INST_BEGIN Lista_Inst . INST_END
+
+    INST_END        shift and go to state 16
+
+
+state 13
+
+    (10) Lista_Variables -> VAR_IDENTIFIER COMMA . Lista_Variables
+    (9) Lista_Variables -> . VAR_IDENTIFIER
+    (10) Lista_Variables -> . VAR_IDENTIFIER COMMA Lista_Variables
+
+    VAR_IDENTIFIER  shift and go to state 8
+
+    Lista_Variables                shift and go to state 17
+
+state 14
+
+    (8) Lista_Declare -> Lista_Variables INST_AS . Tipo
+    (11) Tipo -> . TYPEDEF_INT
+    (12) Tipo -> . TYPEDEF_BOOL
+    (13) Tipo -> . TYPEDEF_RANGE
+
+    TYPEDEF_INT     shift and go to state 18
+    TYPEDEF_BOOL    shift and go to state 21
+    TYPEDEF_RANGE   shift and go to state 20
+
+    Tipo                           shift and go to state 19
+
+state 15
+
+    (5) Lista_Inst -> Inst SEMICOLON . Lista_Inst
+    (4) Lista_Inst -> . Inst
+    (5) Lista_Inst -> . Inst SEMICOLON Lista_Inst
+    (6) Inst -> . Inst_Declare
+    (7) Inst_Declare -> . INST_DECLARE Lista_Declare
+
+    INST_DECLARE    shift and go to state 5
+
+    Inst_Declare                   shift and go to state 3
+    Inst                           shift and go to state 11
+    Lista_Inst                     shift and go to state 22
+
+state 16
+
+    (2) Bloque_Inst -> INST_BEGIN Lista_Inst INST_END .
+
+    $end            reduce using rule 2 (Bloque_Inst -> INST_BEGIN Lista_Inst INST_END .)
+
+
+state 17
+
+    (10) Lista_Variables -> VAR_IDENTIFIER COMMA Lista_Variables .
+
+    INST_AS         reduce using rule 10 (Lista_Variables -> VAR_IDENTIFIER COMMA Lista_Variables .)
+
+
+state 18
+
+    (11) Tipo -> TYPEDEF_INT .
+
+    $end            reduce using rule 11 (Tipo -> TYPEDEF_INT .)
+    SEMICOLON       reduce using rule 11 (Tipo -> TYPEDEF_INT .)
+    INST_END        reduce using rule 11 (Tipo -> TYPEDEF_INT .)
+
+
+state 19
+
+    (8) Lista_Declare -> Lista_Variables INST_AS Tipo .
+
+    $end            reduce using rule 8 (Lista_Declare -> Lista_Variables INST_AS Tipo .)
+    SEMICOLON       reduce using rule 8 (Lista_Declare -> Lista_Variables INST_AS Tipo .)
+    INST_END        reduce using rule 8 (Lista_Declare -> Lista_Variables INST_AS Tipo .)
+
+
+state 20
+
+    (13) Tipo -> TYPEDEF_RANGE .
+
+    $end            reduce using rule 13 (Tipo -> TYPEDEF_RANGE .)
+    SEMICOLON       reduce using rule 13 (Tipo -> TYPEDEF_RANGE .)
+    INST_END        reduce using rule 13 (Tipo -> TYPEDEF_RANGE .)
+
+
+state 21
+
+    (12) Tipo -> TYPEDEF_BOOL .
+
+    $end            reduce using rule 12 (Tipo -> TYPEDEF_BOOL .)
+    SEMICOLON       reduce using rule 12 (Tipo -> TYPEDEF_BOOL .)
+    INST_END        reduce using rule 12 (Tipo -> TYPEDEF_BOOL .)
+
+
+state 22
+
+    (5) Lista_Inst -> Inst SEMICOLON Lista_Inst .
+
+    INST_END        reduce using rule 5 (Lista_Inst -> Inst SEMICOLON Lista_Inst .)
 

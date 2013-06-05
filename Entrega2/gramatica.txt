@@ -1,18 +1,18 @@
 ####################################
 #  Traductores e Interpretadores   #
 #             Entrega 2            #
-#         Gramática asociada       #
+#         Gramatica asociada       #
 ####################################
 # Realizada por:                   #
 # Wilmer Bandres 10-10055          #
 # Gustavo El Khoury 10-10226       #
 ####################################
 
-S               -> INST_PROGRAM VAR_IDENTIFIER Bloque_Inst
+S               -> INST_PROGRAM Bloque_Inst
 
-Bloque_Inst     -> INST_BEGIN Lista_Inst INST_END
+Bloque_Inst     -> INST_BEGIN Lista_Inst INST_END | Inst
 
-Lista_Inst      -> Inst; | Inst ; Lista_Inst
+Lista_Inst      -> Inst | Inst ; Lista_Inst
 
 Inst            -> Inst_Declare | Inst_Asignacion | Inst_Lectura | Inst_Salida
                    Inst_If | Inst_Case | Inst_For | Inst_While
@@ -37,11 +37,11 @@ Lista_cStrings  -> VarString | VarString ; Lista_cStrings
 
 VarString       -> VAR_IDENTIFIER | STRING
 
-Inst_If         -> INST_IF Expresion_Booleana THEN ResultIf SiNo
+Inst_If         -> INST_IF Expresion_Booleana THEN ResultBlock SiNo
 
 SiNo            -> lambda | INST_ELSE ResultBlock
 
-ResultBlock     -> Inst | Bloque_Inst
+ResultBlock     -> Bloque_Inst
 
 Inst_Case       -> INST_CASE Expresion_Aritm OF ListaRangos
 
@@ -51,7 +51,7 @@ RangoAccion     -> Rango CASE_ASSIGN Inst
 
 Inst_For        -> INST_FOR VAR_IDENTIFIER INST_IN Rango INST_DO ResultBlock
 
-Inst_For        -> INST_WHILE Expresion_Bool INST_DO ResultBlock
+Inst_While      -> INST_WHILE Expresion_Bool INST_DO ResultBlock
 
 Expresion_Bool
 
