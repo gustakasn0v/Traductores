@@ -33,3 +33,8 @@ nosetests.xml
 .mr.developer.cfg
 .project
 .pydevproject
+
+# Archivos de ply
+parser.out
+parsetab.py
+*~

@@ -118,6 +118,7 @@ def t_error(t):
   print("Error: caracter inesperado " + t.value[0] + " en la linea " + str(t.lineno) + ", columna " + str(find_column(t.lexer.lexdata,t)-1)) 
   t.lexer.cl=1
   t.lexer.skip(1)
+<<<<<<< HEAD
 
 lexer = lex.lex()
   
@@ -132,6 +133,21 @@ lexer = lex.lex()
   ## Se crea el lexer
   #lexer = lex.lex()
   
+=======
+ 
+lexer = lex.lex()
+#def main():
+  #if (len(sys.argv) != 2):
+    #print("Usage: python leyer.py nombreArchivo")
+    #return -1
+  
+  ## Se abre el archivo con permisos de lectura
+  #string = str(open(str(sys.argv[1]),'r').read())
+  
+  ## Se crea el lexer
+  #lexer = lex.lex()
+  
+>>>>>>> 92998fbc574078492127d8154076d94ff4002106
   ## Variable que determina si hubo un error procesando la entrada
   #lexer.cl = 0
   #lexer.input(string)
