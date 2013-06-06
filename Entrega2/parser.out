@@ -2,46 +2,18 @@ Created by PLY version 3.4 (http://www.dabeaz.com/ply)
 
 Unused terminals:
 
-    GREAT
-    INST_IN
     INST_WRITE
-    LESS
-    EQEQ
     TOP
-    NUMBER
-    INST_FOR
-    INST_WHILE
-    INST_READ
-    MINUS
     STRING
     COMMENT
-    INTERSECTION
-    RPAREN
-    NEQEQ
-    INST_OF
-    PLUS
     CASE_ASSIGN
-    INST_ELSE
     RESERVED
-    DIVIDE
-    EQUAL
-    RANGE
-    INST_DO
-    LPAREN
     IN
-    TIMES
-    INST_CASE
-    AND
-    INST_THEN
-    INST_IF
-    GREATEQ
     BOTTOM
     LENGTH
-    LESSEQ
     RTOI
     NOT
     INST_WRITELN
-    OR
     MOD
 
 Grammar
@@ -53,79 +25,146 @@ Rule 3     Bloque_Inst -> Inst
 Rule 4     Lista_Inst -> Inst
 Rule 5     Lista_Inst -> Inst SEMICOLON Lista_Inst
 Rule 6     Inst -> Inst_Declare
-Rule 7     Inst_Declare -> INST_DECLARE Lista_Declare
-Rule 8     Lista_Declare -> Lista_Variables INST_AS Tipo
-Rule 9     Lista_Variables -> VAR_IDENTIFIER
-Rule 10    Lista_Variables -> VAR_IDENTIFIER COMMA Lista_Variables
-Rule 11    Tipo -> TYPEDEF_INT
-Rule 12    Tipo -> TYPEDEF_BOOL
-Rule 13    Tipo -> TYPEDEF_RANGE
+Rule 7     Inst -> Inst_Asignacion
+Rule 8     Inst -> Inst_Lectura
+Rule 9     Inst -> Inst_For
+Rule 10    Inst -> Inst_While
+Rule 11    Inst -> Inst_If
+Rule 12    Inst -> Inst_Case
+Rule 13    Inst_Declare -> INST_DECLARE Lista_Declare
+Rule 14    Lista_Declare -> Lista_Variables INST_AS Tipo
+Rule 15    Lista_Variables -> VAR_IDENTIFIER
+Rule 16    Lista_Variables -> VAR_IDENTIFIER COMMA Lista_Variables
+Rule 17    Tipo -> TYPEDEF_INT
+Rule 18    Tipo -> TYPEDEF_BOOL
+Rule 19    Tipo -> TYPEDEF_RANGE
+Rule 20    Inst_Asignacion -> VAR_IDENTIFIER EQUAL Expresion
+Rule 21    Expresion -> Operacion_binaria
+Rule 22    Expresion -> Operacion_booleana
+Rule 23    Expresion -> Rango
+Rule 24    Operacion_booleana -> Operacion_binaria Opr_bool Operacion_binaria
+Rule 25    Operacion_booleana -> Operacion_binaria Opr_bool Operacion_booleana
+Rule 26    Operacion_booleana -> Operacion_booleana Opr_bool Operacion_binaria
+Rule 27    Operacion_booleana -> Operacion_booleana Opr_bool Operacion_booleana
+Rule 28    Operacion_booleana -> t
+Rule 29    Operacion_booleana -> f
+Rule 30    Opr_bool -> OR
+Rule 31    Opr_bool -> AND
+Rule 32    Opr_bool -> EQEQ
+Rule 33    Opr_bool -> NEQEQ
+Rule 34    Opr_bool -> GREAT
+Rule 35    Opr_bool -> LESS
+Rule 36    Opr_bool -> GREATEQ
+Rule 37    Opr_bool -> LESSEQ
+Rule 38    Operacion_binaria -> Operacion_binaria PLUS Term
+Rule 39    Operacion_binaria -> Operacion_binaria MINUS Term
+Rule 40    Operacion_binaria -> Term
+Rule 41    Term -> Term TIMES Factor
+Rule 42    Term -> Term DIVIDE Factor
+Rule 43    Term -> Factor
+Rule 44    Factor -> NUMBER
+Rule 45    Factor -> VAR_IDENTIFIER
+Rule 46    Factor -> LPAREN Operacion_binaria RPAREN
+Rule 47    Rango -> Operacion_binaria RANGE Operacion_binaria
+Rule 48    Rango -> Rango PLUS Rango
+Rule 49    Rango -> Rango TIMES Operacion_binaria
+Rule 50    Rango -> Rango INTERSECTION Rango
+Rule 51    Rango -> RangoF
+Rule 52    RangoF -> LPAREN Rango RPAREN
+Rule 53    Inst_Lectura -> INST_READ VAR_IDENTIFIER
+Rule 54    Inst_If -> INST_IF Operacion_booleana INST_THEN Bloque_Inst
+Rule 55    Inst_If -> INST_IF Operacion_booleana INST_THEN Bloque_Inst INST_ELSE Bloque_Inst
+Rule 56    Inst_Case -> INST_CASE Operacion_binaria INST_OF Casos
+Rule 57    Casos -> VAR_IDENTIFIER - > Bloque_Inst
+Rule 58    Casos -> Rango - > Bloque_Inst
+Rule 59    Casos -> Casos Casos
+Rule 60    Inst_For -> INST_FOR VAR_IDENTIFIER INST_IN Rango INST_DO Bloque_Inst
+Rule 61    Inst_While -> INST_WHILE Operacion_booleana INST_DO Bloque_Inst
 
 Terminals, with rules where they appear
 
-AND                  : 
+-                    : 57 58
+>                    : 57 58
+AND                  : 31
 BOTTOM               : 
 CASE_ASSIGN          : 
-COMMA                : 10
+COMMA                : 16
 COMMENT              : 
-DIVIDE               : 
-EQEQ                 : 
-EQUAL                : 
-GREAT                : 
-GREATEQ              : 
+DIVIDE               : 42
+EQEQ                 : 32
+EQUAL                : 20
+GREAT                : 34
+GREATEQ              : 36
 IN                   : 
-INST_AS              : 8
+INST_AS              : 14
 INST_BEGIN           : 2
-INST_CASE            : 
-INST_DECLARE         : 7
-INST_DO              : 
-INST_ELSE            : 
+INST_CASE            : 56
+INST_DECLARE         : 13
+INST_DO              : 60 61
+INST_ELSE            : 55
 INST_END             : 2
-INST_FOR             : 
-INST_IF              : 
-INST_IN              : 
-INST_OF              : 
+INST_FOR             : 60
+INST_IF              : 54 55
+INST_IN              : 60
+INST_OF              : 56
 INST_PROGRAM         : 1
-INST_READ            : 
-INST_THEN            : 
-INST_WHILE           : 
+INST_READ            : 53
+INST_THEN            : 54 55
+INST_WHILE           : 61
 INST_WRITE           : 
 INST_WRITELN         : 
-INTERSECTION         : 
+INTERSECTION         : 50
 LENGTH               : 
-LESS                 : 
-LESSEQ               : 
-LPAREN               : 
-MINUS                : 
+LESS                 : 35
+LESSEQ               : 37
+LPAREN               : 46 52
+MINUS                : 39
 MOD                  : 
-NEQEQ                : 
+NEQEQ                : 33
 NOT                  : 
-NUMBER               : 
-OR                   : 
-PLUS                 : 
-RANGE                : 
+NUMBER               : 44
+OR                   : 30
+PLUS                 : 38 48
+RANGE                : 47
 RESERVED             : 
-RPAREN               : 
+RPAREN               : 46 52
 RTOI                 : 
 SEMICOLON            : 5
 STRING               : 
-TIMES                : 
+TIMES                : 41 49
 TOP                  : 
-TYPEDEF_BOOL         : 12
-TYPEDEF_INT          : 11
-TYPEDEF_RANGE        : 13
-VAR_IDENTIFIER       : 9 10
+TYPEDEF_BOOL         : 18
+TYPEDEF_INT          : 17
+TYPEDEF_RANGE        : 19
+VAR_IDENTIFIER       : 15 16 20 45 53 57 60
 error                : 
+f                    : 29
+t                    : 28
 
 Nonterminals, with rules where they appear
 
-Bloque_Inst          : 1
+Bloque_Inst          : 1 54 55 55 57 58 60 61
+Casos                : 56 59 59
+Expresion            : 20
+Factor               : 41 42 43
 Inst                 : 3 4 5
+Inst_Asignacion      : 7
+Inst_Case            : 12
 Inst_Declare         : 6
-Lista_Declare        : 7
+Inst_For             : 9
+Inst_If              : 11
+Inst_Lectura         : 8
+Inst_While           : 10
+Lista_Declare        : 13
 Lista_Inst           : 2 5
-Lista_Variables      : 8 10
-Tipo                 : 8
+Lista_Variables      : 14 16
+Operacion_binaria    : 21 24 24 25 26 38 39 46 47 47 49 56
+Operacion_booleana   : 22 25 26 27 27 54 55 61
+Opr_bool             : 24 25 26 27
+Rango                : 23 48 48 49 50 50 52 58 60
+RangoF               : 51
+Term                 : 38 39 40 41 42
+Tipo                 : 14
 program              : 0
 
 Parsing method: LALR
@@ -151,23 +190,51 @@ state 2
     (2) Bloque_Inst -> . INST_BEGIN Lista_Inst INST_END
     (3) Bloque_Inst -> . Inst
     (6) Inst -> . Inst_Declare
-    (7) Inst_Declare -> . INST_DECLARE Lista_Declare
+    (7) Inst -> . Inst_Asignacion
+    (8) Inst -> . Inst_Lectura
+    (9) Inst -> . Inst_For
+    (10) Inst -> . Inst_While
+    (11) Inst -> . Inst_If
+    (12) Inst -> . Inst_Case
+    (13) Inst_Declare -> . INST_DECLARE Lista_Declare
+    (20) Inst_Asignacion -> . VAR_IDENTIFIER EQUAL Expresion
+    (53) Inst_Lectura -> . INST_READ VAR_IDENTIFIER
+    (60) Inst_For -> . INST_FOR VAR_IDENTIFIER INST_IN Rango INST_DO Bloque_Inst
+    (61) Inst_While -> . INST_WHILE Operacion_booleana INST_DO Bloque_Inst
+    (54) Inst_If -> . INST_IF Operacion_booleana INST_THEN Bloque_Inst
+    (55) Inst_If -> . INST_IF Operacion_booleana INST_THEN Bloque_Inst INST_ELSE Bloque_Inst
+    (56) Inst_Case -> . INST_CASE Operacion_binaria INST_OF Casos
 
-    INST_BEGIN      shift and go to state 7
-    INST_DECLARE    shift and go to state 5
+    INST_BEGIN      shift and go to state 8
+    INST_DECLARE    shift and go to state 3
+    VAR_IDENTIFIER  shift and go to state 14
+    INST_READ       shift and go to state 7
+    INST_FOR        shift and go to state 5
+    INST_WHILE      shift and go to state 6
+    INST_IF         shift and go to state 17
+    INST_CASE       shift and go to state 16
 
-    Inst                           shift and go to state 6
-    Inst_Declare                   shift and go to state 3
+    Inst_Declare                   shift and go to state 9
     Bloque_Inst                    shift and go to state 4
+    Inst_If                        shift and go to state 15
+    Inst_For                       shift and go to state 10
+    Inst_While                     shift and go to state 12
+    Inst                           shift and go to state 11
+    Inst_Asignacion                shift and go to state 18
+    Inst_Case                      shift and go to state 19
+    Inst_Lectura                   shift and go to state 13
 
 state 3
 
-    (6) Inst -> Inst_Declare .
+    (13) Inst_Declare -> INST_DECLARE . Lista_Declare
+    (14) Lista_Declare -> . Lista_Variables INST_AS Tipo
+    (15) Lista_Variables -> . VAR_IDENTIFIER
+    (16) Lista_Variables -> . VAR_IDENTIFIER COMMA Lista_Variables
 
-    SEMICOLON       reduce using rule 6 (Inst -> Inst_Declare .)
-    INST_END        reduce using rule 6 (Inst -> Inst_Declare .)
-    $end            reduce using rule 6 (Inst -> Inst_Declare .)
+    VAR_IDENTIFIER  shift and go to state 20
 
+    Lista_Variables                shift and go to state 21
+    Lista_Declare                  shift and go to state 22
 
 state 4
 
@@ -178,168 +245,2373 @@ state 4
 
 state 5
 
-    (7) Inst_Declare -> INST_DECLARE . Lista_Declare
-    (8) Lista_Declare -> . Lista_Variables INST_AS Tipo
-    (9) Lista_Variables -> . VAR_IDENTIFIER
-    (10) Lista_Variables -> . VAR_IDENTIFIER COMMA Lista_Variables
+    (60) Inst_For -> INST_FOR . VAR_IDENTIFIER INST_IN Rango INST_DO Bloque_Inst
 
-    VAR_IDENTIFIER  shift and go to state 8
+    VAR_IDENTIFIER  shift and go to state 23
 
-    Lista_Variables                shift and go to state 9
-    Lista_Declare                  shift and go to state 10
 
 state 6
 
-    (3) Bloque_Inst -> Inst .
+    (61) Inst_While -> INST_WHILE . Operacion_booleana INST_DO Bloque_Inst
+    (24) Operacion_booleana -> . Operacion_binaria Opr_bool Operacion_binaria
+    (25) Operacion_booleana -> . Operacion_binaria Opr_bool Operacion_booleana
+    (26) Operacion_booleana -> . Operacion_booleana Opr_bool Operacion_binaria
+    (27) Operacion_booleana -> . Operacion_booleana Opr_bool Operacion_booleana
+    (28) Operacion_booleana -> . t
+    (29) Operacion_booleana -> . f
+    (38) Operacion_binaria -> . Operacion_binaria PLUS Term
+    (39) Operacion_binaria -> . Operacion_binaria MINUS Term
+    (40) Operacion_binaria -> . Term
+    (41) Term -> . Term TIMES Factor
+    (42) Term -> . Term DIVIDE Factor
+    (43) Term -> . Factor
+    (44) Factor -> . NUMBER
+    (45) Factor -> . VAR_IDENTIFIER
+    (46) Factor -> . LPAREN Operacion_binaria RPAREN
 
-    $end            reduce using rule 3 (Bloque_Inst -> Inst .)
+    t               shift and go to state 29
+    f               shift and go to state 25
+    NUMBER          shift and go to state 28
+    VAR_IDENTIFIER  shift and go to state 26
+    LPAREN          shift and go to state 30
 
+    Operacion_binaria              shift and go to state 24
+    Term                           shift and go to state 27
+    Factor                         shift and go to state 31
+    Operacion_booleana             shift and go to state 32
 
 state 7
+
+    (53) Inst_Lectura -> INST_READ . VAR_IDENTIFIER
+
+    VAR_IDENTIFIER  shift and go to state 33
+
+
+state 8
 
     (2) Bloque_Inst -> INST_BEGIN . Lista_Inst INST_END
     (4) Lista_Inst -> . Inst
     (5) Lista_Inst -> . Inst SEMICOLON Lista_Inst
     (6) Inst -> . Inst_Declare
-    (7) Inst_Declare -> . INST_DECLARE Lista_Declare
+    (7) Inst -> . Inst_Asignacion
+    (8) Inst -> . Inst_Lectura
+    (9) Inst -> . Inst_For
+    (10) Inst -> . Inst_While
+    (11) Inst -> . Inst_If
+    (12) Inst -> . Inst_Case
+    (13) Inst_Declare -> . INST_DECLARE Lista_Declare
+    (20) Inst_Asignacion -> . VAR_IDENTIFIER EQUAL Expresion
+    (53) Inst_Lectura -> . INST_READ VAR_IDENTIFIER
+    (60) Inst_For -> . INST_FOR VAR_IDENTIFIER INST_IN Rango INST_DO Bloque_Inst
+    (61) Inst_While -> . INST_WHILE Operacion_booleana INST_DO Bloque_Inst
+    (54) Inst_If -> . INST_IF Operacion_booleana INST_THEN Bloque_Inst
+    (55) Inst_If -> . INST_IF Operacion_booleana INST_THEN Bloque_Inst INST_ELSE Bloque_Inst
+    (56) Inst_Case -> . INST_CASE Operacion_binaria INST_OF Casos
 
-    INST_DECLARE    shift and go to state 5
+    INST_DECLARE    shift and go to state 3
+    VAR_IDENTIFIER  shift and go to state 14
+    INST_READ       shift and go to state 7
+    INST_FOR        shift and go to state 5
+    INST_WHILE      shift and go to state 6
+    INST_IF         shift and go to state 17
+    INST_CASE       shift and go to state 16
 
-    Inst_Declare                   shift and go to state 3
-    Inst                           shift and go to state 11
-    Lista_Inst                     shift and go to state 12
-
-state 8
-
-    (9) Lista_Variables -> VAR_IDENTIFIER .
-    (10) Lista_Variables -> VAR_IDENTIFIER . COMMA Lista_Variables
-
-    INST_AS         reduce using rule 9 (Lista_Variables -> VAR_IDENTIFIER .)
-    COMMA           shift and go to state 13
-
+    Inst_Declare                   shift and go to state 9
+    Inst_If                        shift and go to state 15
+    Inst_For                       shift and go to state 10
+    Inst_While                     shift and go to state 12
+    Inst                           shift and go to state 34
+    Inst_Asignacion                shift and go to state 18
+    Inst_Case                      shift and go to state 19
+    Inst_Lectura                   shift and go to state 13
+    Lista_Inst                     shift and go to state 35
 
 state 9
 
-    (8) Lista_Declare -> Lista_Variables . INST_AS Tipo
+    (6) Inst -> Inst_Declare .
 
-    INST_AS         shift and go to state 14
+    $end            reduce using rule 6 (Inst -> Inst_Declare .)
+    SEMICOLON       reduce using rule 6 (Inst -> Inst_Declare .)
+    INST_END        reduce using rule 6 (Inst -> Inst_Declare .)
+    INST_ELSE       reduce using rule 6 (Inst -> Inst_Declare .)
+    VAR_IDENTIFIER  reduce using rule 6 (Inst -> Inst_Declare .)
+    LPAREN          reduce using rule 6 (Inst -> Inst_Declare .)
+    NUMBER          reduce using rule 6 (Inst -> Inst_Declare .)
 
 
 state 10
 
-    (7) Inst_Declare -> INST_DECLARE Lista_Declare .
+    (9) Inst -> Inst_For .
 
-    SEMICOLON       reduce using rule 7 (Inst_Declare -> INST_DECLARE Lista_Declare .)
-    INST_END        reduce using rule 7 (Inst_Declare -> INST_DECLARE Lista_Declare .)
-    $end            reduce using rule 7 (Inst_Declare -> INST_DECLARE Lista_Declare .)
+    $end            reduce using rule 9 (Inst -> Inst_For .)
+    SEMICOLON       reduce using rule 9 (Inst -> Inst_For .)
+    INST_END        reduce using rule 9 (Inst -> Inst_For .)
+    INST_ELSE       reduce using rule 9 (Inst -> Inst_For .)
+    VAR_IDENTIFIER  reduce using rule 9 (Inst -> Inst_For .)
+    LPAREN          reduce using rule 9 (Inst -> Inst_For .)
+    NUMBER          reduce using rule 9 (Inst -> Inst_For .)
 
 
 state 11
+
+    (3) Bloque_Inst -> Inst .
+
+    $end            reduce using rule 3 (Bloque_Inst -> Inst .)
+    SEMICOLON       reduce using rule 3 (Bloque_Inst -> Inst .)
+    INST_END        reduce using rule 3 (Bloque_Inst -> Inst .)
+    INST_ELSE       reduce using rule 3 (Bloque_Inst -> Inst .)
+    VAR_IDENTIFIER  reduce using rule 3 (Bloque_Inst -> Inst .)
+    LPAREN          reduce using rule 3 (Bloque_Inst -> Inst .)
+    NUMBER          reduce using rule 3 (Bloque_Inst -> Inst .)
+
+
+state 12
+
+    (10) Inst -> Inst_While .
+
+    $end            reduce using rule 10 (Inst -> Inst_While .)
+    SEMICOLON       reduce using rule 10 (Inst -> Inst_While .)
+    INST_END        reduce using rule 10 (Inst -> Inst_While .)
+    INST_ELSE       reduce using rule 10 (Inst -> Inst_While .)
+    VAR_IDENTIFIER  reduce using rule 10 (Inst -> Inst_While .)
+    LPAREN          reduce using rule 10 (Inst -> Inst_While .)
+    NUMBER          reduce using rule 10 (Inst -> Inst_While .)
+
+
+state 13
+
+    (8) Inst -> Inst_Lectura .
+
+    $end            reduce using rule 8 (Inst -> Inst_Lectura .)
+    SEMICOLON       reduce using rule 8 (Inst -> Inst_Lectura .)
+    INST_END        reduce using rule 8 (Inst -> Inst_Lectura .)
+    INST_ELSE       reduce using rule 8 (Inst -> Inst_Lectura .)
+    VAR_IDENTIFIER  reduce using rule 8 (Inst -> Inst_Lectura .)
+    LPAREN          reduce using rule 8 (Inst -> Inst_Lectura .)
+    NUMBER          reduce using rule 8 (Inst -> Inst_Lectura .)
+
+
+state 14
+
+    (20) Inst_Asignacion -> VAR_IDENTIFIER . EQUAL Expresion
+
+    EQUAL           shift and go to state 36
+
+
+state 15
+
+    (11) Inst -> Inst_If .
+
+    $end            reduce using rule 11 (Inst -> Inst_If .)
+    SEMICOLON       reduce using rule 11 (Inst -> Inst_If .)
+    INST_END        reduce using rule 11 (Inst -> Inst_If .)
+    INST_ELSE       reduce using rule 11 (Inst -> Inst_If .)
+    VAR_IDENTIFIER  reduce using rule 11 (Inst -> Inst_If .)
+    LPAREN          reduce using rule 11 (Inst -> Inst_If .)
+    NUMBER          reduce using rule 11 (Inst -> Inst_If .)
+
+
+state 16
+
+    (56) Inst_Case -> INST_CASE . Operacion_binaria INST_OF Casos
+    (38) Operacion_binaria -> . Operacion_binaria PLUS Term
+    (39) Operacion_binaria -> . Operacion_binaria MINUS Term
+    (40) Operacion_binaria -> . Term
+    (41) Term -> . Term TIMES Factor
+    (42) Term -> . Term DIVIDE Factor
+    (43) Term -> . Factor
+    (44) Factor -> . NUMBER
+    (45) Factor -> . VAR_IDENTIFIER
+    (46) Factor -> . LPAREN Operacion_binaria RPAREN
+
+    NUMBER          shift and go to state 28
+    VAR_IDENTIFIER  shift and go to state 26
+    LPAREN          shift and go to state 30
+
+    Operacion_binaria              shift and go to state 37
+    Term                           shift and go to state 27
+    Factor                         shift and go to state 31
+
+state 17
+
+    (54) Inst_If -> INST_IF . Operacion_booleana INST_THEN Bloque_Inst
+    (55) Inst_If -> INST_IF . Operacion_booleana INST_THEN Bloque_Inst INST_ELSE Bloque_Inst
+    (24) Operacion_booleana -> . Operacion_binaria Opr_bool Operacion_binaria
+    (25) Operacion_booleana -> . Operacion_binaria Opr_bool Operacion_booleana
+    (26) Operacion_booleana -> . Operacion_booleana Opr_bool Operacion_binaria
+    (27) Operacion_booleana -> . Operacion_booleana Opr_bool Operacion_booleana
+    (28) Operacion_booleana -> . t
+    (29) Operacion_booleana -> . f
+    (38) Operacion_binaria -> . Operacion_binaria PLUS Term
+    (39) Operacion_binaria -> . Operacion_binaria MINUS Term
+    (40) Operacion_binaria -> . Term
+    (41) Term -> . Term TIMES Factor
+    (42) Term -> . Term DIVIDE Factor
+    (43) Term -> . Factor
+    (44) Factor -> . NUMBER
+    (45) Factor -> . VAR_IDENTIFIER
+    (46) Factor -> . LPAREN Operacion_binaria RPAREN
+
+    t               shift and go to state 29
+    f               shift and go to state 25
+    NUMBER          shift and go to state 28
+    VAR_IDENTIFIER  shift and go to state 26
+    LPAREN          shift and go to state 30
+
+    Operacion_binaria              shift and go to state 24
+    Term                           shift and go to state 27
+    Factor                         shift and go to state 31
+    Operacion_booleana             shift and go to state 38
+
+state 18
+
+    (7) Inst -> Inst_Asignacion .
+
+    $end            reduce using rule 7 (Inst -> Inst_Asignacion .)
+    SEMICOLON       reduce using rule 7 (Inst -> Inst_Asignacion .)
+    INST_END        reduce using rule 7 (Inst -> Inst_Asignacion .)
+    INST_ELSE       reduce using rule 7 (Inst -> Inst_Asignacion .)
+    VAR_IDENTIFIER  reduce using rule 7 (Inst -> Inst_Asignacion .)
+    LPAREN          reduce using rule 7 (Inst -> Inst_Asignacion .)
+    NUMBER          reduce using rule 7 (Inst -> Inst_Asignacion .)
+
+
+state 19
+
+    (12) Inst -> Inst_Case .
+
+    $end            reduce using rule 12 (Inst -> Inst_Case .)
+    SEMICOLON       reduce using rule 12 (Inst -> Inst_Case .)
+    INST_END        reduce using rule 12 (Inst -> Inst_Case .)
+    INST_ELSE       reduce using rule 12 (Inst -> Inst_Case .)
+    VAR_IDENTIFIER  reduce using rule 12 (Inst -> Inst_Case .)
+    LPAREN          reduce using rule 12 (Inst -> Inst_Case .)
+    NUMBER          reduce using rule 12 (Inst -> Inst_Case .)
+
+
+state 20
+
+    (15) Lista_Variables -> VAR_IDENTIFIER .
+    (16) Lista_Variables -> VAR_IDENTIFIER . COMMA Lista_Variables
+
+    INST_AS         reduce using rule 15 (Lista_Variables -> VAR_IDENTIFIER .)
+    COMMA           shift and go to state 39
+
+
+state 21
+
+    (14) Lista_Declare -> Lista_Variables . INST_AS Tipo
+
+    INST_AS         shift and go to state 40
+
+
+state 22
+
+    (13) Inst_Declare -> INST_DECLARE Lista_Declare .
+
+    SEMICOLON       reduce using rule 13 (Inst_Declare -> INST_DECLARE Lista_Declare .)
+    INST_END        reduce using rule 13 (Inst_Declare -> INST_DECLARE Lista_Declare .)
+    $end            reduce using rule 13 (Inst_Declare -> INST_DECLARE Lista_Declare .)
+    INST_ELSE       reduce using rule 13 (Inst_Declare -> INST_DECLARE Lista_Declare .)
+    VAR_IDENTIFIER  reduce using rule 13 (Inst_Declare -> INST_DECLARE Lista_Declare .)
+    LPAREN          reduce using rule 13 (Inst_Declare -> INST_DECLARE Lista_Declare .)
+    NUMBER          reduce using rule 13 (Inst_Declare -> INST_DECLARE Lista_Declare .)
+
+
+state 23
+
+    (60) Inst_For -> INST_FOR VAR_IDENTIFIER . INST_IN Rango INST_DO Bloque_Inst
+
+    INST_IN         shift and go to state 41
+
+
+state 24
+
+    (24) Operacion_booleana -> Operacion_binaria . Opr_bool Operacion_binaria
+    (25) Operacion_booleana -> Operacion_binaria . Opr_bool Operacion_booleana
+    (38) Operacion_binaria -> Operacion_binaria . PLUS Term
+    (39) Operacion_binaria -> Operacion_binaria . MINUS Term
+    (30) Opr_bool -> . OR
+    (31) Opr_bool -> . AND
+    (32) Opr_bool -> . EQEQ
+    (33) Opr_bool -> . NEQEQ
+    (34) Opr_bool -> . GREAT
+    (35) Opr_bool -> . LESS
+    (36) Opr_bool -> . GREATEQ
+    (37) Opr_bool -> . LESSEQ
+
+    PLUS            shift and go to state 51
+    MINUS           shift and go to state 52
+    OR              shift and go to state 48
+    AND             shift and go to state 42
+    EQEQ            shift and go to state 49
+    NEQEQ           shift and go to state 45
+    GREAT           shift and go to state 44
+    LESS            shift and go to state 47
+    GREATEQ         shift and go to state 43
+    LESSEQ          shift and go to state 50
+
+    Opr_bool                       shift and go to state 46
+
+state 25
+
+    (29) Operacion_booleana -> f .
+
+    OR              reduce using rule 29 (Operacion_booleana -> f .)
+    AND             reduce using rule 29 (Operacion_booleana -> f .)
+    EQEQ            reduce using rule 29 (Operacion_booleana -> f .)
+    NEQEQ           reduce using rule 29 (Operacion_booleana -> f .)
+    GREAT           reduce using rule 29 (Operacion_booleana -> f .)
+    LESS            reduce using rule 29 (Operacion_booleana -> f .)
+    GREATEQ         reduce using rule 29 (Operacion_booleana -> f .)
+    LESSEQ          reduce using rule 29 (Operacion_booleana -> f .)
+    INST_DO         reduce using rule 29 (Operacion_booleana -> f .)
+    INST_THEN       reduce using rule 29 (Operacion_booleana -> f .)
+    $end            reduce using rule 29 (Operacion_booleana -> f .)
+    SEMICOLON       reduce using rule 29 (Operacion_booleana -> f .)
+    INST_END        reduce using rule 29 (Operacion_booleana -> f .)
+    INST_ELSE       reduce using rule 29 (Operacion_booleana -> f .)
+    VAR_IDENTIFIER  reduce using rule 29 (Operacion_booleana -> f .)
+    LPAREN          reduce using rule 29 (Operacion_booleana -> f .)
+    NUMBER          reduce using rule 29 (Operacion_booleana -> f .)
+
+
+state 26
+
+    (45) Factor -> VAR_IDENTIFIER .
+
+    TIMES           reduce using rule 45 (Factor -> VAR_IDENTIFIER .)
+    DIVIDE          reduce using rule 45 (Factor -> VAR_IDENTIFIER .)
+    PLUS            reduce using rule 45 (Factor -> VAR_IDENTIFIER .)
+    MINUS           reduce using rule 45 (Factor -> VAR_IDENTIFIER .)
+    OR              reduce using rule 45 (Factor -> VAR_IDENTIFIER .)
+    AND             reduce using rule 45 (Factor -> VAR_IDENTIFIER .)
+    EQEQ            reduce using rule 45 (Factor -> VAR_IDENTIFIER .)
+    NEQEQ           reduce using rule 45 (Factor -> VAR_IDENTIFIER .)
+    GREAT           reduce using rule 45 (Factor -> VAR_IDENTIFIER .)
+    LESS            reduce using rule 45 (Factor -> VAR_IDENTIFIER .)
+    GREATEQ         reduce using rule 45 (Factor -> VAR_IDENTIFIER .)
+    LESSEQ          reduce using rule 45 (Factor -> VAR_IDENTIFIER .)
+    INST_OF         reduce using rule 45 (Factor -> VAR_IDENTIFIER .)
+    RPAREN          reduce using rule 45 (Factor -> VAR_IDENTIFIER .)
+    RANGE           reduce using rule 45 (Factor -> VAR_IDENTIFIER .)
+    $end            reduce using rule 45 (Factor -> VAR_IDENTIFIER .)
+    SEMICOLON       reduce using rule 45 (Factor -> VAR_IDENTIFIER .)
+    INST_END        reduce using rule 45 (Factor -> VAR_IDENTIFIER .)
+    INST_ELSE       reduce using rule 45 (Factor -> VAR_IDENTIFIER .)
+    VAR_IDENTIFIER  reduce using rule 45 (Factor -> VAR_IDENTIFIER .)
+    LPAREN          reduce using rule 45 (Factor -> VAR_IDENTIFIER .)
+    NUMBER          reduce using rule 45 (Factor -> VAR_IDENTIFIER .)
+    INST_DO         reduce using rule 45 (Factor -> VAR_IDENTIFIER .)
+    INST_THEN       reduce using rule 45 (Factor -> VAR_IDENTIFIER .)
+    INTERSECTION    reduce using rule 45 (Factor -> VAR_IDENTIFIER .)
+    -               reduce using rule 45 (Factor -> VAR_IDENTIFIER .)
+
+
+state 27
+
+    (40) Operacion_binaria -> Term .
+    (41) Term -> Term . TIMES Factor
+    (42) Term -> Term . DIVIDE Factor
+
+  ! shift/reduce conflict for TIMES resolved as shift
+    INST_OF         reduce using rule 40 (Operacion_binaria -> Term .)
+    PLUS            reduce using rule 40 (Operacion_binaria -> Term .)
+    MINUS           reduce using rule 40 (Operacion_binaria -> Term .)
+    RANGE           reduce using rule 40 (Operacion_binaria -> Term .)
+    OR              reduce using rule 40 (Operacion_binaria -> Term .)
+    AND             reduce using rule 40 (Operacion_binaria -> Term .)
+    EQEQ            reduce using rule 40 (Operacion_binaria -> Term .)
+    NEQEQ           reduce using rule 40 (Operacion_binaria -> Term .)
+    GREAT           reduce using rule 40 (Operacion_binaria -> Term .)
+    LESS            reduce using rule 40 (Operacion_binaria -> Term .)
+    GREATEQ         reduce using rule 40 (Operacion_binaria -> Term .)
+    LESSEQ          reduce using rule 40 (Operacion_binaria -> Term .)
+    $end            reduce using rule 40 (Operacion_binaria -> Term .)
+    SEMICOLON       reduce using rule 40 (Operacion_binaria -> Term .)
+    INST_END        reduce using rule 40 (Operacion_binaria -> Term .)
+    INST_ELSE       reduce using rule 40 (Operacion_binaria -> Term .)
+    VAR_IDENTIFIER  reduce using rule 40 (Operacion_binaria -> Term .)
+    LPAREN          reduce using rule 40 (Operacion_binaria -> Term .)
+    NUMBER          reduce using rule 40 (Operacion_binaria -> Term .)
+    INTERSECTION    reduce using rule 40 (Operacion_binaria -> Term .)
+    INST_DO         reduce using rule 40 (Operacion_binaria -> Term .)
+    RPAREN          reduce using rule 40 (Operacion_binaria -> Term .)
+    -               reduce using rule 40 (Operacion_binaria -> Term .)
+    INST_THEN       reduce using rule 40 (Operacion_binaria -> Term .)
+    TIMES           shift and go to state 54
+    DIVIDE          shift and go to state 53
+
+  ! TIMES           [ reduce using rule 40 (Operacion_binaria -> Term .) ]
+
+
+state 28
+
+    (44) Factor -> NUMBER .
+
+    TIMES           reduce using rule 44 (Factor -> NUMBER .)
+    DIVIDE          reduce using rule 44 (Factor -> NUMBER .)
+    RANGE           reduce using rule 44 (Factor -> NUMBER .)
+    PLUS            reduce using rule 44 (Factor -> NUMBER .)
+    MINUS           reduce using rule 44 (Factor -> NUMBER .)
+    OR              reduce using rule 44 (Factor -> NUMBER .)
+    AND             reduce using rule 44 (Factor -> NUMBER .)
+    EQEQ            reduce using rule 44 (Factor -> NUMBER .)
+    NEQEQ           reduce using rule 44 (Factor -> NUMBER .)
+    GREAT           reduce using rule 44 (Factor -> NUMBER .)
+    LESS            reduce using rule 44 (Factor -> NUMBER .)
+    GREATEQ         reduce using rule 44 (Factor -> NUMBER .)
+    LESSEQ          reduce using rule 44 (Factor -> NUMBER .)
+    INST_OF         reduce using rule 44 (Factor -> NUMBER .)
+    RPAREN          reduce using rule 44 (Factor -> NUMBER .)
+    $end            reduce using rule 44 (Factor -> NUMBER .)
+    SEMICOLON       reduce using rule 44 (Factor -> NUMBER .)
+    INST_END        reduce using rule 44 (Factor -> NUMBER .)
+    INST_ELSE       reduce using rule 44 (Factor -> NUMBER .)
+    VAR_IDENTIFIER  reduce using rule 44 (Factor -> NUMBER .)
+    LPAREN          reduce using rule 44 (Factor -> NUMBER .)
+    NUMBER          reduce using rule 44 (Factor -> NUMBER .)
+    INST_DO         reduce using rule 44 (Factor -> NUMBER .)
+    INST_THEN       reduce using rule 44 (Factor -> NUMBER .)
+    INTERSECTION    reduce using rule 44 (Factor -> NUMBER .)
+    -               reduce using rule 44 (Factor -> NUMBER .)
+
+
+state 29
+
+    (28) Operacion_booleana -> t .
+
+    OR              reduce using rule 28 (Operacion_booleana -> t .)
+    AND             reduce using rule 28 (Operacion_booleana -> t .)
+    EQEQ            reduce using rule 28 (Operacion_booleana -> t .)
+    NEQEQ           reduce using rule 28 (Operacion_booleana -> t .)
+    GREAT           reduce using rule 28 (Operacion_booleana -> t .)
+    LESS            reduce using rule 28 (Operacion_booleana -> t .)
+    GREATEQ         reduce using rule 28 (Operacion_booleana -> t .)
+    LESSEQ          reduce using rule 28 (Operacion_booleana -> t .)
+    INST_DO         reduce using rule 28 (Operacion_booleana -> t .)
+    INST_THEN       reduce using rule 28 (Operacion_booleana -> t .)
+    $end            reduce using rule 28 (Operacion_booleana -> t .)
+    SEMICOLON       reduce using rule 28 (Operacion_booleana -> t .)
+    INST_END        reduce using rule 28 (Operacion_booleana -> t .)
+    INST_ELSE       reduce using rule 28 (Operacion_booleana -> t .)
+    VAR_IDENTIFIER  reduce using rule 28 (Operacion_booleana -> t .)
+    LPAREN          reduce using rule 28 (Operacion_booleana -> t .)
+    NUMBER          reduce using rule 28 (Operacion_booleana -> t .)
+
+
+state 30
+
+    (46) Factor -> LPAREN . Operacion_binaria RPAREN
+    (38) Operacion_binaria -> . Operacion_binaria PLUS Term
+    (39) Operacion_binaria -> . Operacion_binaria MINUS Term
+    (40) Operacion_binaria -> . Term
+    (41) Term -> . Term TIMES Factor
+    (42) Term -> . Term DIVIDE Factor
+    (43) Term -> . Factor
+    (44) Factor -> . NUMBER
+    (45) Factor -> . VAR_IDENTIFIER
+    (46) Factor -> . LPAREN Operacion_binaria RPAREN
+
+    NUMBER          shift and go to state 28
+    VAR_IDENTIFIER  shift and go to state 26
+    LPAREN          shift and go to state 30
+
+    Operacion_binaria              shift and go to state 55
+    Term                           shift and go to state 27
+    Factor                         shift and go to state 31
+
+state 31
+
+    (43) Term -> Factor .
+
+    TIMES           reduce using rule 43 (Term -> Factor .)
+    DIVIDE          reduce using rule 43 (Term -> Factor .)
+    PLUS            reduce using rule 43 (Term -> Factor .)
+    MINUS           reduce using rule 43 (Term -> Factor .)
+    OR              reduce using rule 43 (Term -> Factor .)
+    AND             reduce using rule 43 (Term -> Factor .)
+    EQEQ            reduce using rule 43 (Term -> Factor .)
+    NEQEQ           reduce using rule 43 (Term -> Factor .)
+    GREAT           reduce using rule 43 (Term -> Factor .)
+    LESS            reduce using rule 43 (Term -> Factor .)
+    GREATEQ         reduce using rule 43 (Term -> Factor .)
+    LESSEQ          reduce using rule 43 (Term -> Factor .)
+    INST_DO         reduce using rule 43 (Term -> Factor .)
+    INST_THEN       reduce using rule 43 (Term -> Factor .)
+    $end            reduce using rule 43 (Term -> Factor .)
+    SEMICOLON       reduce using rule 43 (Term -> Factor .)
+    INST_END        reduce using rule 43 (Term -> Factor .)
+    INST_ELSE       reduce using rule 43 (Term -> Factor .)
+    VAR_IDENTIFIER  reduce using rule 43 (Term -> Factor .)
+    LPAREN          reduce using rule 43 (Term -> Factor .)
+    NUMBER          reduce using rule 43 (Term -> Factor .)
+    RANGE           reduce using rule 43 (Term -> Factor .)
+    INTERSECTION    reduce using rule 43 (Term -> Factor .)
+    RPAREN          reduce using rule 43 (Term -> Factor .)
+    -               reduce using rule 43 (Term -> Factor .)
+    INST_OF         reduce using rule 43 (Term -> Factor .)
+
+
+state 32
+
+    (61) Inst_While -> INST_WHILE Operacion_booleana . INST_DO Bloque_Inst
+    (26) Operacion_booleana -> Operacion_booleana . Opr_bool Operacion_binaria
+    (27) Operacion_booleana -> Operacion_booleana . Opr_bool Operacion_booleana
+    (30) Opr_bool -> . OR
+    (31) Opr_bool -> . AND
+    (32) Opr_bool -> . EQEQ
+    (33) Opr_bool -> . NEQEQ
+    (34) Opr_bool -> . GREAT
+    (35) Opr_bool -> . LESS
+    (36) Opr_bool -> . GREATEQ
+    (37) Opr_bool -> . LESSEQ
+
+    INST_DO         shift and go to state 57
+    OR              shift and go to state 48
+    AND             shift and go to state 42
+    EQEQ            shift and go to state 49
+    NEQEQ           shift and go to state 45
+    GREAT           shift and go to state 44
+    LESS            shift and go to state 47
+    GREATEQ         shift and go to state 43
+    LESSEQ          shift and go to state 50
+
+    Opr_bool                       shift and go to state 56
+
+state 33
+
+    (53) Inst_Lectura -> INST_READ VAR_IDENTIFIER .
+
+    $end            reduce using rule 53 (Inst_Lectura -> INST_READ VAR_IDENTIFIER .)
+    SEMICOLON       reduce using rule 53 (Inst_Lectura -> INST_READ VAR_IDENTIFIER .)
+    INST_END        reduce using rule 53 (Inst_Lectura -> INST_READ VAR_IDENTIFIER .)
+    INST_ELSE       reduce using rule 53 (Inst_Lectura -> INST_READ VAR_IDENTIFIER .)
+    VAR_IDENTIFIER  reduce using rule 53 (Inst_Lectura -> INST_READ VAR_IDENTIFIER .)
+    LPAREN          reduce using rule 53 (Inst_Lectura -> INST_READ VAR_IDENTIFIER .)
+    NUMBER          reduce using rule 53 (Inst_Lectura -> INST_READ VAR_IDENTIFIER .)
+
+
+state 34
 
     (4) Lista_Inst -> Inst .
     (5) Lista_Inst -> Inst . SEMICOLON Lista_Inst
 
     INST_END        reduce using rule 4 (Lista_Inst -> Inst .)
-    SEMICOLON       shift and go to state 15
+    SEMICOLON       shift and go to state 58
 
 
-state 12
+state 35
 
     (2) Bloque_Inst -> INST_BEGIN Lista_Inst . INST_END
 
-    INST_END        shift and go to state 16
+    INST_END        shift and go to state 59
 
 
-state 13
+state 36
 
-    (10) Lista_Variables -> VAR_IDENTIFIER COMMA . Lista_Variables
-    (9) Lista_Variables -> . VAR_IDENTIFIER
-    (10) Lista_Variables -> . VAR_IDENTIFIER COMMA Lista_Variables
+    (20) Inst_Asignacion -> VAR_IDENTIFIER EQUAL . Expresion
+    (21) Expresion -> . Operacion_binaria
+    (22) Expresion -> . Operacion_booleana
+    (23) Expresion -> . Rango
+    (38) Operacion_binaria -> . Operacion_binaria PLUS Term
+    (39) Operacion_binaria -> . Operacion_binaria MINUS Term
+    (40) Operacion_binaria -> . Term
+    (24) Operacion_booleana -> . Operacion_binaria Opr_bool Operacion_binaria
+    (25) Operacion_booleana -> . Operacion_binaria Opr_bool Operacion_booleana
+    (26) Operacion_booleana -> . Operacion_booleana Opr_bool Operacion_binaria
+    (27) Operacion_booleana -> . Operacion_booleana Opr_bool Operacion_booleana
+    (28) Operacion_booleana -> . t
+    (29) Operacion_booleana -> . f
+    (47) Rango -> . Operacion_binaria RANGE Operacion_binaria
+    (48) Rango -> . Rango PLUS Rango
+    (49) Rango -> . Rango TIMES Operacion_binaria
+    (50) Rango -> . Rango INTERSECTION Rango
+    (51) Rango -> . RangoF
+    (41) Term -> . Term TIMES Factor
+    (42) Term -> . Term DIVIDE Factor
+    (43) Term -> . Factor
+    (52) RangoF -> . LPAREN Rango RPAREN
+    (44) Factor -> . NUMBER
+    (45) Factor -> . VAR_IDENTIFIER
+    (46) Factor -> . LPAREN Operacion_binaria RPAREN
 
-    VAR_IDENTIFIER  shift and go to state 8
+    t               shift and go to state 29
+    f               shift and go to state 25
+    LPAREN          shift and go to state 62
+    NUMBER          shift and go to state 28
+    VAR_IDENTIFIER  shift and go to state 26
 
-    Lista_Variables                shift and go to state 17
+    Expresion                      shift and go to state 60
+    Operacion_binaria              shift and go to state 61
+    Factor                         shift and go to state 31
+    Term                           shift and go to state 27
+    RangoF                         shift and go to state 63
+    Rango                          shift and go to state 64
+    Operacion_booleana             shift and go to state 65
 
-state 14
+state 37
 
-    (8) Lista_Declare -> Lista_Variables INST_AS . Tipo
-    (11) Tipo -> . TYPEDEF_INT
-    (12) Tipo -> . TYPEDEF_BOOL
-    (13) Tipo -> . TYPEDEF_RANGE
+    (56) Inst_Case -> INST_CASE Operacion_binaria . INST_OF Casos
+    (38) Operacion_binaria -> Operacion_binaria . PLUS Term
+    (39) Operacion_binaria -> Operacion_binaria . MINUS Term
 
-    TYPEDEF_INT     shift and go to state 18
-    TYPEDEF_BOOL    shift and go to state 21
-    TYPEDEF_RANGE   shift and go to state 20
+    INST_OF         shift and go to state 66
+    PLUS            shift and go to state 51
+    MINUS           shift and go to state 52
 
-    Tipo                           shift and go to state 19
 
-state 15
+state 38
+
+    (54) Inst_If -> INST_IF Operacion_booleana . INST_THEN Bloque_Inst
+    (55) Inst_If -> INST_IF Operacion_booleana . INST_THEN Bloque_Inst INST_ELSE Bloque_Inst
+    (26) Operacion_booleana -> Operacion_booleana . Opr_bool Operacion_binaria
+    (27) Operacion_booleana -> Operacion_booleana . Opr_bool Operacion_booleana
+    (30) Opr_bool -> . OR
+    (31) Opr_bool -> . AND
+    (32) Opr_bool -> . EQEQ
+    (33) Opr_bool -> . NEQEQ
+    (34) Opr_bool -> . GREAT
+    (35) Opr_bool -> . LESS
+    (36) Opr_bool -> . GREATEQ
+    (37) Opr_bool -> . LESSEQ
+
+    INST_THEN       shift and go to state 67
+    OR              shift and go to state 48
+    AND             shift and go to state 42
+    EQEQ            shift and go to state 49
+    NEQEQ           shift and go to state 45
+    GREAT           shift and go to state 44
+    LESS            shift and go to state 47
+    GREATEQ         shift and go to state 43
+    LESSEQ          shift and go to state 50
+
+    Opr_bool                       shift and go to state 56
+
+state 39
+
+    (16) Lista_Variables -> VAR_IDENTIFIER COMMA . Lista_Variables
+    (15) Lista_Variables -> . VAR_IDENTIFIER
+    (16) Lista_Variables -> . VAR_IDENTIFIER COMMA Lista_Variables
+
+    VAR_IDENTIFIER  shift and go to state 20
+
+    Lista_Variables                shift and go to state 68
+
+state 40
+
+    (14) Lista_Declare -> Lista_Variables INST_AS . Tipo
+    (17) Tipo -> . TYPEDEF_INT
+    (18) Tipo -> . TYPEDEF_BOOL
+    (19) Tipo -> . TYPEDEF_RANGE
+
+    TYPEDEF_INT     shift and go to state 69
+    TYPEDEF_BOOL    shift and go to state 72
+    TYPEDEF_RANGE   shift and go to state 71
+
+    Tipo                           shift and go to state 70
+
+state 41
+
+    (60) Inst_For -> INST_FOR VAR_IDENTIFIER INST_IN . Rango INST_DO Bloque_Inst
+    (47) Rango -> . Operacion_binaria RANGE Operacion_binaria
+    (48) Rango -> . Rango PLUS Rango
+    (49) Rango -> . Rango TIMES Operacion_binaria
+    (50) Rango -> . Rango INTERSECTION Rango
+    (51) Rango -> . RangoF
+    (38) Operacion_binaria -> . Operacion_binaria PLUS Term
+    (39) Operacion_binaria -> . Operacion_binaria MINUS Term
+    (40) Operacion_binaria -> . Term
+    (52) RangoF -> . LPAREN Rango RPAREN
+    (41) Term -> . Term TIMES Factor
+    (42) Term -> . Term DIVIDE Factor
+    (43) Term -> . Factor
+    (44) Factor -> . NUMBER
+    (45) Factor -> . VAR_IDENTIFIER
+    (46) Factor -> . LPAREN Operacion_binaria RPAREN
+
+    LPAREN          shift and go to state 62
+    NUMBER          shift and go to state 28
+    VAR_IDENTIFIER  shift and go to state 26
+
+    Operacion_binaria              shift and go to state 73
+    RangoF                         shift and go to state 63
+    Term                           shift and go to state 27
+    Factor                         shift and go to state 31
+    Rango                          shift and go to state 74
+
+state 42
+
+    (31) Opr_bool -> AND .
+
+    t               reduce using rule 31 (Opr_bool -> AND .)
+    f               reduce using rule 31 (Opr_bool -> AND .)
+    NUMBER          reduce using rule 31 (Opr_bool -> AND .)
+    VAR_IDENTIFIER  reduce using rule 31 (Opr_bool -> AND .)
+    LPAREN          reduce using rule 31 (Opr_bool -> AND .)
+
+
+state 43
+
+    (36) Opr_bool -> GREATEQ .
+
+    t               reduce using rule 36 (Opr_bool -> GREATEQ .)
+    f               reduce using rule 36 (Opr_bool -> GREATEQ .)
+    NUMBER          reduce using rule 36 (Opr_bool -> GREATEQ .)
+    VAR_IDENTIFIER  reduce using rule 36 (Opr_bool -> GREATEQ .)
+    LPAREN          reduce using rule 36 (Opr_bool -> GREATEQ .)
+
+
+state 44
+
+    (34) Opr_bool -> GREAT .
+
+    t               reduce using rule 34 (Opr_bool -> GREAT .)
+    f               reduce using rule 34 (Opr_bool -> GREAT .)
+    NUMBER          reduce using rule 34 (Opr_bool -> GREAT .)
+    VAR_IDENTIFIER  reduce using rule 34 (Opr_bool -> GREAT .)
+    LPAREN          reduce using rule 34 (Opr_bool -> GREAT .)
+
+
+state 45
+
+    (33) Opr_bool -> NEQEQ .
+
+    t               reduce using rule 33 (Opr_bool -> NEQEQ .)
+    f               reduce using rule 33 (Opr_bool -> NEQEQ .)
+    NUMBER          reduce using rule 33 (Opr_bool -> NEQEQ .)
+    VAR_IDENTIFIER  reduce using rule 33 (Opr_bool -> NEQEQ .)
+    LPAREN          reduce using rule 33 (Opr_bool -> NEQEQ .)
+
+
+state 46
+
+    (24) Operacion_booleana -> Operacion_binaria Opr_bool . Operacion_binaria
+    (25) Operacion_booleana -> Operacion_binaria Opr_bool . Operacion_booleana
+    (38) Operacion_binaria -> . Operacion_binaria PLUS Term
+    (39) Operacion_binaria -> . Operacion_binaria MINUS Term
+    (40) Operacion_binaria -> . Term
+    (24) Operacion_booleana -> . Operacion_binaria Opr_bool Operacion_binaria
+    (25) Operacion_booleana -> . Operacion_binaria Opr_bool Operacion_booleana
+    (26) Operacion_booleana -> . Operacion_booleana Opr_bool Operacion_binaria
+    (27) Operacion_booleana -> . Operacion_booleana Opr_bool Operacion_booleana
+    (28) Operacion_booleana -> . t
+    (29) Operacion_booleana -> . f
+    (41) Term -> . Term TIMES Factor
+    (42) Term -> . Term DIVIDE Factor
+    (43) Term -> . Factor
+    (44) Factor -> . NUMBER
+    (45) Factor -> . VAR_IDENTIFIER
+    (46) Factor -> . LPAREN Operacion_binaria RPAREN
+
+    t               shift and go to state 29
+    f               shift and go to state 25
+    NUMBER          shift and go to state 28
+    VAR_IDENTIFIER  shift and go to state 26
+    LPAREN          shift and go to state 30
+
+    Operacion_binaria              shift and go to state 75
+    Term                           shift and go to state 27
+    Operacion_booleana             shift and go to state 76
+    Factor                         shift and go to state 31
+
+state 47
+
+    (35) Opr_bool -> LESS .
+
+    t               reduce using rule 35 (Opr_bool -> LESS .)
+    f               reduce using rule 35 (Opr_bool -> LESS .)
+    NUMBER          reduce using rule 35 (Opr_bool -> LESS .)
+    VAR_IDENTIFIER  reduce using rule 35 (Opr_bool -> LESS .)
+    LPAREN          reduce using rule 35 (Opr_bool -> LESS .)
+
+
+state 48
+
+    (30) Opr_bool -> OR .
+
+    t               reduce using rule 30 (Opr_bool -> OR .)
+    f               reduce using rule 30 (Opr_bool -> OR .)
+    NUMBER          reduce using rule 30 (Opr_bool -> OR .)
+    VAR_IDENTIFIER  reduce using rule 30 (Opr_bool -> OR .)
+    LPAREN          reduce using rule 30 (Opr_bool -> OR .)
+
+
+state 49
+
+    (32) Opr_bool -> EQEQ .
+
+    t               reduce using rule 32 (Opr_bool -> EQEQ .)
+    f               reduce using rule 32 (Opr_bool -> EQEQ .)
+    NUMBER          reduce using rule 32 (Opr_bool -> EQEQ .)
+    VAR_IDENTIFIER  reduce using rule 32 (Opr_bool -> EQEQ .)
+    LPAREN          reduce using rule 32 (Opr_bool -> EQEQ .)
+
+
+state 50
+
+    (37) Opr_bool -> LESSEQ .
+
+    t               reduce using rule 37 (Opr_bool -> LESSEQ .)
+    f               reduce using rule 37 (Opr_bool -> LESSEQ .)
+    NUMBER          reduce using rule 37 (Opr_bool -> LESSEQ .)
+    VAR_IDENTIFIER  reduce using rule 37 (Opr_bool -> LESSEQ .)
+    LPAREN          reduce using rule 37 (Opr_bool -> LESSEQ .)
+
+
+state 51
+
+    (38) Operacion_binaria -> Operacion_binaria PLUS . Term
+    (41) Term -> . Term TIMES Factor
+    (42) Term -> . Term DIVIDE Factor
+    (43) Term -> . Factor
+    (44) Factor -> . NUMBER
+    (45) Factor -> . VAR_IDENTIFIER
+    (46) Factor -> . LPAREN Operacion_binaria RPAREN
+
+    NUMBER          shift and go to state 28
+    VAR_IDENTIFIER  shift and go to state 26
+    LPAREN          shift and go to state 30
+
+    Term                           shift and go to state 77
+    Factor                         shift and go to state 31
+
+state 52
+
+    (39) Operacion_binaria -> Operacion_binaria MINUS . Term
+    (41) Term -> . Term TIMES Factor
+    (42) Term -> . Term DIVIDE Factor
+    (43) Term -> . Factor
+    (44) Factor -> . NUMBER
+    (45) Factor -> . VAR_IDENTIFIER
+    (46) Factor -> . LPAREN Operacion_binaria RPAREN
+
+    NUMBER          shift and go to state 28
+    VAR_IDENTIFIER  shift and go to state 26
+    LPAREN          shift and go to state 30
+
+    Term                           shift and go to state 78
+    Factor                         shift and go to state 31
+
+state 53
+
+    (42) Term -> Term DIVIDE . Factor
+    (44) Factor -> . NUMBER
+    (45) Factor -> . VAR_IDENTIFIER
+    (46) Factor -> . LPAREN Operacion_binaria RPAREN
+
+    NUMBER          shift and go to state 28
+    VAR_IDENTIFIER  shift and go to state 26
+    LPAREN          shift and go to state 30
+
+    Factor                         shift and go to state 79
+
+state 54
+
+    (41) Term -> Term TIMES . Factor
+    (44) Factor -> . NUMBER
+    (45) Factor -> . VAR_IDENTIFIER
+    (46) Factor -> . LPAREN Operacion_binaria RPAREN
+
+    NUMBER          shift and go to state 28
+    VAR_IDENTIFIER  shift and go to state 26
+    LPAREN          shift and go to state 30
+
+    Factor                         shift and go to state 80
+
+state 55
+
+    (46) Factor -> LPAREN Operacion_binaria . RPAREN
+    (38) Operacion_binaria -> Operacion_binaria . PLUS Term
+    (39) Operacion_binaria -> Operacion_binaria . MINUS Term
+
+    RPAREN          shift and go to state 81
+    PLUS            shift and go to state 51
+    MINUS           shift and go to state 52
+
+
+state 56
+
+    (26) Operacion_booleana -> Operacion_booleana Opr_bool . Operacion_binaria
+    (27) Operacion_booleana -> Operacion_booleana Opr_bool . Operacion_booleana
+    (38) Operacion_binaria -> . Operacion_binaria PLUS Term
+    (39) Operacion_binaria -> . Operacion_binaria MINUS Term
+    (40) Operacion_binaria -> . Term
+    (24) Operacion_booleana -> . Operacion_binaria Opr_bool Operacion_binaria
+    (25) Operacion_booleana -> . Operacion_binaria Opr_bool Operacion_booleana
+    (26) Operacion_booleana -> . Operacion_booleana Opr_bool Operacion_binaria
+    (27) Operacion_booleana -> . Operacion_booleana Opr_bool Operacion_booleana
+    (28) Operacion_booleana -> . t
+    (29) Operacion_booleana -> . f
+    (41) Term -> . Term TIMES Factor
+    (42) Term -> . Term DIVIDE Factor
+    (43) Term -> . Factor
+    (44) Factor -> . NUMBER
+    (45) Factor -> . VAR_IDENTIFIER
+    (46) Factor -> . LPAREN Operacion_binaria RPAREN
+
+    t               shift and go to state 29
+    f               shift and go to state 25
+    NUMBER          shift and go to state 28
+    VAR_IDENTIFIER  shift and go to state 26
+    LPAREN          shift and go to state 30
+
+    Operacion_binaria              shift and go to state 82
+    Term                           shift and go to state 27
+    Operacion_booleana             shift and go to state 83
+    Factor                         shift and go to state 31
+
+state 57
+
+    (61) Inst_While -> INST_WHILE Operacion_booleana INST_DO . Bloque_Inst
+    (2) Bloque_Inst -> . INST_BEGIN Lista_Inst INST_END
+    (3) Bloque_Inst -> . Inst
+    (6) Inst -> . Inst_Declare
+    (7) Inst -> . Inst_Asignacion
+    (8) Inst -> . Inst_Lectura
+    (9) Inst -> . Inst_For
+    (10) Inst -> . Inst_While
+    (11) Inst -> . Inst_If
+    (12) Inst -> . Inst_Case
+    (13) Inst_Declare -> . INST_DECLARE Lista_Declare
+    (20) Inst_Asignacion -> . VAR_IDENTIFIER EQUAL Expresion
+    (53) Inst_Lectura -> . INST_READ VAR_IDENTIFIER
+    (60) Inst_For -> . INST_FOR VAR_IDENTIFIER INST_IN Rango INST_DO Bloque_Inst
+    (61) Inst_While -> . INST_WHILE Operacion_booleana INST_DO Bloque_Inst
+    (54) Inst_If -> . INST_IF Operacion_booleana INST_THEN Bloque_Inst
+    (55) Inst_If -> . INST_IF Operacion_booleana INST_THEN Bloque_Inst INST_ELSE Bloque_Inst
+    (56) Inst_Case -> . INST_CASE Operacion_binaria INST_OF Casos
+
+    INST_BEGIN      shift and go to state 8
+    INST_DECLARE    shift and go to state 3
+    VAR_IDENTIFIER  shift and go to state 14
+    INST_READ       shift and go to state 7
+    INST_FOR        shift and go to state 5
+    INST_WHILE      shift and go to state 6
+    INST_IF         shift and go to state 17
+    INST_CASE       shift and go to state 16
+
+    Inst_Declare                   shift and go to state 9
+    Bloque_Inst                    shift and go to state 84
+    Inst_If                        shift and go to state 15
+    Inst_For                       shift and go to state 10
+    Inst_While                     shift and go to state 12
+    Inst                           shift and go to state 11
+    Inst_Asignacion                shift and go to state 18
+    Inst_Case                      shift and go to state 19
+    Inst_Lectura                   shift and go to state 13
+
+state 58
 
     (5) Lista_Inst -> Inst SEMICOLON . Lista_Inst
     (4) Lista_Inst -> . Inst
     (5) Lista_Inst -> . Inst SEMICOLON Lista_Inst
     (6) Inst -> . Inst_Declare
-    (7) Inst_Declare -> . INST_DECLARE Lista_Declare
+    (7) Inst -> . Inst_Asignacion
+    (8) Inst -> . Inst_Lectura
+    (9) Inst -> . Inst_For
+    (10) Inst -> . Inst_While
+    (11) Inst -> . Inst_If
+    (12) Inst -> . Inst_Case
+    (13) Inst_Declare -> . INST_DECLARE Lista_Declare
+    (20) Inst_Asignacion -> . VAR_IDENTIFIER EQUAL Expresion
+    (53) Inst_Lectura -> . INST_READ VAR_IDENTIFIER
+    (60) Inst_For -> . INST_FOR VAR_IDENTIFIER INST_IN Rango INST_DO Bloque_Inst
+    (61) Inst_While -> . INST_WHILE Operacion_booleana INST_DO Bloque_Inst
+    (54) Inst_If -> . INST_IF Operacion_booleana INST_THEN Bloque_Inst
+    (55) Inst_If -> . INST_IF Operacion_booleana INST_THEN Bloque_Inst INST_ELSE Bloque_Inst
+    (56) Inst_Case -> . INST_CASE Operacion_binaria INST_OF Casos
 
-    INST_DECLARE    shift and go to state 5
+    INST_DECLARE    shift and go to state 3
+    VAR_IDENTIFIER  shift and go to state 14
+    INST_READ       shift and go to state 7
+    INST_FOR        shift and go to state 5
+    INST_WHILE      shift and go to state 6
+    INST_IF         shift and go to state 17
+    INST_CASE       shift and go to state 16
 
-    Inst_Declare                   shift and go to state 3
-    Inst                           shift and go to state 11
-    Lista_Inst                     shift and go to state 22
+    Inst_Declare                   shift and go to state 9
+    Inst_If                        shift and go to state 15
+    Inst_For                       shift and go to state 10
+    Inst_While                     shift and go to state 12
+    Inst                           shift and go to state 34
+    Inst_Asignacion                shift and go to state 18
+    Inst_Case                      shift and go to state 19
+    Inst_Lectura                   shift and go to state 13
+    Lista_Inst                     shift and go to state 85
 
-state 16
+state 59
 
     (2) Bloque_Inst -> INST_BEGIN Lista_Inst INST_END .
 
     $end            reduce using rule 2 (Bloque_Inst -> INST_BEGIN Lista_Inst INST_END .)
+    SEMICOLON       reduce using rule 2 (Bloque_Inst -> INST_BEGIN Lista_Inst INST_END .)
+    INST_END        reduce using rule 2 (Bloque_Inst -> INST_BEGIN Lista_Inst INST_END .)
+    INST_ELSE       reduce using rule 2 (Bloque_Inst -> INST_BEGIN Lista_Inst INST_END .)
+    VAR_IDENTIFIER  reduce using rule 2 (Bloque_Inst -> INST_BEGIN Lista_Inst INST_END .)
+    LPAREN          reduce using rule 2 (Bloque_Inst -> INST_BEGIN Lista_Inst INST_END .)
+    NUMBER          reduce using rule 2 (Bloque_Inst -> INST_BEGIN Lista_Inst INST_END .)
 
 
-state 17
+state 60
 
-    (10) Lista_Variables -> VAR_IDENTIFIER COMMA Lista_Variables .
+    (20) Inst_Asignacion -> VAR_IDENTIFIER EQUAL Expresion .
 
-    INST_AS         reduce using rule 10 (Lista_Variables -> VAR_IDENTIFIER COMMA Lista_Variables .)
-
-
-state 18
-
-    (11) Tipo -> TYPEDEF_INT .
-
-    $end            reduce using rule 11 (Tipo -> TYPEDEF_INT .)
-    SEMICOLON       reduce using rule 11 (Tipo -> TYPEDEF_INT .)
-    INST_END        reduce using rule 11 (Tipo -> TYPEDEF_INT .)
+    $end            reduce using rule 20 (Inst_Asignacion -> VAR_IDENTIFIER EQUAL Expresion .)
+    SEMICOLON       reduce using rule 20 (Inst_Asignacion -> VAR_IDENTIFIER EQUAL Expresion .)
+    INST_END        reduce using rule 20 (Inst_Asignacion -> VAR_IDENTIFIER EQUAL Expresion .)
+    INST_ELSE       reduce using rule 20 (Inst_Asignacion -> VAR_IDENTIFIER EQUAL Expresion .)
+    VAR_IDENTIFIER  reduce using rule 20 (Inst_Asignacion -> VAR_IDENTIFIER EQUAL Expresion .)
+    LPAREN          reduce using rule 20 (Inst_Asignacion -> VAR_IDENTIFIER EQUAL Expresion .)
+    NUMBER          reduce using rule 20 (Inst_Asignacion -> VAR_IDENTIFIER EQUAL Expresion .)
 
 
-state 19
+state 61
 
-    (8) Lista_Declare -> Lista_Variables INST_AS Tipo .
+    (21) Expresion -> Operacion_binaria .
+    (38) Operacion_binaria -> Operacion_binaria . PLUS Term
+    (39) Operacion_binaria -> Operacion_binaria . MINUS Term
+    (24) Operacion_booleana -> Operacion_binaria . Opr_bool Operacion_binaria
+    (25) Operacion_booleana -> Operacion_binaria . Opr_bool Operacion_booleana
+    (47) Rango -> Operacion_binaria . RANGE Operacion_binaria
+    (30) Opr_bool -> . OR
+    (31) Opr_bool -> . AND
+    (32) Opr_bool -> . EQEQ
+    (33) Opr_bool -> . NEQEQ
+    (34) Opr_bool -> . GREAT
+    (35) Opr_bool -> . LESS
+    (36) Opr_bool -> . GREATEQ
+    (37) Opr_bool -> . LESSEQ
 
-    $end            reduce using rule 8 (Lista_Declare -> Lista_Variables INST_AS Tipo .)
-    SEMICOLON       reduce using rule 8 (Lista_Declare -> Lista_Variables INST_AS Tipo .)
-    INST_END        reduce using rule 8 (Lista_Declare -> Lista_Variables INST_AS Tipo .)
+    $end            reduce using rule 21 (Expresion -> Operacion_binaria .)
+    SEMICOLON       reduce using rule 21 (Expresion -> Operacion_binaria .)
+    INST_END        reduce using rule 21 (Expresion -> Operacion_binaria .)
+    INST_ELSE       reduce using rule 21 (Expresion -> Operacion_binaria .)
+    VAR_IDENTIFIER  reduce using rule 21 (Expresion -> Operacion_binaria .)
+    LPAREN          reduce using rule 21 (Expresion -> Operacion_binaria .)
+    NUMBER          reduce using rule 21 (Expresion -> Operacion_binaria .)
+    PLUS            shift and go to state 51
+    MINUS           shift and go to state 52
+    RANGE           shift and go to state 86
+    OR              shift and go to state 48
+    AND             shift and go to state 42
+    EQEQ            shift and go to state 49
+    NEQEQ           shift and go to state 45
+    GREAT           shift and go to state 44
+    LESS            shift and go to state 47
+    GREATEQ         shift and go to state 43
+    LESSEQ          shift and go to state 50
+
+    Opr_bool                       shift and go to state 46
+
+state 62
+
+    (52) RangoF -> LPAREN . Rango RPAREN
+    (46) Factor -> LPAREN . Operacion_binaria RPAREN
+    (47) Rango -> . Operacion_binaria RANGE Operacion_binaria
+    (48) Rango -> . Rango PLUS Rango
+    (49) Rango -> . Rango TIMES Operacion_binaria
+    (50) Rango -> . Rango INTERSECTION Rango
+    (51) Rango -> . RangoF
+    (38) Operacion_binaria -> . Operacion_binaria PLUS Term
+    (39) Operacion_binaria -> . Operacion_binaria MINUS Term
+    (40) Operacion_binaria -> . Term
+    (52) RangoF -> . LPAREN Rango RPAREN
+    (41) Term -> . Term TIMES Factor
+    (42) Term -> . Term DIVIDE Factor
+    (43) Term -> . Factor
+    (44) Factor -> . NUMBER
+    (45) Factor -> . VAR_IDENTIFIER
+    (46) Factor -> . LPAREN Operacion_binaria RPAREN
+
+    LPAREN          shift and go to state 62
+    NUMBER          shift and go to state 28
+    VAR_IDENTIFIER  shift and go to state 26
+
+    Rango                          shift and go to state 88
+    Operacion_binaria              shift and go to state 87
+    Factor                         shift and go to state 31
+    Term                           shift and go to state 27
+    RangoF                         shift and go to state 63
+
+state 63
+
+    (51) Rango -> RangoF .
+
+    PLUS            reduce using rule 51 (Rango -> RangoF .)
+    TIMES           reduce using rule 51 (Rango -> RangoF .)
+    INTERSECTION    reduce using rule 51 (Rango -> RangoF .)
+    $end            reduce using rule 51 (Rango -> RangoF .)
+    SEMICOLON       reduce using rule 51 (Rango -> RangoF .)
+    INST_END        reduce using rule 51 (Rango -> RangoF .)
+    INST_ELSE       reduce using rule 51 (Rango -> RangoF .)
+    VAR_IDENTIFIER  reduce using rule 51 (Rango -> RangoF .)
+    LPAREN          reduce using rule 51 (Rango -> RangoF .)
+    NUMBER          reduce using rule 51 (Rango -> RangoF .)
+    INST_DO         reduce using rule 51 (Rango -> RangoF .)
+    RPAREN          reduce using rule 51 (Rango -> RangoF .)
+    -               reduce using rule 51 (Rango -> RangoF .)
 
 
-state 20
+state 64
 
-    (13) Tipo -> TYPEDEF_RANGE .
+    (23) Expresion -> Rango .
+    (48) Rango -> Rango . PLUS Rango
+    (49) Rango -> Rango . TIMES Operacion_binaria
+    (50) Rango -> Rango . INTERSECTION Rango
 
-    $end            reduce using rule 13 (Tipo -> TYPEDEF_RANGE .)
-    SEMICOLON       reduce using rule 13 (Tipo -> TYPEDEF_RANGE .)
-    INST_END        reduce using rule 13 (Tipo -> TYPEDEF_RANGE .)
+    $end            reduce using rule 23 (Expresion -> Rango .)
+    SEMICOLON       reduce using rule 23 (Expresion -> Rango .)
+    INST_END        reduce using rule 23 (Expresion -> Rango .)
+    INST_ELSE       reduce using rule 23 (Expresion -> Rango .)
+    VAR_IDENTIFIER  reduce using rule 23 (Expresion -> Rango .)
+    LPAREN          reduce using rule 23 (Expresion -> Rango .)
+    NUMBER          reduce using rule 23 (Expresion -> Rango .)
+    PLUS            shift and go to state 90
+    TIMES           shift and go to state 91
+    INTERSECTION    shift and go to state 89
 
 
-state 21
+state 65
 
-    (12) Tipo -> TYPEDEF_BOOL .
+    (22) Expresion -> Operacion_booleana .
+    (26) Operacion_booleana -> Operacion_booleana . Opr_bool Operacion_binaria
+    (27) Operacion_booleana -> Operacion_booleana . Opr_bool Operacion_booleana
+    (30) Opr_bool -> . OR
+    (31) Opr_bool -> . AND
+    (32) Opr_bool -> . EQEQ
+    (33) Opr_bool -> . NEQEQ
+    (34) Opr_bool -> . GREAT
+    (35) Opr_bool -> . LESS
+    (36) Opr_bool -> . GREATEQ
+    (37) Opr_bool -> . LESSEQ
 
-    $end            reduce using rule 12 (Tipo -> TYPEDEF_BOOL .)
-    SEMICOLON       reduce using rule 12 (Tipo -> TYPEDEF_BOOL .)
-    INST_END        reduce using rule 12 (Tipo -> TYPEDEF_BOOL .)
+    $end            reduce using rule 22 (Expresion -> Operacion_booleana .)
+    SEMICOLON       reduce using rule 22 (Expresion -> Operacion_booleana .)
+    INST_END        reduce using rule 22 (Expresion -> Operacion_booleana .)
+    INST_ELSE       reduce using rule 22 (Expresion -> Operacion_booleana .)
+    VAR_IDENTIFIER  reduce using rule 22 (Expresion -> Operacion_booleana .)
+    LPAREN          reduce using rule 22 (Expresion -> Operacion_booleana .)
+    NUMBER          reduce using rule 22 (Expresion -> Operacion_booleana .)
+    OR              shift and go to state 48
+    AND             shift and go to state 42
+    EQEQ            shift and go to state 49
+    NEQEQ           shift and go to state 45
+    GREAT           shift and go to state 44
+    LESS            shift and go to state 47
+    GREATEQ         shift and go to state 43
+    LESSEQ          shift and go to state 50
+
+    Opr_bool                       shift and go to state 56
+
+state 66
+
+    (56) Inst_Case -> INST_CASE Operacion_binaria INST_OF . Casos
+    (57) Casos -> . VAR_IDENTIFIER - > Bloque_Inst
+    (58) Casos -> . Rango - > Bloque_Inst
+    (59) Casos -> . Casos Casos
+    (47) Rango -> . Operacion_binaria RANGE Operacion_binaria
+    (48) Rango -> . Rango PLUS Rango
+    (49) Rango -> . Rango TIMES Operacion_binaria
+    (50) Rango -> . Rango INTERSECTION Rango
+    (51) Rango -> . RangoF
+    (38) Operacion_binaria -> . Operacion_binaria PLUS Term
+    (39) Operacion_binaria -> . Operacion_binaria MINUS Term
+    (40) Operacion_binaria -> . Term
+    (52) RangoF -> . LPAREN Rango RPAREN
+    (41) Term -> . Term TIMES Factor
+    (42) Term -> . Term DIVIDE Factor
+    (43) Term -> . Factor
+    (44) Factor -> . NUMBER
+    (45) Factor -> . VAR_IDENTIFIER
+    (46) Factor -> . LPAREN Operacion_binaria RPAREN
+
+    VAR_IDENTIFIER  shift and go to state 92
+    LPAREN          shift and go to state 62
+    NUMBER          shift and go to state 28
+
+    Operacion_binaria              shift and go to state 73
+    Factor                         shift and go to state 31
+    Term                           shift and go to state 27
+    RangoF                         shift and go to state 63
+    Rango                          shift and go to state 93
+    Casos                          shift and go to state 94
+
+state 67
+
+    (54) Inst_If -> INST_IF Operacion_booleana INST_THEN . Bloque_Inst
+    (55) Inst_If -> INST_IF Operacion_booleana INST_THEN . Bloque_Inst INST_ELSE Bloque_Inst
+    (2) Bloque_Inst -> . INST_BEGIN Lista_Inst INST_END
+    (3) Bloque_Inst -> . Inst
+    (6) Inst -> . Inst_Declare
+    (7) Inst -> . Inst_Asignacion
+    (8) Inst -> . Inst_Lectura
+    (9) Inst -> . Inst_For
+    (10) Inst -> . Inst_While
+    (11) Inst -> . Inst_If
+    (12) Inst -> . Inst_Case
+    (13) Inst_Declare -> . INST_DECLARE Lista_Declare
+    (20) Inst_Asignacion -> . VAR_IDENTIFIER EQUAL Expresion
+    (53) Inst_Lectura -> . INST_READ VAR_IDENTIFIER
+    (60) Inst_For -> . INST_FOR VAR_IDENTIFIER INST_IN Rango INST_DO Bloque_Inst
+    (61) Inst_While -> . INST_WHILE Operacion_booleana INST_DO Bloque_Inst
+    (54) Inst_If -> . INST_IF Operacion_booleana INST_THEN Bloque_Inst
+    (55) Inst_If -> . INST_IF Operacion_booleana INST_THEN Bloque_Inst INST_ELSE Bloque_Inst
+    (56) Inst_Case -> . INST_CASE Operacion_binaria INST_OF Casos
+
+    INST_BEGIN      shift and go to state 8
+    INST_DECLARE    shift and go to state 3
+    VAR_IDENTIFIER  shift and go to state 14
+    INST_READ       shift and go to state 7
+    INST_FOR        shift and go to state 5
+    INST_WHILE      shift and go to state 6
+    INST_IF         shift and go to state 17
+    INST_CASE       shift and go to state 16
+
+    Inst_Declare                   shift and go to state 9
+    Bloque_Inst                    shift and go to state 95
+    Inst_If                        shift and go to state 15
+    Inst_For                       shift and go to state 10
+    Inst_While                     shift and go to state 12
+    Inst                           shift and go to state 11
+    Inst_Asignacion                shift and go to state 18
+    Inst_Case                      shift and go to state 19
+    Inst_Lectura                   shift and go to state 13
+
+state 68
+
+    (16) Lista_Variables -> VAR_IDENTIFIER COMMA Lista_Variables .
+
+    INST_AS         reduce using rule 16 (Lista_Variables -> VAR_IDENTIFIER COMMA Lista_Variables .)
 
 
-state 22
+state 69
+
+    (17) Tipo -> TYPEDEF_INT .
+
+    $end            reduce using rule 17 (Tipo -> TYPEDEF_INT .)
+    SEMICOLON       reduce using rule 17 (Tipo -> TYPEDEF_INT .)
+    INST_END        reduce using rule 17 (Tipo -> TYPEDEF_INT .)
+    INST_ELSE       reduce using rule 17 (Tipo -> TYPEDEF_INT .)
+    VAR_IDENTIFIER  reduce using rule 17 (Tipo -> TYPEDEF_INT .)
+    LPAREN          reduce using rule 17 (Tipo -> TYPEDEF_INT .)
+    NUMBER          reduce using rule 17 (Tipo -> TYPEDEF_INT .)
+
+
+state 70
+
+    (14) Lista_Declare -> Lista_Variables INST_AS Tipo .
+
+    $end            reduce using rule 14 (Lista_Declare -> Lista_Variables INST_AS Tipo .)
+    SEMICOLON       reduce using rule 14 (Lista_Declare -> Lista_Variables INST_AS Tipo .)
+    INST_END        reduce using rule 14 (Lista_Declare -> Lista_Variables INST_AS Tipo .)
+    INST_ELSE       reduce using rule 14 (Lista_Declare -> Lista_Variables INST_AS Tipo .)
+    VAR_IDENTIFIER  reduce using rule 14 (Lista_Declare -> Lista_Variables INST_AS Tipo .)
+    LPAREN          reduce using rule 14 (Lista_Declare -> Lista_Variables INST_AS Tipo .)
+    NUMBER          reduce using rule 14 (Lista_Declare -> Lista_Variables INST_AS Tipo .)
+
+
+state 71
+
+    (19) Tipo -> TYPEDEF_RANGE .
+
+    $end            reduce using rule 19 (Tipo -> TYPEDEF_RANGE .)
+    SEMICOLON       reduce using rule 19 (Tipo -> TYPEDEF_RANGE .)
+    INST_END        reduce using rule 19 (Tipo -> TYPEDEF_RANGE .)
+    INST_ELSE       reduce using rule 19 (Tipo -> TYPEDEF_RANGE .)
+    VAR_IDENTIFIER  reduce using rule 19 (Tipo -> TYPEDEF_RANGE .)
+    LPAREN          reduce using rule 19 (Tipo -> TYPEDEF_RANGE .)
+    NUMBER          reduce using rule 19 (Tipo -> TYPEDEF_RANGE .)
+
+
+state 72
+
+    (18) Tipo -> TYPEDEF_BOOL .
+
+    $end            reduce using rule 18 (Tipo -> TYPEDEF_BOOL .)
+    SEMICOLON       reduce using rule 18 (Tipo -> TYPEDEF_BOOL .)
+    INST_END        reduce using rule 18 (Tipo -> TYPEDEF_BOOL .)
+    INST_ELSE       reduce using rule 18 (Tipo -> TYPEDEF_BOOL .)
+    VAR_IDENTIFIER  reduce using rule 18 (Tipo -> TYPEDEF_BOOL .)
+    LPAREN          reduce using rule 18 (Tipo -> TYPEDEF_BOOL .)
+    NUMBER          reduce using rule 18 (Tipo -> TYPEDEF_BOOL .)
+
+
+state 73
+
+    (47) Rango -> Operacion_binaria . RANGE Operacion_binaria
+    (38) Operacion_binaria -> Operacion_binaria . PLUS Term
+    (39) Operacion_binaria -> Operacion_binaria . MINUS Term
+
+    RANGE           shift and go to state 86
+    PLUS            shift and go to state 51
+    MINUS           shift and go to state 52
+
+
+state 74
+
+    (60) Inst_For -> INST_FOR VAR_IDENTIFIER INST_IN Rango . INST_DO Bloque_Inst
+    (48) Rango -> Rango . PLUS Rango
+    (49) Rango -> Rango . TIMES Operacion_binaria
+    (50) Rango -> Rango . INTERSECTION Rango
+
+    INST_DO         shift and go to state 96
+    PLUS            shift and go to state 90
+    TIMES           shift and go to state 91
+    INTERSECTION    shift and go to state 89
+
+
+state 75
+
+    (24) Operacion_booleana -> Operacion_binaria Opr_bool Operacion_binaria .
+    (38) Operacion_binaria -> Operacion_binaria . PLUS Term
+    (39) Operacion_binaria -> Operacion_binaria . MINUS Term
+    (24) Operacion_booleana -> Operacion_binaria . Opr_bool Operacion_binaria
+    (25) Operacion_booleana -> Operacion_binaria . Opr_bool Operacion_booleana
+    (30) Opr_bool -> . OR
+    (31) Opr_bool -> . AND
+    (32) Opr_bool -> . EQEQ
+    (33) Opr_bool -> . NEQEQ
+    (34) Opr_bool -> . GREAT
+    (35) Opr_bool -> . LESS
+    (36) Opr_bool -> . GREATEQ
+    (37) Opr_bool -> . LESSEQ
+
+  ! shift/reduce conflict for OR resolved as shift
+  ! shift/reduce conflict for AND resolved as shift
+  ! shift/reduce conflict for EQEQ resolved as shift
+  ! shift/reduce conflict for NEQEQ resolved as shift
+  ! shift/reduce conflict for GREAT resolved as shift
+  ! shift/reduce conflict for LESS resolved as shift
+  ! shift/reduce conflict for GREATEQ resolved as shift
+  ! shift/reduce conflict for LESSEQ resolved as shift
+    INST_DO         reduce using rule 24 (Operacion_booleana -> Operacion_binaria Opr_bool Operacion_binaria .)
+    INST_THEN       reduce using rule 24 (Operacion_booleana -> Operacion_binaria Opr_bool Operacion_binaria .)
+    $end            reduce using rule 24 (Operacion_booleana -> Operacion_binaria Opr_bool Operacion_binaria .)
+    SEMICOLON       reduce using rule 24 (Operacion_booleana -> Operacion_binaria Opr_bool Operacion_binaria .)
+    INST_END        reduce using rule 24 (Operacion_booleana -> Operacion_binaria Opr_bool Operacion_binaria .)
+    INST_ELSE       reduce using rule 24 (Operacion_booleana -> Operacion_binaria Opr_bool Operacion_binaria .)
+    VAR_IDENTIFIER  reduce using rule 24 (Operacion_booleana -> Operacion_binaria Opr_bool Operacion_binaria .)
+    LPAREN          reduce using rule 24 (Operacion_booleana -> Operacion_binaria Opr_bool Operacion_binaria .)
+    NUMBER          reduce using rule 24 (Operacion_booleana -> Operacion_binaria Opr_bool Operacion_binaria .)
+    PLUS            shift and go to state 51
+    MINUS           shift and go to state 52
+    OR              shift and go to state 48
+    AND             shift and go to state 42
+    EQEQ            shift and go to state 49
+    NEQEQ           shift and go to state 45
+    GREAT           shift and go to state 44
+    LESS            shift and go to state 47
+    GREATEQ         shift and go to state 43
+    LESSEQ          shift and go to state 50
+
+  ! OR              [ reduce using rule 24 (Operacion_booleana -> Operacion_binaria Opr_bool Operacion_binaria .) ]
+  ! AND             [ reduce using rule 24 (Operacion_booleana -> Operacion_binaria Opr_bool Operacion_binaria .) ]
+  ! EQEQ            [ reduce using rule 24 (Operacion_booleana -> Operacion_binaria Opr_bool Operacion_binaria .) ]
+  ! NEQEQ           [ reduce using rule 24 (Operacion_booleana -> Operacion_binaria Opr_bool Operacion_binaria .) ]
+  ! GREAT           [ reduce using rule 24 (Operacion_booleana -> Operacion_binaria Opr_bool Operacion_binaria .) ]
+  ! LESS            [ reduce using rule 24 (Operacion_booleana -> Operacion_binaria Opr_bool Operacion_binaria .) ]
+  ! GREATEQ         [ reduce using rule 24 (Operacion_booleana -> Operacion_binaria Opr_bool Operacion_binaria .) ]
+  ! LESSEQ          [ reduce using rule 24 (Operacion_booleana -> Operacion_binaria Opr_bool Operacion_binaria .) ]
+
+    Opr_bool                       shift and go to state 46
+
+state 76
+
+    (25) Operacion_booleana -> Operacion_binaria Opr_bool Operacion_booleana .
+    (26) Operacion_booleana -> Operacion_booleana . Opr_bool Operacion_binaria
+    (27) Operacion_booleana -> Operacion_booleana . Opr_bool Operacion_booleana
+    (30) Opr_bool -> . OR
+    (31) Opr_bool -> . AND
+    (32) Opr_bool -> . EQEQ
+    (33) Opr_bool -> . NEQEQ
+    (34) Opr_bool -> . GREAT
+    (35) Opr_bool -> . LESS
+    (36) Opr_bool -> . GREATEQ
+    (37) Opr_bool -> . LESSEQ
+
+  ! shift/reduce conflict for OR resolved as shift
+  ! shift/reduce conflict for AND resolved as shift
+  ! shift/reduce conflict for EQEQ resolved as shift
+  ! shift/reduce conflict for NEQEQ resolved as shift
+  ! shift/reduce conflict for GREAT resolved as shift
+  ! shift/reduce conflict for LESS resolved as shift
+  ! shift/reduce conflict for GREATEQ resolved as shift
+  ! shift/reduce conflict for LESSEQ resolved as shift
+    INST_DO         reduce using rule 25 (Operacion_booleana -> Operacion_binaria Opr_bool Operacion_booleana .)
+    INST_THEN       reduce using rule 25 (Operacion_booleana -> Operacion_binaria Opr_bool Operacion_booleana .)
+    $end            reduce using rule 25 (Operacion_booleana -> Operacion_binaria Opr_bool Operacion_booleana .)
+    SEMICOLON       reduce using rule 25 (Operacion_booleana -> Operacion_binaria Opr_bool Operacion_booleana .)
+    INST_END        reduce using rule 25 (Operacion_booleana -> Operacion_binaria Opr_bool Operacion_booleana .)
+    INST_ELSE       reduce using rule 25 (Operacion_booleana -> Operacion_binaria Opr_bool Operacion_booleana .)
+    VAR_IDENTIFIER  reduce using rule 25 (Operacion_booleana -> Operacion_binaria Opr_bool Operacion_booleana .)
+    LPAREN          reduce using rule 25 (Operacion_booleana -> Operacion_binaria Opr_bool Operacion_booleana .)
+    NUMBER          reduce using rule 25 (Operacion_booleana -> Operacion_binaria Opr_bool Operacion_booleana .)
+    OR              shift and go to state 48
+    AND             shift and go to state 42
+    EQEQ            shift and go to state 49
+    NEQEQ           shift and go to state 45
+    GREAT           shift and go to state 44
+    LESS            shift and go to state 47
+    GREATEQ         shift and go to state 43
+    LESSEQ          shift and go to state 50
+
+  ! OR              [ reduce using rule 25 (Operacion_booleana -> Operacion_binaria Opr_bool Operacion_booleana .) ]
+  ! AND             [ reduce using rule 25 (Operacion_booleana -> Operacion_binaria Opr_bool Operacion_booleana .) ]
+  ! EQEQ            [ reduce using rule 25 (Operacion_booleana -> Operacion_binaria Opr_bool Operacion_booleana .) ]
+  ! NEQEQ           [ reduce using rule 25 (Operacion_booleana -> Operacion_binaria Opr_bool Operacion_booleana .) ]
+  ! GREAT           [ reduce using rule 25 (Operacion_booleana -> Operacion_binaria Opr_bool Operacion_booleana .) ]
+  ! LESS            [ reduce using rule 25 (Operacion_booleana -> Operacion_binaria Opr_bool Operacion_booleana .) ]
+  ! GREATEQ         [ reduce using rule 25 (Operacion_booleana -> Operacion_binaria Opr_bool Operacion_booleana .) ]
+  ! LESSEQ          [ reduce using rule 25 (Operacion_booleana -> Operacion_binaria Opr_bool Operacion_booleana .) ]
+
+    Opr_bool                       shift and go to state 56
+
+state 77
+
+    (38) Operacion_binaria -> Operacion_binaria PLUS Term .
+    (41) Term -> Term . TIMES Factor
+    (42) Term -> Term . DIVIDE Factor
+
+    INST_OF         reduce using rule 38 (Operacion_binaria -> Operacion_binaria PLUS Term .)
+    PLUS            reduce using rule 38 (Operacion_binaria -> Operacion_binaria PLUS Term .)
+    MINUS           reduce using rule 38 (Operacion_binaria -> Operacion_binaria PLUS Term .)
+    RANGE           reduce using rule 38 (Operacion_binaria -> Operacion_binaria PLUS Term .)
+    OR              reduce using rule 38 (Operacion_binaria -> Operacion_binaria PLUS Term .)
+    AND             reduce using rule 38 (Operacion_binaria -> Operacion_binaria PLUS Term .)
+    EQEQ            reduce using rule 38 (Operacion_binaria -> Operacion_binaria PLUS Term .)
+    NEQEQ           reduce using rule 38 (Operacion_binaria -> Operacion_binaria PLUS Term .)
+    GREAT           reduce using rule 38 (Operacion_binaria -> Operacion_binaria PLUS Term .)
+    LESS            reduce using rule 38 (Operacion_binaria -> Operacion_binaria PLUS Term .)
+    GREATEQ         reduce using rule 38 (Operacion_binaria -> Operacion_binaria PLUS Term .)
+    LESSEQ          reduce using rule 38 (Operacion_binaria -> Operacion_binaria PLUS Term .)
+    $end            reduce using rule 38 (Operacion_binaria -> Operacion_binaria PLUS Term .)
+    SEMICOLON       reduce using rule 38 (Operacion_binaria -> Operacion_binaria PLUS Term .)
+    INST_END        reduce using rule 38 (Operacion_binaria -> Operacion_binaria PLUS Term .)
+    INST_ELSE       reduce using rule 38 (Operacion_binaria -> Operacion_binaria PLUS Term .)
+    VAR_IDENTIFIER  reduce using rule 38 (Operacion_binaria -> Operacion_binaria PLUS Term .)
+    LPAREN          reduce using rule 38 (Operacion_binaria -> Operacion_binaria PLUS Term .)
+    NUMBER          reduce using rule 38 (Operacion_binaria -> Operacion_binaria PLUS Term .)
+    INTERSECTION    reduce using rule 38 (Operacion_binaria -> Operacion_binaria PLUS Term .)
+    INST_DO         reduce using rule 38 (Operacion_binaria -> Operacion_binaria PLUS Term .)
+    RPAREN          reduce using rule 38 (Operacion_binaria -> Operacion_binaria PLUS Term .)
+    -               reduce using rule 38 (Operacion_binaria -> Operacion_binaria PLUS Term .)
+    INST_THEN       reduce using rule 38 (Operacion_binaria -> Operacion_binaria PLUS Term .)
+    TIMES           shift and go to state 54
+    DIVIDE          shift and go to state 53
+
+  ! TIMES           [ reduce using rule 38 (Operacion_binaria -> Operacion_binaria PLUS Term .) ]
+
+
+state 78
+
+    (39) Operacion_binaria -> Operacion_binaria MINUS Term .
+    (41) Term -> Term . TIMES Factor
+    (42) Term -> Term . DIVIDE Factor
+
+    INST_OF         reduce using rule 39 (Operacion_binaria -> Operacion_binaria MINUS Term .)
+    PLUS            reduce using rule 39 (Operacion_binaria -> Operacion_binaria MINUS Term .)
+    MINUS           reduce using rule 39 (Operacion_binaria -> Operacion_binaria MINUS Term .)
+    RANGE           reduce using rule 39 (Operacion_binaria -> Operacion_binaria MINUS Term .)
+    OR              reduce using rule 39 (Operacion_binaria -> Operacion_binaria MINUS Term .)
+    AND             reduce using rule 39 (Operacion_binaria -> Operacion_binaria MINUS Term .)
+    EQEQ            reduce using rule 39 (Operacion_binaria -> Operacion_binaria MINUS Term .)
+    NEQEQ           reduce using rule 39 (Operacion_binaria -> Operacion_binaria MINUS Term .)
+    GREAT           reduce using rule 39 (Operacion_binaria -> Operacion_binaria MINUS Term .)
+    LESS            reduce using rule 39 (Operacion_binaria -> Operacion_binaria MINUS Term .)
+    GREATEQ         reduce using rule 39 (Operacion_binaria -> Operacion_binaria MINUS Term .)
+    LESSEQ          reduce using rule 39 (Operacion_binaria -> Operacion_binaria MINUS Term .)
+    $end            reduce using rule 39 (Operacion_binaria -> Operacion_binaria MINUS Term .)
+    SEMICOLON       reduce using rule 39 (Operacion_binaria -> Operacion_binaria MINUS Term .)
+    INST_END        reduce using rule 39 (Operacion_binaria -> Operacion_binaria MINUS Term .)
+    INST_ELSE       reduce using rule 39 (Operacion_binaria -> Operacion_binaria MINUS Term .)
+    VAR_IDENTIFIER  reduce using rule 39 (Operacion_binaria -> Operacion_binaria MINUS Term .)
+    LPAREN          reduce using rule 39 (Operacion_binaria -> Operacion_binaria MINUS Term .)
+    NUMBER          reduce using rule 39 (Operacion_binaria -> Operacion_binaria MINUS Term .)
+    INTERSECTION    reduce using rule 39 (Operacion_binaria -> Operacion_binaria MINUS Term .)
+    INST_DO         reduce using rule 39 (Operacion_binaria -> Operacion_binaria MINUS Term .)
+    RPAREN          reduce using rule 39 (Operacion_binaria -> Operacion_binaria MINUS Term .)
+    -               reduce using rule 39 (Operacion_binaria -> Operacion_binaria MINUS Term .)
+    INST_THEN       reduce using rule 39 (Operacion_binaria -> Operacion_binaria MINUS Term .)
+    TIMES           shift and go to state 54
+    DIVIDE          shift and go to state 53
+
+  ! TIMES           [ reduce using rule 39 (Operacion_binaria -> Operacion_binaria MINUS Term .) ]
+
+
+state 79
+
+    (42) Term -> Term DIVIDE Factor .
+
+    TIMES           reduce using rule 42 (Term -> Term DIVIDE Factor .)
+    DIVIDE          reduce using rule 42 (Term -> Term DIVIDE Factor .)
+    PLUS            reduce using rule 42 (Term -> Term DIVIDE Factor .)
+    MINUS           reduce using rule 42 (Term -> Term DIVIDE Factor .)
+    OR              reduce using rule 42 (Term -> Term DIVIDE Factor .)
+    AND             reduce using rule 42 (Term -> Term DIVIDE Factor .)
+    EQEQ            reduce using rule 42 (Term -> Term DIVIDE Factor .)
+    NEQEQ           reduce using rule 42 (Term -> Term DIVIDE Factor .)
+    GREAT           reduce using rule 42 (Term -> Term DIVIDE Factor .)
+    LESS            reduce using rule 42 (Term -> Term DIVIDE Factor .)
+    GREATEQ         reduce using rule 42 (Term -> Term DIVIDE Factor .)
+    LESSEQ          reduce using rule 42 (Term -> Term DIVIDE Factor .)
+    INST_DO         reduce using rule 42 (Term -> Term DIVIDE Factor .)
+    INST_THEN       reduce using rule 42 (Term -> Term DIVIDE Factor .)
+    $end            reduce using rule 42 (Term -> Term DIVIDE Factor .)
+    SEMICOLON       reduce using rule 42 (Term -> Term DIVIDE Factor .)
+    INST_END        reduce using rule 42 (Term -> Term DIVIDE Factor .)
+    INST_ELSE       reduce using rule 42 (Term -> Term DIVIDE Factor .)
+    VAR_IDENTIFIER  reduce using rule 42 (Term -> Term DIVIDE Factor .)
+    LPAREN          reduce using rule 42 (Term -> Term DIVIDE Factor .)
+    NUMBER          reduce using rule 42 (Term -> Term DIVIDE Factor .)
+    RANGE           reduce using rule 42 (Term -> Term DIVIDE Factor .)
+    INTERSECTION    reduce using rule 42 (Term -> Term DIVIDE Factor .)
+    RPAREN          reduce using rule 42 (Term -> Term DIVIDE Factor .)
+    -               reduce using rule 42 (Term -> Term DIVIDE Factor .)
+    INST_OF         reduce using rule 42 (Term -> Term DIVIDE Factor .)
+
+
+state 80
+
+    (41) Term -> Term TIMES Factor .
+
+    TIMES           reduce using rule 41 (Term -> Term TIMES Factor .)
+    DIVIDE          reduce using rule 41 (Term -> Term TIMES Factor .)
+    PLUS            reduce using rule 41 (Term -> Term TIMES Factor .)
+    MINUS           reduce using rule 41 (Term -> Term TIMES Factor .)
+    OR              reduce using rule 41 (Term -> Term TIMES Factor .)
+    AND             reduce using rule 41 (Term -> Term TIMES Factor .)
+    EQEQ            reduce using rule 41 (Term -> Term TIMES Factor .)
+    NEQEQ           reduce using rule 41 (Term -> Term TIMES Factor .)
+    GREAT           reduce using rule 41 (Term -> Term TIMES Factor .)
+    LESS            reduce using rule 41 (Term -> Term TIMES Factor .)
+    GREATEQ         reduce using rule 41 (Term -> Term TIMES Factor .)
+    LESSEQ          reduce using rule 41 (Term -> Term TIMES Factor .)
+    INST_DO         reduce using rule 41 (Term -> Term TIMES Factor .)
+    INST_THEN       reduce using rule 41 (Term -> Term TIMES Factor .)
+    $end            reduce using rule 41 (Term -> Term TIMES Factor .)
+    SEMICOLON       reduce using rule 41 (Term -> Term TIMES Factor .)
+    INST_END        reduce using rule 41 (Term -> Term TIMES Factor .)
+    INST_ELSE       reduce using rule 41 (Term -> Term TIMES Factor .)
+    VAR_IDENTIFIER  reduce using rule 41 (Term -> Term TIMES Factor .)
+    LPAREN          reduce using rule 41 (Term -> Term TIMES Factor .)
+    NUMBER          reduce using rule 41 (Term -> Term TIMES Factor .)
+    RANGE           reduce using rule 41 (Term -> Term TIMES Factor .)
+    INTERSECTION    reduce using rule 41 (Term -> Term TIMES Factor .)
+    RPAREN          reduce using rule 41 (Term -> Term TIMES Factor .)
+    -               reduce using rule 41 (Term -> Term TIMES Factor .)
+    INST_OF         reduce using rule 41 (Term -> Term TIMES Factor .)
+
+
+state 81
+
+    (46) Factor -> LPAREN Operacion_binaria RPAREN .
+
+    TIMES           reduce using rule 46 (Factor -> LPAREN Operacion_binaria RPAREN .)
+    DIVIDE          reduce using rule 46 (Factor -> LPAREN Operacion_binaria RPAREN .)
+    RANGE           reduce using rule 46 (Factor -> LPAREN Operacion_binaria RPAREN .)
+    PLUS            reduce using rule 46 (Factor -> LPAREN Operacion_binaria RPAREN .)
+    MINUS           reduce using rule 46 (Factor -> LPAREN Operacion_binaria RPAREN .)
+    OR              reduce using rule 46 (Factor -> LPAREN Operacion_binaria RPAREN .)
+    AND             reduce using rule 46 (Factor -> LPAREN Operacion_binaria RPAREN .)
+    EQEQ            reduce using rule 46 (Factor -> LPAREN Operacion_binaria RPAREN .)
+    NEQEQ           reduce using rule 46 (Factor -> LPAREN Operacion_binaria RPAREN .)
+    GREAT           reduce using rule 46 (Factor -> LPAREN Operacion_binaria RPAREN .)
+    LESS            reduce using rule 46 (Factor -> LPAREN Operacion_binaria RPAREN .)
+    GREATEQ         reduce using rule 46 (Factor -> LPAREN Operacion_binaria RPAREN .)
+    LESSEQ          reduce using rule 46 (Factor -> LPAREN Operacion_binaria RPAREN .)
+    INST_OF         reduce using rule 46 (Factor -> LPAREN Operacion_binaria RPAREN .)
+    RPAREN          reduce using rule 46 (Factor -> LPAREN Operacion_binaria RPAREN .)
+    $end            reduce using rule 46 (Factor -> LPAREN Operacion_binaria RPAREN .)
+    SEMICOLON       reduce using rule 46 (Factor -> LPAREN Operacion_binaria RPAREN .)
+    INST_END        reduce using rule 46 (Factor -> LPAREN Operacion_binaria RPAREN .)
+    INST_ELSE       reduce using rule 46 (Factor -> LPAREN Operacion_binaria RPAREN .)
+    VAR_IDENTIFIER  reduce using rule 46 (Factor -> LPAREN Operacion_binaria RPAREN .)
+    LPAREN          reduce using rule 46 (Factor -> LPAREN Operacion_binaria RPAREN .)
+    NUMBER          reduce using rule 46 (Factor -> LPAREN Operacion_binaria RPAREN .)
+    INST_DO         reduce using rule 46 (Factor -> LPAREN Operacion_binaria RPAREN .)
+    INST_THEN       reduce using rule 46 (Factor -> LPAREN Operacion_binaria RPAREN .)
+    INTERSECTION    reduce using rule 46 (Factor -> LPAREN Operacion_binaria RPAREN .)
+    -               reduce using rule 46 (Factor -> LPAREN Operacion_binaria RPAREN .)
+
+
+state 82
+
+    (26) Operacion_booleana -> Operacion_booleana Opr_bool Operacion_binaria .
+    (38) Operacion_binaria -> Operacion_binaria . PLUS Term
+    (39) Operacion_binaria -> Operacion_binaria . MINUS Term
+    (24) Operacion_booleana -> Operacion_binaria . Opr_bool Operacion_binaria
+    (25) Operacion_booleana -> Operacion_binaria . Opr_bool Operacion_booleana
+    (30) Opr_bool -> . OR
+    (31) Opr_bool -> . AND
+    (32) Opr_bool -> . EQEQ
+    (33) Opr_bool -> . NEQEQ
+    (34) Opr_bool -> . GREAT
+    (35) Opr_bool -> . LESS
+    (36) Opr_bool -> . GREATEQ
+    (37) Opr_bool -> . LESSEQ
+
+  ! shift/reduce conflict for OR resolved as shift
+  ! shift/reduce conflict for AND resolved as shift
+  ! shift/reduce conflict for EQEQ resolved as shift
+  ! shift/reduce conflict for NEQEQ resolved as shift
+  ! shift/reduce conflict for GREAT resolved as shift
+  ! shift/reduce conflict for LESS resolved as shift
+  ! shift/reduce conflict for GREATEQ resolved as shift
+  ! shift/reduce conflict for LESSEQ resolved as shift
+    INST_DO         reduce using rule 26 (Operacion_booleana -> Operacion_booleana Opr_bool Operacion_binaria .)
+    INST_THEN       reduce using rule 26 (Operacion_booleana -> Operacion_booleana Opr_bool Operacion_binaria .)
+    $end            reduce using rule 26 (Operacion_booleana -> Operacion_booleana Opr_bool Operacion_binaria .)
+    SEMICOLON       reduce using rule 26 (Operacion_booleana -> Operacion_booleana Opr_bool Operacion_binaria .)
+    INST_END        reduce using rule 26 (Operacion_booleana -> Operacion_booleana Opr_bool Operacion_binaria .)
+    INST_ELSE       reduce using rule 26 (Operacion_booleana -> Operacion_booleana Opr_bool Operacion_binaria .)
+    VAR_IDENTIFIER  reduce using rule 26 (Operacion_booleana -> Operacion_booleana Opr_bool Operacion_binaria .)
+    LPAREN          reduce using rule 26 (Operacion_booleana -> Operacion_booleana Opr_bool Operacion_binaria .)
+    NUMBER          reduce using rule 26 (Operacion_booleana -> Operacion_booleana Opr_bool Operacion_binaria .)
+    PLUS            shift and go to state 51
+    MINUS           shift and go to state 52
+    OR              shift and go to state 48
+    AND             shift and go to state 42
+    EQEQ            shift and go to state 49
+    NEQEQ           shift and go to state 45
+    GREAT           shift and go to state 44
+    LESS            shift and go to state 47
+    GREATEQ         shift and go to state 43
+    LESSEQ          shift and go to state 50
+
+  ! OR              [ reduce using rule 26 (Operacion_booleana -> Operacion_booleana Opr_bool Operacion_binaria .) ]
+  ! AND             [ reduce using rule 26 (Operacion_booleana -> Operacion_booleana Opr_bool Operacion_binaria .) ]
+  ! EQEQ            [ reduce using rule 26 (Operacion_booleana -> Operacion_booleana Opr_bool Operacion_binaria .) ]
+  ! NEQEQ           [ reduce using rule 26 (Operacion_booleana -> Operacion_booleana Opr_bool Operacion_binaria .) ]
+  ! GREAT           [ reduce using rule 26 (Operacion_booleana -> Operacion_booleana Opr_bool Operacion_binaria .) ]
+  ! LESS            [ reduce using rule 26 (Operacion_booleana -> Operacion_booleana Opr_bool Operacion_binaria .) ]
+  ! GREATEQ         [ reduce using rule 26 (Operacion_booleana -> Operacion_booleana Opr_bool Operacion_binaria .) ]
+  ! LESSEQ          [ reduce using rule 26 (Operacion_booleana -> Operacion_booleana Opr_bool Operacion_binaria .) ]
+
+    Opr_bool                       shift and go to state 46
+
+state 83
+
+    (27) Operacion_booleana -> Operacion_booleana Opr_bool Operacion_booleana .
+    (26) Operacion_booleana -> Operacion_booleana . Opr_bool Operacion_binaria
+    (27) Operacion_booleana -> Operacion_booleana . Opr_bool Operacion_booleana
+    (30) Opr_bool -> . OR
+    (31) Opr_bool -> . AND
+    (32) Opr_bool -> . EQEQ
+    (33) Opr_bool -> . NEQEQ
+    (34) Opr_bool -> . GREAT
+    (35) Opr_bool -> . LESS
+    (36) Opr_bool -> . GREATEQ
+    (37) Opr_bool -> . LESSEQ
+
+  ! shift/reduce conflict for OR resolved as shift
+  ! shift/reduce conflict for AND resolved as shift
+  ! shift/reduce conflict for EQEQ resolved as shift
+  ! shift/reduce conflict for NEQEQ resolved as shift
+  ! shift/reduce conflict for GREAT resolved as shift
+  ! shift/reduce conflict for LESS resolved as shift
+  ! shift/reduce conflict for GREATEQ resolved as shift
+  ! shift/reduce conflict for LESSEQ resolved as shift
+    INST_DO         reduce using rule 27 (Operacion_booleana -> Operacion_booleana Opr_bool Operacion_booleana .)
+    INST_THEN       reduce using rule 27 (Operacion_booleana -> Operacion_booleana Opr_bool Operacion_booleana .)
+    $end            reduce using rule 27 (Operacion_booleana -> Operacion_booleana Opr_bool Operacion_booleana .)
+    SEMICOLON       reduce using rule 27 (Operacion_booleana -> Operacion_booleana Opr_bool Operacion_booleana .)
+    INST_END        reduce using rule 27 (Operacion_booleana -> Operacion_booleana Opr_bool Operacion_booleana .)
+    INST_ELSE       reduce using rule 27 (Operacion_booleana -> Operacion_booleana Opr_bool Operacion_booleana .)
+    VAR_IDENTIFIER  reduce using rule 27 (Operacion_booleana -> Operacion_booleana Opr_bool Operacion_booleana .)
+    LPAREN          reduce using rule 27 (Operacion_booleana -> Operacion_booleana Opr_bool Operacion_booleana .)
+    NUMBER          reduce using rule 27 (Operacion_booleana -> Operacion_booleana Opr_bool Operacion_booleana .)
+    OR              shift and go to state 48
+    AND             shift and go to state 42
+    EQEQ            shift and go to state 49
+    NEQEQ           shift and go to state 45
+    GREAT           shift and go to state 44
+    LESS            shift and go to state 47
+    GREATEQ         shift and go to state 43
+    LESSEQ          shift and go to state 50
+
+  ! OR              [ reduce using rule 27 (Operacion_booleana -> Operacion_booleana Opr_bool Operacion_booleana .) ]
+  ! AND             [ reduce using rule 27 (Operacion_booleana -> Operacion_booleana Opr_bool Operacion_booleana .) ]
+  ! EQEQ            [ reduce using rule 27 (Operacion_booleana -> Operacion_booleana Opr_bool Operacion_booleana .) ]
+  ! NEQEQ           [ reduce using rule 27 (Operacion_booleana -> Operacion_booleana Opr_bool Operacion_booleana .) ]
+  ! GREAT           [ reduce using rule 27 (Operacion_booleana -> Operacion_booleana Opr_bool Operacion_booleana .) ]
+  ! LESS            [ reduce using rule 27 (Operacion_booleana -> Operacion_booleana Opr_bool Operacion_booleana .) ]
+  ! GREATEQ         [ reduce using rule 27 (Operacion_booleana -> Operacion_booleana Opr_bool Operacion_booleana .) ]
+  ! LESSEQ          [ reduce using rule 27 (Operacion_booleana -> Operacion_booleana Opr_bool Operacion_booleana .) ]
+
+    Opr_bool                       shift and go to state 56
+
+state 84
+
+    (61) Inst_While -> INST_WHILE Operacion_booleana INST_DO Bloque_Inst .
+
+    $end            reduce using rule 61 (Inst_While -> INST_WHILE Operacion_booleana INST_DO Bloque_Inst .)
+    SEMICOLON       reduce using rule 61 (Inst_While -> INST_WHILE Operacion_booleana INST_DO Bloque_Inst .)
+    INST_END        reduce using rule 61 (Inst_While -> INST_WHILE Operacion_booleana INST_DO Bloque_Inst .)
+    INST_ELSE       reduce using rule 61 (Inst_While -> INST_WHILE Operacion_booleana INST_DO Bloque_Inst .)
+    VAR_IDENTIFIER  reduce using rule 61 (Inst_While -> INST_WHILE Operacion_booleana INST_DO Bloque_Inst .)
+    LPAREN          reduce using rule 61 (Inst_While -> INST_WHILE Operacion_booleana INST_DO Bloque_Inst .)
+    NUMBER          reduce using rule 61 (Inst_While -> INST_WHILE Operacion_booleana INST_DO Bloque_Inst .)
+
+
+state 85
 
     (5) Lista_Inst -> Inst SEMICOLON Lista_Inst .
 
     INST_END        reduce using rule 5 (Lista_Inst -> Inst SEMICOLON Lista_Inst .)
 
+
+state 86
+
+    (47) Rango -> Operacion_binaria RANGE . Operacion_binaria
+    (38) Operacion_binaria -> . Operacion_binaria PLUS Term
+    (39) Operacion_binaria -> . Operacion_binaria MINUS Term
+    (40) Operacion_binaria -> . Term
+    (41) Term -> . Term TIMES Factor
+    (42) Term -> . Term DIVIDE Factor
+    (43) Term -> . Factor
+    (44) Factor -> . NUMBER
+    (45) Factor -> . VAR_IDENTIFIER
+    (46) Factor -> . LPAREN Operacion_binaria RPAREN
+
+    NUMBER          shift and go to state 28
+    VAR_IDENTIFIER  shift and go to state 26
+    LPAREN          shift and go to state 30
+
+    Operacion_binaria              shift and go to state 97
+    Term                           shift and go to state 27
+    Factor                         shift and go to state 31
+
+state 87
+
+    (46) Factor -> LPAREN Operacion_binaria . RPAREN
+    (47) Rango -> Operacion_binaria . RANGE Operacion_binaria
+    (38) Operacion_binaria -> Operacion_binaria . PLUS Term
+    (39) Operacion_binaria -> Operacion_binaria . MINUS Term
+
+    RPAREN          shift and go to state 81
+    RANGE           shift and go to state 86
+    PLUS            shift and go to state 51
+    MINUS           shift and go to state 52
+
+
+state 88
+
+    (52) RangoF -> LPAREN Rango . RPAREN
+    (48) Rango -> Rango . PLUS Rango
+    (49) Rango -> Rango . TIMES Operacion_binaria
+    (50) Rango -> Rango . INTERSECTION Rango
+
+    RPAREN          shift and go to state 98
+    PLUS            shift and go to state 90
+    TIMES           shift and go to state 91
+    INTERSECTION    shift and go to state 89
+
+
+state 89
+
+    (50) Rango -> Rango INTERSECTION . Rango
+    (47) Rango -> . Operacion_binaria RANGE Operacion_binaria
+    (48) Rango -> . Rango PLUS Rango
+    (49) Rango -> . Rango TIMES Operacion_binaria
+    (50) Rango -> . Rango INTERSECTION Rango
+    (51) Rango -> . RangoF
+    (38) Operacion_binaria -> . Operacion_binaria PLUS Term
+    (39) Operacion_binaria -> . Operacion_binaria MINUS Term
+    (40) Operacion_binaria -> . Term
+    (52) RangoF -> . LPAREN Rango RPAREN
+    (41) Term -> . Term TIMES Factor
+    (42) Term -> . Term DIVIDE Factor
+    (43) Term -> . Factor
+    (44) Factor -> . NUMBER
+    (45) Factor -> . VAR_IDENTIFIER
+    (46) Factor -> . LPAREN Operacion_binaria RPAREN
+
+    LPAREN          shift and go to state 62
+    NUMBER          shift and go to state 28
+    VAR_IDENTIFIER  shift and go to state 26
+
+    Rango                          shift and go to state 99
+    Operacion_binaria              shift and go to state 73
+    Factor                         shift and go to state 31
+    Term                           shift and go to state 27
+    RangoF                         shift and go to state 63
+
+state 90
+
+    (48) Rango -> Rango PLUS . Rango
+    (47) Rango -> . Operacion_binaria RANGE Operacion_binaria
+    (48) Rango -> . Rango PLUS Rango
+    (49) Rango -> . Rango TIMES Operacion_binaria
+    (50) Rango -> . Rango INTERSECTION Rango
+    (51) Rango -> . RangoF
+    (38) Operacion_binaria -> . Operacion_binaria PLUS Term
+    (39) Operacion_binaria -> . Operacion_binaria MINUS Term
+    (40) Operacion_binaria -> . Term
+    (52) RangoF -> . LPAREN Rango RPAREN
+    (41) Term -> . Term TIMES Factor
+    (42) Term -> . Term DIVIDE Factor
+    (43) Term -> . Factor
+    (44) Factor -> . NUMBER
+    (45) Factor -> . VAR_IDENTIFIER
+    (46) Factor -> . LPAREN Operacion_binaria RPAREN
+
+    LPAREN          shift and go to state 62
+    NUMBER          shift and go to state 28
+    VAR_IDENTIFIER  shift and go to state 26
+
+    Rango                          shift and go to state 100
+    Operacion_binaria              shift and go to state 73
+    Factor                         shift and go to state 31
+    Term                           shift and go to state 27
+    RangoF                         shift and go to state 63
+
+state 91
+
+    (49) Rango -> Rango TIMES . Operacion_binaria
+    (38) Operacion_binaria -> . Operacion_binaria PLUS Term
+    (39) Operacion_binaria -> . Operacion_binaria MINUS Term
+    (40) Operacion_binaria -> . Term
+    (41) Term -> . Term TIMES Factor
+    (42) Term -> . Term DIVIDE Factor
+    (43) Term -> . Factor
+    (44) Factor -> . NUMBER
+    (45) Factor -> . VAR_IDENTIFIER
+    (46) Factor -> . LPAREN Operacion_binaria RPAREN
+
+    NUMBER          shift and go to state 28
+    VAR_IDENTIFIER  shift and go to state 26
+    LPAREN          shift and go to state 30
+
+    Operacion_binaria              shift and go to state 101
+    Term                           shift and go to state 27
+    Factor                         shift and go to state 31
+
+state 92
+
+    (57) Casos -> VAR_IDENTIFIER . - > Bloque_Inst
+    (45) Factor -> VAR_IDENTIFIER .
+
+    -               shift and go to state 102
+    TIMES           reduce using rule 45 (Factor -> VAR_IDENTIFIER .)
+    DIVIDE          reduce using rule 45 (Factor -> VAR_IDENTIFIER .)
+    RANGE           reduce using rule 45 (Factor -> VAR_IDENTIFIER .)
+    PLUS            reduce using rule 45 (Factor -> VAR_IDENTIFIER .)
+    MINUS           reduce using rule 45 (Factor -> VAR_IDENTIFIER .)
+
+
+state 93
+
+    (58) Casos -> Rango . - > Bloque_Inst
+    (48) Rango -> Rango . PLUS Rango
+    (49) Rango -> Rango . TIMES Operacion_binaria
+    (50) Rango -> Rango . INTERSECTION Rango
+
+    -               shift and go to state 103
+    PLUS            shift and go to state 90
+    TIMES           shift and go to state 91
+    INTERSECTION    shift and go to state 89
+
+
+state 94
+
+    (56) Inst_Case -> INST_CASE Operacion_binaria INST_OF Casos .
+    (59) Casos -> Casos . Casos
+    (57) Casos -> . VAR_IDENTIFIER - > Bloque_Inst
+    (58) Casos -> . Rango - > Bloque_Inst
+    (59) Casos -> . Casos Casos
+    (47) Rango -> . Operacion_binaria RANGE Operacion_binaria
+    (48) Rango -> . Rango PLUS Rango
+    (49) Rango -> . Rango TIMES Operacion_binaria
+    (50) Rango -> . Rango INTERSECTION Rango
+    (51) Rango -> . RangoF
+    (38) Operacion_binaria -> . Operacion_binaria PLUS Term
+    (39) Operacion_binaria -> . Operacion_binaria MINUS Term
+    (40) Operacion_binaria -> . Term
+    (52) RangoF -> . LPAREN Rango RPAREN
+    (41) Term -> . Term TIMES Factor
+    (42) Term -> . Term DIVIDE Factor
+    (43) Term -> . Factor
+    (44) Factor -> . NUMBER
+    (45) Factor -> . VAR_IDENTIFIER
+    (46) Factor -> . LPAREN Operacion_binaria RPAREN
+
+  ! shift/reduce conflict for VAR_IDENTIFIER resolved as shift
+  ! shift/reduce conflict for LPAREN resolved as shift
+  ! shift/reduce conflict for NUMBER resolved as shift
+    $end            reduce using rule 56 (Inst_Case -> INST_CASE Operacion_binaria INST_OF Casos .)
+    SEMICOLON       reduce using rule 56 (Inst_Case -> INST_CASE Operacion_binaria INST_OF Casos .)
+    INST_END        reduce using rule 56 (Inst_Case -> INST_CASE Operacion_binaria INST_OF Casos .)
+    INST_ELSE       reduce using rule 56 (Inst_Case -> INST_CASE Operacion_binaria INST_OF Casos .)
+    VAR_IDENTIFIER  shift and go to state 92
+    LPAREN          shift and go to state 62
+    NUMBER          shift and go to state 28
+
+  ! VAR_IDENTIFIER  [ reduce using rule 56 (Inst_Case -> INST_CASE Operacion_binaria INST_OF Casos .) ]
+  ! LPAREN          [ reduce using rule 56 (Inst_Case -> INST_CASE Operacion_binaria INST_OF Casos .) ]
+  ! NUMBER          [ reduce using rule 56 (Inst_Case -> INST_CASE Operacion_binaria INST_OF Casos .) ]
+
+    Operacion_binaria              shift and go to state 73
+    Factor                         shift and go to state 31
+    Term                           shift and go to state 27
+    RangoF                         shift and go to state 63
+    Rango                          shift and go to state 93
+    Casos                          shift and go to state 104
+
+state 95
+
+    (54) Inst_If -> INST_IF Operacion_booleana INST_THEN Bloque_Inst .
+    (55) Inst_If -> INST_IF Operacion_booleana INST_THEN Bloque_Inst . INST_ELSE Bloque_Inst
+
+  ! shift/reduce conflict for INST_ELSE resolved as shift
+    $end            reduce using rule 54 (Inst_If -> INST_IF Operacion_booleana INST_THEN Bloque_Inst .)
+    SEMICOLON       reduce using rule 54 (Inst_If -> INST_IF Operacion_booleana INST_THEN Bloque_Inst .)
+    INST_END        reduce using rule 54 (Inst_If -> INST_IF Operacion_booleana INST_THEN Bloque_Inst .)
+    VAR_IDENTIFIER  reduce using rule 54 (Inst_If -> INST_IF Operacion_booleana INST_THEN Bloque_Inst .)
+    LPAREN          reduce using rule 54 (Inst_If -> INST_IF Operacion_booleana INST_THEN Bloque_Inst .)
+    NUMBER          reduce using rule 54 (Inst_If -> INST_IF Operacion_booleana INST_THEN Bloque_Inst .)
+    INST_ELSE       shift and go to state 105
+
+  ! INST_ELSE       [ reduce using rule 54 (Inst_If -> INST_IF Operacion_booleana INST_THEN Bloque_Inst .) ]
+
+
+state 96
+
+    (60) Inst_For -> INST_FOR VAR_IDENTIFIER INST_IN Rango INST_DO . Bloque_Inst
+    (2) Bloque_Inst -> . INST_BEGIN Lista_Inst INST_END
+    (3) Bloque_Inst -> . Inst
+    (6) Inst -> . Inst_Declare
+    (7) Inst -> . Inst_Asignacion
+    (8) Inst -> . Inst_Lectura
+    (9) Inst -> . Inst_For
+    (10) Inst -> . Inst_While
+    (11) Inst -> . Inst_If
+    (12) Inst -> . Inst_Case
+    (13) Inst_Declare -> . INST_DECLARE Lista_Declare
+    (20) Inst_Asignacion -> . VAR_IDENTIFIER EQUAL Expresion
+    (53) Inst_Lectura -> . INST_READ VAR_IDENTIFIER
+    (60) Inst_For -> . INST_FOR VAR_IDENTIFIER INST_IN Rango INST_DO Bloque_Inst
+    (61) Inst_While -> . INST_WHILE Operacion_booleana INST_DO Bloque_Inst
+    (54) Inst_If -> . INST_IF Operacion_booleana INST_THEN Bloque_Inst
+    (55) Inst_If -> . INST_IF Operacion_booleana INST_THEN Bloque_Inst INST_ELSE Bloque_Inst
+    (56) Inst_Case -> . INST_CASE Operacion_binaria INST_OF Casos
+
+    INST_BEGIN      shift and go to state 8
+    INST_DECLARE    shift and go to state 3
+    VAR_IDENTIFIER  shift and go to state 14
+    INST_READ       shift and go to state 7
+    INST_FOR        shift and go to state 5
+    INST_WHILE      shift and go to state 6
+    INST_IF         shift and go to state 17
+    INST_CASE       shift and go to state 16
+
+    Inst_Declare                   shift and go to state 9
+    Bloque_Inst                    shift and go to state 106
+    Inst_If                        shift and go to state 15
+    Inst_While                     shift and go to state 12
+    Inst_For                       shift and go to state 10
+    Inst_Asignacion                shift and go to state 18
+    Inst                           shift and go to state 11
+    Inst_Case                      shift and go to state 19
+    Inst_Lectura                   shift and go to state 13
+
+state 97
+
+    (47) Rango -> Operacion_binaria RANGE Operacion_binaria .
+    (38) Operacion_binaria -> Operacion_binaria . PLUS Term
+    (39) Operacion_binaria -> Operacion_binaria . MINUS Term
+
+  ! shift/reduce conflict for PLUS resolved as shift
+    TIMES           reduce using rule 47 (Rango -> Operacion_binaria RANGE Operacion_binaria .)
+    INTERSECTION    reduce using rule 47 (Rango -> Operacion_binaria RANGE Operacion_binaria .)
+    $end            reduce using rule 47 (Rango -> Operacion_binaria RANGE Operacion_binaria .)
+    SEMICOLON       reduce using rule 47 (Rango -> Operacion_binaria RANGE Operacion_binaria .)
+    INST_END        reduce using rule 47 (Rango -> Operacion_binaria RANGE Operacion_binaria .)
+    INST_ELSE       reduce using rule 47 (Rango -> Operacion_binaria RANGE Operacion_binaria .)
+    VAR_IDENTIFIER  reduce using rule 47 (Rango -> Operacion_binaria RANGE Operacion_binaria .)
+    LPAREN          reduce using rule 47 (Rango -> Operacion_binaria RANGE Operacion_binaria .)
+    NUMBER          reduce using rule 47 (Rango -> Operacion_binaria RANGE Operacion_binaria .)
+    INST_DO         reduce using rule 47 (Rango -> Operacion_binaria RANGE Operacion_binaria .)
+    RPAREN          reduce using rule 47 (Rango -> Operacion_binaria RANGE Operacion_binaria .)
+    -               reduce using rule 47 (Rango -> Operacion_binaria RANGE Operacion_binaria .)
+    PLUS            shift and go to state 51
+    MINUS           shift and go to state 52
+
+  ! PLUS            [ reduce using rule 47 (Rango -> Operacion_binaria RANGE Operacion_binaria .) ]
+
+
+state 98
+
+    (52) RangoF -> LPAREN Rango RPAREN .
+
+    PLUS            reduce using rule 52 (RangoF -> LPAREN Rango RPAREN .)
+    TIMES           reduce using rule 52 (RangoF -> LPAREN Rango RPAREN .)
+    INTERSECTION    reduce using rule 52 (RangoF -> LPAREN Rango RPAREN .)
+    $end            reduce using rule 52 (RangoF -> LPAREN Rango RPAREN .)
+    SEMICOLON       reduce using rule 52 (RangoF -> LPAREN Rango RPAREN .)
+    INST_END        reduce using rule 52 (RangoF -> LPAREN Rango RPAREN .)
+    INST_ELSE       reduce using rule 52 (RangoF -> LPAREN Rango RPAREN .)
+    VAR_IDENTIFIER  reduce using rule 52 (RangoF -> LPAREN Rango RPAREN .)
+    LPAREN          reduce using rule 52 (RangoF -> LPAREN Rango RPAREN .)
+    NUMBER          reduce using rule 52 (RangoF -> LPAREN Rango RPAREN .)
+    -               reduce using rule 52 (RangoF -> LPAREN Rango RPAREN .)
+    RPAREN          reduce using rule 52 (RangoF -> LPAREN Rango RPAREN .)
+    INST_DO         reduce using rule 52 (RangoF -> LPAREN Rango RPAREN .)
+
+
+state 99
+
+    (50) Rango -> Rango INTERSECTION Rango .
+    (48) Rango -> Rango . PLUS Rango
+    (49) Rango -> Rango . TIMES Operacion_binaria
+    (50) Rango -> Rango . INTERSECTION Rango
+
+  ! shift/reduce conflict for PLUS resolved as shift
+  ! shift/reduce conflict for TIMES resolved as shift
+  ! shift/reduce conflict for INTERSECTION resolved as shift
+    $end            reduce using rule 50 (Rango -> Rango INTERSECTION Rango .)
+    SEMICOLON       reduce using rule 50 (Rango -> Rango INTERSECTION Rango .)
+    INST_END        reduce using rule 50 (Rango -> Rango INTERSECTION Rango .)
+    INST_ELSE       reduce using rule 50 (Rango -> Rango INTERSECTION Rango .)
+    VAR_IDENTIFIER  reduce using rule 50 (Rango -> Rango INTERSECTION Rango .)
+    LPAREN          reduce using rule 50 (Rango -> Rango INTERSECTION Rango .)
+    NUMBER          reduce using rule 50 (Rango -> Rango INTERSECTION Rango .)
+    INST_DO         reduce using rule 50 (Rango -> Rango INTERSECTION Rango .)
+    RPAREN          reduce using rule 50 (Rango -> Rango INTERSECTION Rango .)
+    -               reduce using rule 50 (Rango -> Rango INTERSECTION Rango .)
+    PLUS            shift and go to state 90
+    TIMES           shift and go to state 91
+    INTERSECTION    shift and go to state 89
+
+  ! PLUS            [ reduce using rule 50 (Rango -> Rango INTERSECTION Rango .) ]
+  ! TIMES           [ reduce using rule 50 (Rango -> Rango INTERSECTION Rango .) ]
+  ! INTERSECTION    [ reduce using rule 50 (Rango -> Rango INTERSECTION Rango .) ]
+
+
+state 100
+
+    (48) Rango -> Rango PLUS Rango .
+    (48) Rango -> Rango . PLUS Rango
+    (49) Rango -> Rango . TIMES Operacion_binaria
+    (50) Rango -> Rango . INTERSECTION Rango
+
+    PLUS            reduce using rule 48 (Rango -> Rango PLUS Rango .)
+    INTERSECTION    reduce using rule 48 (Rango -> Rango PLUS Rango .)
+    $end            reduce using rule 48 (Rango -> Rango PLUS Rango .)
+    SEMICOLON       reduce using rule 48 (Rango -> Rango PLUS Rango .)
+    INST_END        reduce using rule 48 (Rango -> Rango PLUS Rango .)
+    INST_ELSE       reduce using rule 48 (Rango -> Rango PLUS Rango .)
+    VAR_IDENTIFIER  reduce using rule 48 (Rango -> Rango PLUS Rango .)
+    LPAREN          reduce using rule 48 (Rango -> Rango PLUS Rango .)
+    NUMBER          reduce using rule 48 (Rango -> Rango PLUS Rango .)
+    INST_DO         reduce using rule 48 (Rango -> Rango PLUS Rango .)
+    RPAREN          reduce using rule 48 (Rango -> Rango PLUS Rango .)
+    -               reduce using rule 48 (Rango -> Rango PLUS Rango .)
+    TIMES           shift and go to state 91
+
+  ! TIMES           [ reduce using rule 48 (Rango -> Rango PLUS Rango .) ]
+  ! PLUS            [ shift and go to state 90 ]
+  ! INTERSECTION    [ shift and go to state 89 ]
+
+
+state 101
+
+    (49) Rango -> Rango TIMES Operacion_binaria .
+    (38) Operacion_binaria -> Operacion_binaria . PLUS Term
+    (39) Operacion_binaria -> Operacion_binaria . MINUS Term
+
+    PLUS            reduce using rule 49 (Rango -> Rango TIMES Operacion_binaria .)
+    TIMES           reduce using rule 49 (Rango -> Rango TIMES Operacion_binaria .)
+    INTERSECTION    reduce using rule 49 (Rango -> Rango TIMES Operacion_binaria .)
+    $end            reduce using rule 49 (Rango -> Rango TIMES Operacion_binaria .)
+    SEMICOLON       reduce using rule 49 (Rango -> Rango TIMES Operacion_binaria .)
+    INST_END        reduce using rule 49 (Rango -> Rango TIMES Operacion_binaria .)
+    INST_ELSE       reduce using rule 49 (Rango -> Rango TIMES Operacion_binaria .)
+    VAR_IDENTIFIER  reduce using rule 49 (Rango -> Rango TIMES Operacion_binaria .)
+    LPAREN          reduce using rule 49 (Rango -> Rango TIMES Operacion_binaria .)
+    NUMBER          reduce using rule 49 (Rango -> Rango TIMES Operacion_binaria .)
+    INST_DO         reduce using rule 49 (Rango -> Rango TIMES Operacion_binaria .)
+    RPAREN          reduce using rule 49 (Rango -> Rango TIMES Operacion_binaria .)
+    -               reduce using rule 49 (Rango -> Rango TIMES Operacion_binaria .)
+    MINUS           shift and go to state 52
+
+  ! PLUS            [ shift and go to state 51 ]
+
+
+state 102
+
+    (57) Casos -> VAR_IDENTIFIER - . > Bloque_Inst
+
+    >               shift and go to state 107
+
+
+state 103
+
+    (58) Casos -> Rango - . > Bloque_Inst
+
+    >               shift and go to state 108
+
+
+state 104
+
+    (59) Casos -> Casos Casos .
+    (59) Casos -> Casos . Casos
+    (57) Casos -> . VAR_IDENTIFIER - > Bloque_Inst
+    (58) Casos -> . Rango - > Bloque_Inst
+    (59) Casos -> . Casos Casos
+    (47) Rango -> . Operacion_binaria RANGE Operacion_binaria
+    (48) Rango -> . Rango PLUS Rango
+    (49) Rango -> . Rango TIMES Operacion_binaria
+    (50) Rango -> . Rango INTERSECTION Rango
+    (51) Rango -> . RangoF
+    (38) Operacion_binaria -> . Operacion_binaria PLUS Term
+    (39) Operacion_binaria -> . Operacion_binaria MINUS Term
+    (40) Operacion_binaria -> . Term
+    (52) RangoF -> . LPAREN Rango RPAREN
+    (41) Term -> . Term TIMES Factor
+    (42) Term -> . Term DIVIDE Factor
+    (43) Term -> . Factor
+    (44) Factor -> . NUMBER
+    (45) Factor -> . VAR_IDENTIFIER
+    (46) Factor -> . LPAREN Operacion_binaria RPAREN
+
+  ! shift/reduce conflict for VAR_IDENTIFIER resolved as shift
+  ! shift/reduce conflict for LPAREN resolved as shift
+  ! shift/reduce conflict for NUMBER resolved as shift
+    $end            reduce using rule 59 (Casos -> Casos Casos .)
+    SEMICOLON       reduce using rule 59 (Casos -> Casos Casos .)
+    INST_END        reduce using rule 59 (Casos -> Casos Casos .)
+    INST_ELSE       reduce using rule 59 (Casos -> Casos Casos .)
+    VAR_IDENTIFIER  shift and go to state 92
+    LPAREN          shift and go to state 62
+    NUMBER          shift and go to state 28
+
+  ! VAR_IDENTIFIER  [ reduce using rule 59 (Casos -> Casos Casos .) ]
+  ! LPAREN          [ reduce using rule 59 (Casos -> Casos Casos .) ]
+  ! NUMBER          [ reduce using rule 59 (Casos -> Casos Casos .) ]
+
+    Operacion_binaria              shift and go to state 73
+    Factor                         shift and go to state 31
+    Term                           shift and go to state 27
+    RangoF                         shift and go to state 63
+    Rango                          shift and go to state 93
+    Casos                          shift and go to state 104
+
+state 105
+
+    (55) Inst_If -> INST_IF Operacion_booleana INST_THEN Bloque_Inst INST_ELSE . Bloque_Inst
+    (2) Bloque_Inst -> . INST_BEGIN Lista_Inst INST_END
+    (3) Bloque_Inst -> . Inst
+    (6) Inst -> . Inst_Declare
+    (7) Inst -> . Inst_Asignacion
+    (8) Inst -> . Inst_Lectura
+    (9) Inst -> . Inst_For
+    (10) Inst -> . Inst_While
+    (11) Inst -> . Inst_If
+    (12) Inst -> . Inst_Case
+    (13) Inst_Declare -> . INST_DECLARE Lista_Declare
+    (20) Inst_Asignacion -> . VAR_IDENTIFIER EQUAL Expresion
+    (53) Inst_Lectura -> . INST_READ VAR_IDENTIFIER
+    (60) Inst_For -> . INST_FOR VAR_IDENTIFIER INST_IN Rango INST_DO Bloque_Inst
+    (61) Inst_While -> . INST_WHILE Operacion_booleana INST_DO Bloque_Inst
+    (54) Inst_If -> . INST_IF Operacion_booleana INST_THEN Bloque_Inst
+    (55) Inst_If -> . INST_IF Operacion_booleana INST_THEN Bloque_Inst INST_ELSE Bloque_Inst
+    (56) Inst_Case -> . INST_CASE Operacion_binaria INST_OF Casos
+
+    INST_BEGIN      shift and go to state 8
+    INST_DECLARE    shift and go to state 3
+    VAR_IDENTIFIER  shift and go to state 14
+    INST_READ       shift and go to state 7
+    INST_FOR        shift and go to state 5
+    INST_WHILE      shift and go to state 6
+    INST_IF         shift and go to state 17
+    INST_CASE       shift and go to state 16
+
+    Inst_Declare                   shift and go to state 9
+    Bloque_Inst                    shift and go to state 109
+    Inst_If                        shift and go to state 15
+    Inst_For                       shift and go to state 10
+    Inst_While                     shift and go to state 12
+    Inst                           shift and go to state 11
+    Inst_Asignacion                shift and go to state 18
+    Inst_Case                      shift and go to state 19
+    Inst_Lectura                   shift and go to state 13
+
+state 106
+
+    (60) Inst_For -> INST_FOR VAR_IDENTIFIER INST_IN Rango INST_DO Bloque_Inst .
+
+    $end            reduce using rule 60 (Inst_For -> INST_FOR VAR_IDENTIFIER INST_IN Rango INST_DO Bloque_Inst .)
+    SEMICOLON       reduce using rule 60 (Inst_For -> INST_FOR VAR_IDENTIFIER INST_IN Rango INST_DO Bloque_Inst .)
+    INST_END        reduce using rule 60 (Inst_For -> INST_FOR VAR_IDENTIFIER INST_IN Rango INST_DO Bloque_Inst .)
+    INST_ELSE       reduce using rule 60 (Inst_For -> INST_FOR VAR_IDENTIFIER INST_IN Rango INST_DO Bloque_Inst .)
+    VAR_IDENTIFIER  reduce using rule 60 (Inst_For -> INST_FOR VAR_IDENTIFIER INST_IN Rango INST_DO Bloque_Inst .)
+    LPAREN          reduce using rule 60 (Inst_For -> INST_FOR VAR_IDENTIFIER INST_IN Rango INST_DO Bloque_Inst .)
+    NUMBER          reduce using rule 60 (Inst_For -> INST_FOR VAR_IDENTIFIER INST_IN Rango INST_DO Bloque_Inst .)
+
+
+state 107
+
+    (57) Casos -> VAR_IDENTIFIER - > . Bloque_Inst
+    (2) Bloque_Inst -> . INST_BEGIN Lista_Inst INST_END
+    (3) Bloque_Inst -> . Inst
+    (6) Inst -> . Inst_Declare
+    (7) Inst -> . Inst_Asignacion
+    (8) Inst -> . Inst_Lectura
+    (9) Inst -> . Inst_For
+    (10) Inst -> . Inst_While
+    (11) Inst -> . Inst_If
+    (12) Inst -> . Inst_Case
+    (13) Inst_Declare -> . INST_DECLARE Lista_Declare
+    (20) Inst_Asignacion -> . VAR_IDENTIFIER EQUAL Expresion
+    (53) Inst_Lectura -> . INST_READ VAR_IDENTIFIER
+    (60) Inst_For -> . INST_FOR VAR_IDENTIFIER INST_IN Rango INST_DO Bloque_Inst
+    (61) Inst_While -> . INST_WHILE Operacion_booleana INST_DO Bloque_Inst
+    (54) Inst_If -> . INST_IF Operacion_booleana INST_THEN Bloque_Inst
+    (55) Inst_If -> . INST_IF Operacion_booleana INST_THEN Bloque_Inst INST_ELSE Bloque_Inst
+    (56) Inst_Case -> . INST_CASE Operacion_binaria INST_OF Casos
+
+    INST_BEGIN      shift and go to state 8
+    INST_DECLARE    shift and go to state 3
+    VAR_IDENTIFIER  shift and go to state 14
+    INST_READ       shift and go to state 7
+    INST_FOR        shift and go to state 5
+    INST_WHILE      shift and go to state 6
+    INST_IF         shift and go to state 17
+    INST_CASE       shift and go to state 16
+
+    Inst_Declare                   shift and go to state 9
+    Bloque_Inst                    shift and go to state 110
+    Inst_If                        shift and go to state 15
+    Inst_For                       shift and go to state 10
+    Inst_While                     shift and go to state 12
+    Inst                           shift and go to state 11
+    Inst_Asignacion                shift and go to state 18
+    Inst_Case                      shift and go to state 19
+    Inst_Lectura                   shift and go to state 13
+
+state 108
+
+    (58) Casos -> Rango - > . Bloque_Inst
+    (2) Bloque_Inst -> . INST_BEGIN Lista_Inst INST_END
+    (3) Bloque_Inst -> . Inst
+    (6) Inst -> . Inst_Declare
+    (7) Inst -> . Inst_Asignacion
+    (8) Inst -> . Inst_Lectura
+    (9) Inst -> . Inst_For
+    (10) Inst -> . Inst_While
+    (11) Inst -> . Inst_If
+    (12) Inst -> . Inst_Case
+    (13) Inst_Declare -> . INST_DECLARE Lista_Declare
+    (20) Inst_Asignacion -> . VAR_IDENTIFIER EQUAL Expresion
+    (53) Inst_Lectura -> . INST_READ VAR_IDENTIFIER
+    (60) Inst_For -> . INST_FOR VAR_IDENTIFIER INST_IN Rango INST_DO Bloque_Inst
+    (61) Inst_While -> . INST_WHILE Operacion_booleana INST_DO Bloque_Inst
+    (54) Inst_If -> . INST_IF Operacion_booleana INST_THEN Bloque_Inst
+    (55) Inst_If -> . INST_IF Operacion_booleana INST_THEN Bloque_Inst INST_ELSE Bloque_Inst
+    (56) Inst_Case -> . INST_CASE Operacion_binaria INST_OF Casos
+
+    INST_BEGIN      shift and go to state 8
+    INST_DECLARE    shift and go to state 3
+    VAR_IDENTIFIER  shift and go to state 14
+    INST_READ       shift and go to state 7
+    INST_FOR        shift and go to state 5
+    INST_WHILE      shift and go to state 6
+    INST_IF         shift and go to state 17
+    INST_CASE       shift and go to state 16
+
+    Inst_Declare                   shift and go to state 9
+    Bloque_Inst                    shift and go to state 111
+    Inst_If                        shift and go to state 15
+    Inst_While                     shift and go to state 12
+    Inst_For                       shift and go to state 10
+    Inst_Asignacion                shift and go to state 18
+    Inst                           shift and go to state 11
+    Inst_Case                      shift and go to state 19
+    Inst_Lectura                   shift and go to state 13
+
+state 109
+
+    (55) Inst_If -> INST_IF Operacion_booleana INST_THEN Bloque_Inst INST_ELSE Bloque_Inst .
+
+    $end            reduce using rule 55 (Inst_If -> INST_IF Operacion_booleana INST_THEN Bloque_Inst INST_ELSE Bloque_Inst .)
+    SEMICOLON       reduce using rule 55 (Inst_If -> INST_IF Operacion_booleana INST_THEN Bloque_Inst INST_ELSE Bloque_Inst .)
+    INST_END        reduce using rule 55 (Inst_If -> INST_IF Operacion_booleana INST_THEN Bloque_Inst INST_ELSE Bloque_Inst .)
+    INST_ELSE       reduce using rule 55 (Inst_If -> INST_IF Operacion_booleana INST_THEN Bloque_Inst INST_ELSE Bloque_Inst .)
+    VAR_IDENTIFIER  reduce using rule 55 (Inst_If -> INST_IF Operacion_booleana INST_THEN Bloque_Inst INST_ELSE Bloque_Inst .)
+    LPAREN          reduce using rule 55 (Inst_If -> INST_IF Operacion_booleana INST_THEN Bloque_Inst INST_ELSE Bloque_Inst .)
+    NUMBER          reduce using rule 55 (Inst_If -> INST_IF Operacion_booleana INST_THEN Bloque_Inst INST_ELSE Bloque_Inst .)
+
+
+state 110
+
+    (57) Casos -> VAR_IDENTIFIER - > Bloque_Inst .
+
+    $end            reduce using rule 57 (Casos -> VAR_IDENTIFIER - > Bloque_Inst .)
+    SEMICOLON       reduce using rule 57 (Casos -> VAR_IDENTIFIER - > Bloque_Inst .)
+    INST_END        reduce using rule 57 (Casos -> VAR_IDENTIFIER - > Bloque_Inst .)
+    INST_ELSE       reduce using rule 57 (Casos -> VAR_IDENTIFIER - > Bloque_Inst .)
+    VAR_IDENTIFIER  reduce using rule 57 (Casos -> VAR_IDENTIFIER - > Bloque_Inst .)
+    LPAREN          reduce using rule 57 (Casos -> VAR_IDENTIFIER - > Bloque_Inst .)
+    NUMBER          reduce using rule 57 (Casos -> VAR_IDENTIFIER - > Bloque_Inst .)
+
+
+state 111
+
+    (58) Casos -> Rango - > Bloque_Inst .
+
+    $end            reduce using rule 58 (Casos -> Rango - > Bloque_Inst .)
+    SEMICOLON       reduce using rule 58 (Casos -> Rango - > Bloque_Inst .)
+    INST_END        reduce using rule 58 (Casos -> Rango - > Bloque_Inst .)
+    INST_ELSE       reduce using rule 58 (Casos -> Rango - > Bloque_Inst .)
+    VAR_IDENTIFIER  reduce using rule 58 (Casos -> Rango - > Bloque_Inst .)
+    LPAREN          reduce using rule 58 (Casos -> Rango - > Bloque_Inst .)
+    NUMBER          reduce using rule 58 (Casos -> Rango - > Bloque_Inst .)
+
+WARNING: 
+WARNING: Conflicts:
+WARNING: 
+WARNING: shift/reduce conflict for TIMES in state 27 resolved as shift
+WARNING: shift/reduce conflict for OR in state 75 resolved as shift
+WARNING: shift/reduce conflict for AND in state 75 resolved as shift
+WARNING: shift/reduce conflict for EQEQ in state 75 resolved as shift
+WARNING: shift/reduce conflict for NEQEQ in state 75 resolved as shift
+WARNING: shift/reduce conflict for GREAT in state 75 resolved as shift
+WARNING: shift/reduce conflict for LESS in state 75 resolved as shift
+WARNING: shift/reduce conflict for GREATEQ in state 75 resolved as shift
+WARNING: shift/reduce conflict for LESSEQ in state 75 resolved as shift
+WARNING: shift/reduce conflict for OR in state 76 resolved as shift
+WARNING: shift/reduce conflict for AND in state 76 resolved as shift
+WARNING: shift/reduce conflict for EQEQ in state 76 resolved as shift
+WARNING: shift/reduce conflict for NEQEQ in state 76 resolved as shift
+WARNING: shift/reduce conflict for GREAT in state 76 resolved as shift
+WARNING: shift/reduce conflict for LESS in state 76 resolved as shift
+WARNING: shift/reduce conflict for GREATEQ in state 76 resolved as shift
+WARNING: shift/reduce conflict for LESSEQ in state 76 resolved as shift
+WARNING: shift/reduce conflict for OR in state 82 resolved as shift
+WARNING: shift/reduce conflict for AND in state 82 resolved as shift
+WARNING: shift/reduce conflict for EQEQ in state 82 resolved as shift
+WARNING: shift/reduce conflict for NEQEQ in state 82 resolved as shift
+WARNING: shift/reduce conflict for GREAT in state 82 resolved as shift
+WARNING: shift/reduce conflict for LESS in state 82 resolved as shift
+WARNING: shift/reduce conflict for GREATEQ in state 82 resolved as shift
+WARNING: shift/reduce conflict for LESSEQ in state 82 resolved as shift
+WARNING: shift/reduce conflict for OR in state 83 resolved as shift
+WARNING: shift/reduce conflict for AND in state 83 resolved as shift
+WARNING: shift/reduce conflict for EQEQ in state 83 resolved as shift
+WARNING: shift/reduce conflict for NEQEQ in state 83 resolved as shift
+WARNING: shift/reduce conflict for GREAT in state 83 resolved as shift
+WARNING: shift/reduce conflict for LESS in state 83 resolved as shift
+WARNING: shift/reduce conflict for GREATEQ in state 83 resolved as shift
+WARNING: shift/reduce conflict for LESSEQ in state 83 resolved as shift
+WARNING: shift/reduce conflict for VAR_IDENTIFIER in state 94 resolved as shift
+WARNING: shift/reduce conflict for LPAREN in state 94 resolved as shift
+WARNING: shift/reduce conflict for NUMBER in state 94 resolved as shift
+WARNING: shift/reduce conflict for INST_ELSE in state 95 resolved as shift
+WARNING: shift/reduce conflict for PLUS in state 97 resolved as shift
+WARNING: shift/reduce conflict for PLUS in state 99 resolved as shift
+WARNING: shift/reduce conflict for TIMES in state 99 resolved as shift
+WARNING: shift/reduce conflict for INTERSECTION in state 99 resolved as shift
+WARNING: shift/reduce conflict for VAR_IDENTIFIER in state 104 resolved as shift
+WARNING: shift/reduce conflict for LPAREN in state 104 resolved as shift
+WARNING: shift/reduce conflict for NUMBER in state 104 resolved as shift

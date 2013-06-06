@@ -5,9 +5,9 @@ _tabversion = '3.2'
 
 _lr_method = 'LALR'
 
-_lr_signature = '@Zi$,\xca\x17\xb5D\x05c&NK\x84\xff'
+_lr_signature = '\xed\x8b\xe2\x1b\xa0\xba\xc5hV\t\xad\xa1\xa9\x83%u'
     
-_lr_action_items = {'TYPEDEF_INT':([14,],[18,]),'INST_DECLARE':([2,7,15,],[5,5,5,]),'SEMICOLON':([3,10,11,18,19,20,21,],[-6,-7,15,-11,-8,-13,-12,]),'TYPEDEF_RANGE':([14,],[20,]),'TYPEDEF_BOOL':([14,],[21,]),'VAR_IDENTIFIER':([5,13,],[8,8,]),'INST_END':([3,10,11,12,18,19,20,21,22,],[-6,-7,-4,16,-11,-8,-13,-12,-5,]),'INST_AS':([8,9,17,],[-9,14,-10,]),'COMMA':([8,],[13,]),'INST_BEGIN':([2,],[7,]),'INST_PROGRAM':([0,],[2,]),'$end':([1,3,4,6,10,16,18,19,20,21,],[0,-6,-1,-3,-7,-2,-11,-8,-13,-12,]),}
+_lr_action_items = {'GREAT':([24,25,26,27,28,29,31,32,38,61,65,75,76,77,78,79,80,81,82,83,],[44,-29,-45,-40,-44,-28,-43,44,44,44,44,44,44,-38,-39,-42,-41,-46,44,44,]),'INST_DECLARE':([2,8,57,58,67,96,105,107,108,],[3,3,3,3,3,3,3,3,3,]),'INST_IN':([23,],[41,]),'LESS':([24,25,26,27,28,29,31,32,38,61,65,75,76,77,78,79,80,81,82,83,],[47,-29,-45,-40,-44,-28,-43,47,47,47,47,47,47,-38,-39,-42,-41,-46,47,47,]),'EQEQ':([24,25,26,27,28,29,31,32,38,61,65,75,76,77,78,79,80,81,82,83,],[49,-29,-45,-40,-44,-28,-43,49,49,49,49,49,49,-38,-39,-42,-41,-46,49,49,]),'EQUAL':([14,],[36,]),'INST_END':([9,10,11,12,13,15,18,19,22,25,26,27,28,29,31,33,34,35,59,60,61,63,64,65,69,70,71,72,75,76,77,78,79,80,81,82,83,84,85,94,95,97,98,99,100,101,104,106,109,110,111,],[-6,-9,-3,-10,-8,-11,-7,-12,-13,-29,-45,-40,-44,-28,-43,-53,-4,59,-2,-20,-21,-51,-23,-22,-17,-14,-19,-18,-24,-25,-38,-39,-42,-41,-46,-26,-27,-61,-5,-56,-54,-47,-52,-50,-48,-49,-59,-60,-55,-57,-58,]),'INST_FOR':([2,8,57,58,67,96,105,107,108,],[5,5,5,5,5,5,5,5,5,]),'INST_WHILE':([2,8,57,58,67,96,105,107,108,],[6,6,6,6,6,6,6,6,6,]),'INST_READ':([2,8,57,58,67,96,105,107,108,],[7,7,7,7,7,7,7,7,7,]),'INST_BEGIN':([2,57,67,96,105,107,108,],[8,8,8,8,8,8,8,]),'MINUS':([24,26,27,28,31,37,55,61,73,75,77,78,79,80,81,82,87,92,97,101,],[52,-45,-40,-44,-43,52,52,52,52,52,-38,-39,-42,-41,-46,52,52,-45,52,52,]),'INTERSECTION':([26,27,28,31,63,64,74,77,78,79,80,81,88,93,97,98,99,100,101,],[-45,-40,-44,-43,-51,89,89,-38,-39,-42,-41,-46,89,89,-47,-52,89,-48,-49,]),'RPAREN':([26,27,28,31,55,63,77,78,79,80,81,87,88,97,98,99,100,101,],[-45,-40,-44,-43,81,-51,-38,-39,-42,-41,-46,81,98,-47,-52,-50,-48,-49,]),'SEMICOLON':([9,10,11,12,13,15,18,19,22,25,26,27,28,29,31,33,34,59,60,61,63,64,65,69,70,71,72,75,76,77,78,79,80,81,82,83,84,94,95,97,98,99,100,101,104,106,109,110,111,],[-6,-9,-3,-10,-8,-11,-7,-12,-13,-29,-45,-40,-44,-28,-43,-53,58,-2,-20,-21,-51,-23,-22,-17,-14,-19,-18,-24,-25,-38,-39,-42,-41,-46,-26,-27,-61,-56,-54,-47,-52,-50,-48,-49,-59,-60,-55,-57,-58,]),'NEQEQ':([24,25,26,27,28,29,31,32,38,61,65,75,76,77,78,79,80,81,82,83,],[45,-29,-45,-40,-44,-28,-43,45,45,45,45,45,45,-38,-39,-42,-41,-46,45,45,]),'TYPEDEF_RANGE':([40,],[71,]),'INST_OF':([26,27,28,31,37,77,78,79,80,81,],[-45,-40,-44,-43,66,-38,-39,-42,-41,-46,]),'-':([26,27,28,31,63,77,78,79,80,81,92,93,97,98,99,100,101,],[-45,-40,-44,-43,-51,-38,-39,-42,-41,-46,102,103,-47,-52,-50,-48,-49,]),'INST_AS':([20,21,68,],[-15,40,-16,]),'COMMA':([20,],[39,]),'PLUS':([24,26,27,28,31,37,55,61,63,64,73,74,75,77,78,79,80,81,82,87,88,92,93,97,98,99,100,101,],[51,-45,-40,-44,-43,51,51,51,-51,90,51,90,51,-38,-39,-42,-41,-46,51,51,90,-45,90,51,-52,90,-48,-49,]),'INST_PROGRAM':([0,],[2,]),'$end':([1,4,9,10,11,12,13,15,18,19,22,25,26,27,28,29,31,33,59,60,61,63,64,65,69,70,71,72,75,76,77,78,79,80,81,82,83,84,94,95,97,98,99,100,101,104,106,109,110,111,],[0,-1,-6,-9,-3,-10,-8,-11,-7,-12,-13,-29,-45,-40,-44,-28,-43,-53,-2,-20,-21,-51,-23,-22,-17,-14,-19,-18,-24,-25,-38,-39,-42,-41,-46,-26,-27,-61,-56,-54,-47,-52,-50,-48,-49,-59,-60,-55,-57,-58,]),'INST_ELSE':([9,10,11,12,13,15,18,19,22,25,26,27,28,29,31,33,59,60,61,63,64,65,69,70,71,72,75,76,77,78,79,80,81,82,83,84,94,95,97,98,99,100,101,104,106,109,110,111,],[-6,-9,-3,-10,-8,-11,-7,-12,-13,-29,-45,-40,-44,-28,-43,-53,-2,-20,-21,-51,-23,-22,-17,-14,-19,-18,-24,-25,-38,-39,-42,-41,-46,-26,-27,-61,-56,105,-47,-52,-50,-48,-49,-59,-60,-55,-57,-58,]),'DIVIDE':([26,27,28,31,77,78,79,80,81,92,],[-45,53,-44,-43,53,53,-42,-41,-46,-45,]),'TYPEDEF_BOOL':([40,],[72,]),'VAR_IDENTIFIER':([2,3,5,6,7,8,9,10,11,12,13,15,16,17,18,19,22,25,26,27,28,29,30,31,33,36,39,41,42,43,44,45,46,47,48,49,50,51,52,53,54,56,57,58,59,60,61,62,63,64,65,66,67,69,70,71,72,75,76,77,78,79,80,81,82,83,84,86,89,90,91,94,95,96,97,98,99,100,101,104,105,106,107,108,109,110,111,],[14,20,23,26,33,14,-6,-9,-3,-10,-8,-11,26,26,-7,-12,-13,-29,-45,-40,-44,-28,26,-43,-53,26,20,26,-31,-36,-34,-33,26,-35,-30,-32,-37,26,26,26,26,26,14,14,-2,-20,-21,26,-51,-23,-22,92,14,-17,-14,-19,-18,-24,-25,-38,-39,-42,-41,-46,-26,-27,-61,26,26,26,26,92,-54,14,-47,-52,-50,-48,-49,92,14,-60,14,14,-55,-57,-58,]),'NUMBER':([6,9,10,11,12,13,15,16,17,18,19,22,25,26,27,28,29,30,31,33,36,41,42,43,44,45,46,47,48,49,50,51,52,53,54,56,59,60,61,62,63,64,65,66,69,70,71,72,75,76,77,78,79,80,81,82,83,84,86,89,90,91,94,95,97,98,99,100,101,104,106,109,110,111,],[28,-6,-9,-3,-10,-8,-11,28,28,-7,-12,-13,-29,-45,-40,-44,-28,28,-43,-53,28,28,-31,-36,-34,-33,28,-35,-30,-32,-37,28,28,28,28,28,-2,-20,-21,28,-51,-23,-22,28,-17,-14,-19,-18,-24,-25,-38,-39,-42,-41,-46,-26,-27,-61,28,28,28,28,28,-54,-47,-52,-50,-48,-49,28,-60,-55,-57,-58,]),'RANGE':([26,27,28,31,61,73,77,78,79,80,81,87,92,],[-45,-40,-44,-43,86,86,-38,-39,-42,-41,-46,86,-45,]),'INST_DO':([25,26,27,28,29,31,32,63,74,75,76,77,78,79,80,81,82,83,97,98,99,100,101,],[-29,-45,-40,-44,-28,-43,57,-51,96,-24,-25,-38,-39,-42,-41,-46,-26,-27,-47,-52,-50,-48,-49,]),'LPAREN':([6,9,10,11,12,13,15,16,17,18,19,22,25,26,27,28,29,30,31,33,36,41,42,43,44,45,46,47,48,49,50,51,52,53,54,56,59,60,61,62,63,64,65,66,69,70,71,72,75,76,77,78,79,80,81,82,83,84,86,89,90,91,94,95,97,98,99,100,101,104,106,109,110,111,],[30,-6,-9,-3,-10,-8,-11,30,30,-7,-12,-13,-29,-45,-40,-44,-28,30,-43,-53,62,62,-31,-36,-34,-33,30,-35,-30,-32,-37,30,30,30,30,30,-2,-20,-21,62,-51,-23,-22,62,-17,-14,-19,-18,-24,-25,-38,-39,-42,-41,-46,-26,-27,-61,30,62,62,30,62,-54,-47,-52,-50,-48,-49,62,-60,-55,-57,-58,]),'TIMES':([26,27,28,31,63,64,74,77,78,79,80,81,88,92,93,97,98,99,100,101,],[-45,54,-44,-43,-51,91,91,54,54,-42,-41,-46,91,-45,91,-47,-52,91,91,-49,]),'AND':([24,25,26,27,28,29,31,32,38,61,65,75,76,77,78,79,80,81,82,83,],[42,-29,-45,-40,-44,-28,-43,42,42,42,42,42,42,-38,-39,-42,-41,-46,42,42,]),'INST_THEN':([25,26,27,28,29,31,38,75,76,77,78,79,80,81,82,83,],[-29,-45,-40,-44,-28,-43,67,-24,-25,-38,-39,-42,-41,-46,-26,-27,]),'INST_IF':([2,8,57,58,67,96,105,107,108,],[17,17,17,17,17,17,17,17,17,]),'GREATEQ':([24,25,26,27,28,29,31,32,38,61,65,75,76,77,78,79,80,81,82,83,],[43,-29,-45,-40,-44,-28,-43,43,43,43,43,43,43,-38,-39,-42,-41,-46,43,43,]),'f':([6,17,36,42,43,44,45,46,47,48,49,50,56,],[25,25,25,-31,-36,-34,-33,25,-35,-30,-32,-37,25,]),'TYPEDEF_INT':([40,],[69,]),'LESSEQ':([24,25,26,27,28,29,31,32,38,61,65,75,76,77,78,79,80,81,82,83,],[50,-29,-45,-40,-44,-28,-43,50,50,50,50,50,50,-38,-39,-42,-41,-46,50,50,]),'t':([6,17,36,42,43,44,45,46,47,48,49,50,56,],[29,29,29,-31,-36,-34,-33,29,-35,-30,-32,-37,29,]),'INST_CASE':([2,8,57,58,67,96,105,107,108,],[16,16,16,16,16,16,16,16,16,]),'>':([102,103,],[107,108,]),'OR':([24,25,26,27,28,29,31,32,38,61,65,75,76,77,78,79,80,81,82,83,],[48,-29,-45,-40,-44,-28,-43,48,48,48,48,48,48,-38,-39,-42,-41,-46,48,48,]),}
 
 _lr_action = { }
 for _k, _v in _lr_action_items.items():
@@ -16,7 +16,7 @@ for _k, _v in _lr_action_items.items():
       _lr_action[_x][_k] = _y
 del _lr_action_items
 
-_lr_goto_items = {'Inst_Declare':([2,7,15,],[3,3,3,]),'Tipo':([14,],[19,]),'Bloque_Inst':([2,],[4,]),'program':([0,],[1,]),'Inst':([2,7,15,],[6,11,11,]),'Lista_Variables':([5,13,],[9,17,]),'Lista_Declare':([5,],[10,]),'Lista_Inst':([7,15,],[12,22,]),}
+_lr_goto_items = {'Tipo':([40,],[70,]),'Factor':([6,16,17,30,36,41,46,51,52,53,54,56,62,66,86,89,90,91,94,104,],[31,31,31,31,31,31,31,31,31,79,80,31,31,31,31,31,31,31,31,31,]),'Bloque_Inst':([2,57,67,96,105,107,108,],[4,84,95,106,109,110,111,]),'RangoF':([36,41,62,66,89,90,94,104,],[63,63,63,63,63,63,63,63,]),'Casos':([66,94,104,],[94,104,104,]),'Operacion_booleana':([6,17,36,46,56,],[32,38,65,76,83,]),'Inst_Declare':([2,8,57,58,67,96,105,107,108,],[9,9,9,9,9,9,9,9,9,]),'Opr_bool':([24,32,38,61,65,75,76,82,83,],[46,56,56,46,56,46,56,46,56,]),'Inst_For':([2,8,57,58,67,96,105,107,108,],[10,10,10,10,10,10,10,10,10,]),'program':([0,],[1,]),'Inst':([2,8,57,58,67,96,105,107,108,],[11,34,11,34,11,11,11,11,11,]),'Inst_While':([2,8,57,58,67,96,105,107,108,],[12,12,12,12,12,12,12,12,12,]),'Inst_Lectura':([2,8,57,58,67,96,105,107,108,],[13,13,13,13,13,13,13,13,13,]),'Lista_Inst':([8,58,],[35,85,]),'Expresion':([36,],[60,]),'Term':([6,16,17,30,36,41,46,51,52,56,62,66,86,89,90,91,94,104,],[27,27,27,27,27,27,27,77,78,27,27,27,27,27,27,27,27,27,]),'Inst_If':([2,8,57,58,67,96,105,107,108,],[15,15,15,15,15,15,15,15,15,]),'Inst_Asignacion':([2,8,57,58,67,96,105,107,108,],[18,18,18,18,18,18,18,18,18,]),'Rango':([36,41,62,66,89,90,94,104,],[64,74,88,93,99,100,93,93,]),'Lista_Declare':([3,],[22,]),'Operacion_binaria':([6,16,17,30,36,41,46,56,62,66,86,89,90,91,94,104,],[24,37,24,55,61,73,75,82,87,73,97,73,73,101,73,73,]),'Lista_Variables':([3,39,],[21,68,]),'Inst_Case':([2,8,57,58,67,96,105,107,108,],[19,19,19,19,19,19,19,19,19,]),}
 
 _lr_goto = { }
 for _k, _v in _lr_goto_items.items():
@@ -26,17 +26,65 @@ for _k, _v in _lr_goto_items.items():
 del _lr_goto_items
 _lr_productions = [
   ("S' -> program","S'",1,None,None,None),
-  ('program -> INST_PROGRAM Bloque_Inst','program',2,'p_program','parser.py',14),
-  ('Bloque_Inst -> INST_BEGIN Lista_Inst INST_END','Bloque_Inst',3,'p_Bloque_Inst','parser.py',19),
-  ('Bloque_Inst -> Inst','Bloque_Inst',1,'p_Bloque_Inst','parser.py',20),
-  ('Lista_Inst -> Inst','Lista_Inst',1,'p_Lista_Inst','parser.py',27),
-  ('Lista_Inst -> Inst SEMICOLON Lista_Inst','Lista_Inst',3,'p_Lista_Inst','parser.py',28),
-  ('Inst -> Inst_Declare','Inst',1,'p_Inst','parser.py',35),
-  ('Inst_Declare -> INST_DECLARE Lista_Declare','Inst_Declare',2,'p_Inst_Declare','parser.py',47),
-  ('Lista_Declare -> Lista_Variables INST_AS Tipo','Lista_Declare',3,'p_Lista_Declare','parser.py',51),
-  ('Lista_Variables -> VAR_IDENTIFIER','Lista_Variables',1,'p_Lista_Variables','parser.py',55),
-  ('Lista_Variables -> VAR_IDENTIFIER COMMA Lista_Variables','Lista_Variables',3,'p_Lista_Variables','parser.py',56),
-  ('Tipo -> TYPEDEF_INT','Tipo',1,'p_Tipo','parser.py',64),
-  ('Tipo -> TYPEDEF_BOOL','Tipo',1,'p_Tipo','parser.py',65),
-  ('Tipo -> TYPEDEF_RANGE','Tipo',1,'p_Tipo','parser.py',66),
+  ('program -> INST_PROGRAM Bloque_Inst','program',2,'p_program','parser.py',52),
+  ('Bloque_Inst -> INST_BEGIN Lista_Inst INST_END','Bloque_Inst',3,'p_Bloque_Inst','parser.py',57),
+  ('Bloque_Inst -> Inst','Bloque_Inst',1,'p_Bloque_Inst','parser.py',58),
+  ('Lista_Inst -> Inst','Lista_Inst',1,'p_Lista_Inst','parser.py',65),
+  ('Lista_Inst -> Inst SEMICOLON Lista_Inst','Lista_Inst',3,'p_Lista_Inst','parser.py',66),
+  ('Inst -> Inst_Declare','Inst',1,'p_Inst','parser.py',73),
+  ('Inst -> Inst_Asignacion','Inst',1,'p_Inst','parser.py',74),
+  ('Inst -> Inst_Lectura','Inst',1,'p_Inst','parser.py',75),
+  ('Inst -> Inst_For','Inst',1,'p_Inst','parser.py',76),
+  ('Inst -> Inst_While','Inst',1,'p_Inst','parser.py',77),
+  ('Inst -> Inst_If','Inst',1,'p_Inst','parser.py',78),
+  ('Inst -> Inst_Case','Inst',1,'p_Inst','parser.py',79),
+  ('Inst_Declare -> INST_DECLARE Lista_Declare','Inst_Declare',2,'p_Inst_Declare','parser.py',85),
+  ('Lista_Declare -> Lista_Variables INST_AS Tipo','Lista_Declare',3,'p_Lista_Declare','parser.py',89),
+  ('Lista_Variables -> VAR_IDENTIFIER','Lista_Variables',1,'p_Lista_Variables','parser.py',93),
+  ('Lista_Variables -> VAR_IDENTIFIER COMMA Lista_Variables','Lista_Variables',3,'p_Lista_Variables','parser.py',94),
+  ('Tipo -> TYPEDEF_INT','Tipo',1,'p_Tipo','parser.py',102),
+  ('Tipo -> TYPEDEF_BOOL','Tipo',1,'p_Tipo','parser.py',103),
+  ('Tipo -> TYPEDEF_RANGE','Tipo',1,'p_Tipo','parser.py',104),
+  ('Inst_Asignacion -> VAR_IDENTIFIER EQUAL Expresion','Inst_Asignacion',3,'p_Inst_Asignacion','parser.py',108),
+  ('Expresion -> Operacion_binaria','Expresion',1,'p_Expresion','parser.py',131),
+  ('Expresion -> Operacion_booleana','Expresion',1,'p_Expresion','parser.py',132),
+  ('Expresion -> Rango','Expresion',1,'p_Expresion','parser.py',133),
+  ('Operacion_booleana -> Operacion_binaria Opr_bool Operacion_binaria','Operacion_booleana',3,'p_Operacion_booleana','parser.py',137),
+  ('Operacion_booleana -> Operacion_binaria Opr_bool Operacion_booleana','Operacion_booleana',3,'p_Operacion_booleana','parser.py',138),
+  ('Operacion_booleana -> Operacion_booleana Opr_bool Operacion_binaria','Operacion_booleana',3,'p_Operacion_booleana','parser.py',139),
+  ('Operacion_booleana -> Operacion_booleana Opr_bool Operacion_booleana','Operacion_booleana',3,'p_Operacion_booleana','parser.py',140),
+  ('Operacion_booleana -> t','Operacion_booleana',1,'p_Operacion_booleana','parser.py',141),
+  ('Operacion_booleana -> f','Operacion_booleana',1,'p_Operacion_booleana','parser.py',142),
+  ('Opr_bool -> OR','Opr_bool',1,'p_Opr_bool','parser.py',150),
+  ('Opr_bool -> AND','Opr_bool',1,'p_Opr_bool','parser.py',151),
+  ('Opr_bool -> EQEQ','Opr_bool',1,'p_Opr_bool','parser.py',152),
+  ('Opr_bool -> NEQEQ','Opr_bool',1,'p_Opr_bool','parser.py',153),
+  ('Opr_bool -> GREAT','Opr_bool',1,'p_Opr_bool','parser.py',154),
+  ('Opr_bool -> LESS','Opr_bool',1,'p_Opr_bool','parser.py',155),
+  ('Opr_bool -> GREATEQ','Opr_bool',1,'p_Opr_bool','parser.py',156),
+  ('Opr_bool -> LESSEQ','Opr_bool',1,'p_Opr_bool','parser.py',157),
+  ('Operacion_binaria -> Operacion_binaria PLUS Term','Operacion_binaria',3,'p_Operacion_binaria','parser.py',161),
+  ('Operacion_binaria -> Operacion_binaria MINUS Term','Operacion_binaria',3,'p_Operacion_binaria','parser.py',162),
+  ('Operacion_binaria -> Term','Operacion_binaria',1,'p_Operacion_binaria','parser.py',163),
+  ('Term -> Term TIMES Factor','Term',3,'p_Term','parser.py',170),
+  ('Term -> Term DIVIDE Factor','Term',3,'p_Term','parser.py',171),
+  ('Term -> Factor','Term',1,'p_Term','parser.py',172),
+  ('Factor -> NUMBER','Factor',1,'p_Factor','parser.py',179),
+  ('Factor -> VAR_IDENTIFIER','Factor',1,'p_Factor','parser.py',180),
+  ('Factor -> LPAREN Operacion_binaria RPAREN','Factor',3,'p_Factor','parser.py',181),
+  ('Rango -> Operacion_binaria RANGE Operacion_binaria','Rango',3,'p_Rango','parser.py',188),
+  ('Rango -> Rango PLUS Rango','Rango',3,'p_Rango','parser.py',189),
+  ('Rango -> Rango TIMES Operacion_binaria','Rango',3,'p_Rango','parser.py',190),
+  ('Rango -> Rango INTERSECTION Rango','Rango',3,'p_Rango','parser.py',191),
+  ('Rango -> RangoF','Rango',1,'p_Rango','parser.py',192),
+  ('RangoF -> LPAREN Rango RPAREN','RangoF',3,'p_RangoF','parser.py',199),
+  ('Inst_Lectura -> INST_READ VAR_IDENTIFIER','Inst_Lectura',2,'p_Inst_Lectura','parser.py',204),
+  ('Inst_If -> INST_IF Operacion_booleana INST_THEN Bloque_Inst','Inst_If',4,'p_Inst_If','parser.py',218),
+  ('Inst_If -> INST_IF Operacion_booleana INST_THEN Bloque_Inst INST_ELSE Bloque_Inst','Inst_If',6,'p_Inst_If','parser.py',219),
+  ('Inst_Case -> INST_CASE Operacion_binaria INST_OF Casos','Inst_Case',4,'p_Inst_Case','parser.py',228),
+  ('Casos -> VAR_IDENTIFIER - > Bloque_Inst','Casos',4,'p_Casos','parser.py',231),
+  ('Casos -> Rango - > Bloque_Inst','Casos',4,'p_Casos','parser.py',232),
+  ('Casos -> Casos Casos','Casos',2,'p_Casos','parser.py',233),
+  ('Inst_For -> INST_FOR VAR_IDENTIFIER INST_IN Rango INST_DO Bloque_Inst','Inst_For',6,'p_Inst_For','parser.py',242),
+  ('Inst_While -> INST_WHILE Operacion_booleana INST_DO Bloque_Inst','Inst_While',4,'p_Inst_While','parser.py',251),
 ]
