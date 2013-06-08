@@ -63,11 +63,25 @@ def p_Inst(p):
   | Inst_While
   | Inst_If 
   | Inst_Case 
-  | Inst_Salida '''
+  | Inst_Salida
+  | Inst_Funcion '''
   p[0] = p[1]
   
 
+class InstFuncion:
+  def __init__(self,func,var):
+    self.funcion = func
+    self.var = var
+  def printArbol(self):
+    print "Funcion: " + self.funcion + "\nVariable " + self.var
+    
+def p_Inst_Funcion(p):
+  ''' Inst_Funcion : RTOI LPAREN VAR_IDENTIFIER RPAREN 
+  | LENGTH LPAREN VAR_IDENTIFIER RPAREN
+  | TOP LPAREN VAR_IDENTIFIER RPAREN
+  | BOTTOM LPAREN VAR_IDENTIFIER RPAREN '''
   
+  p[0] = InstFuncion(p[1],p[3])
   
 class bloqueDeclaracion:
   def __init__(self,listaDeclaraciones):

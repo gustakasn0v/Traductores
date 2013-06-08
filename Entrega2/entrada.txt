@@ -1,6 +1,7 @@
 program
 begin
 	read hola;
-	read algo
-	
+	rtoi ( hola );
+	bottom ( epale )
+
 end
