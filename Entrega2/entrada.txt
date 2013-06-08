@@ -1,4 +1,6 @@
 program
 begin
-	read hola
+	read hola;
+	read algo
+	
 end

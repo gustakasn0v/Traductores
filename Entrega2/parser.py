@@ -48,10 +48,12 @@ def p_Lista_Inst(p):
     '''Lista_Inst : Inst 
     | Inst SEMICOLON Lista_Inst'''
     if(len(p)>=3):
-      p[0] = listaInstrucciones( [ p[3] ].insert(0,p[1]) )
+      p[3].listaInst.insert(0,p[1])
+      p[0] = listaInstrucciones( p[3].listaInst )
+      
     else:
       p[0] = listaInstrucciones([p[1]])
-
+      
 def p_Inst(p):
   '''Inst : Inst_Declare 
   | Inst_Asignacion
@@ -62,6 +64,7 @@ def p_Inst(p):
   | Inst_Case 
   | Inst_Salida '''
   p[0] = p[1]
+  
 
   
   
