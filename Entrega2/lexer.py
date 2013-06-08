@@ -41,7 +41,7 @@ palabrasReservadas = {
 }
 
 # Defino formalmente los tokens como una lista, y le concateno el diccionario
-tokens = ['NUMBER','MINUS','EQUAL','TIMES','DIVIDE','MOD','PLUS','GREAT','GREATEQ','LESS','LESSEQ','INTERSECTION',
+tokens = ['TRUE','FALSE','NUMBER','MINUS','EQUAL','TIMES','DIVIDE','MOD','PLUS','GREAT','GREATEQ','LESS','LESSEQ','INTERSECTION',
           'RESERVED','RANGE','VAR_IDENTIFIER','COMMENT','COMMA','SEMICOLON','EQEQ','NEQEQ','IN','STRING','LPAREN','RPAREN','CASE_ASSIGN'] + list(palabrasReservadas.values());
           
 
@@ -65,7 +65,8 @@ t_RPAREN = r'\)'
 t_RANGE = r'\.\.'
 t_CASE_ASSIGN = r'\-\>'
 t_ignore  = ' \t'
-
+t_TRUE = r'true'
+t_FALSE = r'false'
 
 # A continuacion las formulas reconocedoras de tokens que requieran procedimientos
 

@@ -20,7 +20,7 @@ class bloque:
     self.nombre = nombre
     self.contenido = contenido
     
-  def printArbol(self,indent):
+  def printArbol(self):
     print self.nombre
     self.contenido.printArbol()
     
@@ -85,8 +85,11 @@ class unaDeclaracion:
     self.listaVariables = listaVariables
     self.tipo = tipo
     
-  def printArbol(self,indent):
-    self.listaVariables.printArbol()
+  def printArbol(self):
+   print "Variables"
+   for i in self.listaVariables:
+     print i + ","
+   print "Declaradas como " + self.tipo
 
   
 def p_Lista_Declare(p):
@@ -116,7 +119,7 @@ def p_Tipo(p):
   ''' Tipo : TYPEDEF_INT 
   | TYPEDEF_BOOL 
   | TYPEDEF_RANGE '''
-  p[0] = 'de tipo ' + p[1]
+  p[0] =  p[1]
 
 class Asignacion:
   def __init__(self,variable,expresion):
@@ -133,11 +136,14 @@ def p_Inst_Asignacion(p):
 
 
 precedence = (
-	('left', 'OR'),
-	('left', 'AND'),
-	('nonassoc', 'EQEQ' ,'NEQEQ','LESS','LESSEQ' ,'GREAT','GREATEQ'),
+    ('right','INST_ELSE'),
+    ('left','INTERSECTION'),
+    ('left', 'OR'),
+    ('left', 'AND'),
+    ('nonassoc', 'EQEQ' ,'NEQEQ','LESS','LESSEQ' ,'GREAT','GREATEQ'),
     ('left', 'PLUS', 'MINUS'),
     ('left', 'TIMES', 'DIVIDE'),
+    ('nonassoc', 'RANGE'),
 ) 
 
 
@@ -163,8 +169,8 @@ def p_Operacion_booleana(p):
   ''' Operacion_booleana : Operacion_binaria Opr_bool Operacion_binaria
   | Operacion_booleana AND Operacion_booleana 
   | Operacion_booleana OR Operacion_booleana 
-  | 't'
-  | 'f' '''
+  | TRUE
+  | FALSE '''
 
   if len(p)>=3:
 	  p[0] = Operacion(p[1],p[2],p[3])
@@ -229,12 +235,12 @@ class Lectura:
     self.variable = var
   
   def printArbol(self):
-    print "Read: " + '\n ' + self.var
+    print "Read de la variable: " + self.variable
     
   
 def p_Inst_Lectura(p):
   '''Inst_Lectura : INST_READ VAR_IDENTIFIER '''
-  p[0] = Lectura(var)
+  p[0] = Lectura(p[2])
   
   
 class Salida:
@@ -246,20 +252,32 @@ class Salida:
     print tipow + "\n"
     for i in lista:
       i.printArbol()
+
+      
+#Esta clase se usa para facilitar el write
+class String:
+  def __init__(self,cadena):
+    self.cadena = cadena
     
+  def printArbol():
+    print self.cadena
 
 
 def p_Inst_Salida(p):
   '''Inst_Salida : INST_WRITE Lista_Aux
   | INST_WRITELN  Lista_Aux '''
-  
+  p[0] = Salida(p[1],p[2])
 
+  
 def p_Lista_Aux(p):
   '''Lista_Aux : Expresion
   | STRING 
   | Expresion COMMA Lista_Aux
   | STRING COMMA Lista_Aux '''
-  
+  if(len(p)>=3):
+    p[0] = [ p[3] ].insert(0,p[1])
+  else:
+    p[0] = listaInstrucciones([p[1]])
 
 class ifc:
   def __init__(self,cond,bloque,bloque2=""):
@@ -287,30 +305,43 @@ def p_Inst_If(p):
 def p_Inst_Case(p):
   '''Inst_Case : INST_CASE Operacion_binaria INST_OF Casos '''
 
+  
 def p_Casos(p):
   ''' Casos : VAR_IDENTIFIER '-' '>' Bloque_Inst 
   | Rango '-' '>' Bloque_Inst 
   | Casos Casos '''
 
+
 class forc:
-	def __init__(self,var,rango,inst):
-		this.var = var
-		this.rango = rango
-		this.inst = inst
+    def __init__(self,var,rango,inst):
+      this.var = var
+      this.rango = rango
+      this.inst = inst
+      
+    def printArbol(self):
+      print "Ciclo for con variable " + self.var + " y rango " + self.rango
+      print "Bloque de instrucciones: \n" + self.inst
+      
+      
 
 def p_Inst_For(p):
   '''Inst_For : INST_FOR VAR_IDENTIFIER INST_IN Rango INST_DO Bloque_Inst '''
   p[0] = forc(p[2],p[4],p[6])
 
+  
 class whilec:
-	def __init__(self,cond,inst):
-		this.cond = cond
-		this.inst = inst
+    def __init__(self,cond,inst):
+      this.cond = cond
+      this.inst = inst
+      
+    def printArbol(self):
+      print "Ciclo while con condicion " + self.cond.printArbol() + " e instrucciones " + self.inst.printArbol()
 
 def p_Inst_While(p):
   '''Inst_While : INST_WHILE Operacion_booleana INST_DO Bloque_Inst '''
   p[0] = whilec(p[2],p[4])
 
+  
 def p_error(p):
     print "Syntax error in input!"
 
@@ -327,4 +358,4 @@ s = str(open(str('entrada.txt'),'r').read())
       #break
    #if not s: continue
 result = parser.parse(s)
-print result
+print result.printArbol()
