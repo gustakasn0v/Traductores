@@ -73,7 +73,7 @@ class InstFuncion:
     self.funcion = func
     self.var = var
   def printArbol(self):
-    print "Funcion: " + self.funcion + "\nVariable " + self.var
+    print "Funcion: " + self.funcion + "\n\tVariable: " + self.var
     
 def p_Inst_Funcion(p):
   ''' Inst_Funcion : RTOI LPAREN VAR_IDENTIFIER RPAREN 
@@ -104,10 +104,9 @@ class unaDeclaracion:
     self.tipo = tipo
     
   def printArbol(self):
-   print "Variables"
-   for i in self.listaVariables:
-     print i + ","
-   print "Declaradas como " + self.tipo
+   print "\tVariables: ",
+   self.listaVariables.printArbol()
+   print "declaradas como " + self.tipo
 
   
 def p_Lista_Declare(p):
@@ -121,7 +120,7 @@ class listaVariables:
     
   def printArbol(self):
     for i in self.lista:
-      i.printArbol()
+      print i +",",
     
 
 def p_Lista_Variables(p):
@@ -129,7 +128,8 @@ def p_Lista_Variables(p):
   | VAR_IDENTIFIER COMMA Lista_Variables '''
   
   if(len(p)>=3):
-    p[0] = listaVariables([ p[3] ].insert(0,p[1]))
+    p[3].lista.insert(0,p[1])
+    p[0] = listaVariables( p[3].lista)
   else:
     p[0] = listaVariables([p[1]])
   

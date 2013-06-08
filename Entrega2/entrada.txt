@@ -1,7 +1,5 @@
 program
 begin
-	read hola;
-	rtoi ( hola );
-	bottom ( epale )
-
+	declare x,y,z as int;
+	declare p,q,holis as bool
 end
