@@ -48,6 +48,7 @@ def p_Lista_Inst(p):
     '''Lista_Inst : Inst 
     | Inst SEMICOLON Lista_Inst'''
     if(len(p)>=3):
+      p[3].listaInst.insert(0,String("\nSERPARADOR\n"))
       p[3].listaInst.insert(0,p[1])
       p[0] = listaInstrucciones( p[3].listaInst )
       
@@ -262,7 +263,7 @@ class String:
   def __init__(self,cadena):
     self.cadena = cadena
     
-  def printArbol():
+  def printArbol(self):
     print self.cadena
 
 
