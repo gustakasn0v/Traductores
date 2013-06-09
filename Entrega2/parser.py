@@ -454,10 +454,12 @@ class case(indentable):
     self.var = var
   
   def printArbol(self):
+    self.printIndent()
     print "Condicional case, con expresion: ",
-    self.var.printArbol()
     self.var.level = self.level
-    self.lista.level = self.level
+    self.var.printArbol()
+    
+    self.lista.level = self.level +1
     self.lista.printArbol()
 
 class listaCasos(indentable):
@@ -480,8 +482,10 @@ class casos(indentable):
     self.printIndent(),
     print "Caso "
     self.printIndent(),
-    print "Ran: ",
+    print "Ran: "
+    self.rango.level = self.level+1
     self.rango.printArbol()
+    self.bloque.level = self.level
     self.bloque.printArbol()
 
 def p_Inst_Case(p):
@@ -489,10 +493,10 @@ def p_Inst_Case(p):
   p[0] = case(p[2],p[4])
     
 def p_Casos(p):
-  ''' Casos : VAR_IDENTIFIER CASE_ASSIGN Bloque_Inst 
-  | Rango CASE_ASSIGN Bloque_Inst 
-  | VAR_IDENTIFIER CASE_ASSIGN Bloque_Inst Casos 
-  | Rango CASE_ASSIGN Bloque_Inst Casos'''
+  ''' Casos : VAR_IDENTIFIER CASE_ASSIGN Bloque_Control
+  | Rango CASE_ASSIGN Bloque_Control
+  | VAR_IDENTIFIER CASE_ASSIGN Bloque_Control Casos 
+  | Rango CASE_ASSIGN Bloque_Control Casos'''
 
   if len(p)==5:
     p[4].lista.insert(0,casos(p[1],p[3]))
