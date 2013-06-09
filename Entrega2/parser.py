@@ -13,7 +13,6 @@ from lexer import tokens
 def p_program(p):
     'program : INST_PROGRAM Bloque_Inst'
     p[0] = p[2]
-    
 
 class bloque:
   def __init__(self,nombre,contenido):
@@ -415,8 +414,10 @@ class casos:
     self.bloque.printArbol()
 
 def p_Inst_Case(p):
-  '''Inst_Case : INST_CASE Operacion_binaria INST_OF Casos INST_END'''
+  '''Inst_Case : INST_CASE Operacion_binaria INST_OF Casos'''
   p[0] = case(p[2],p[4])
+  
+  
 def p_Casos(p):
   ''' Casos : VAR_IDENTIFIER '-' '>' Bloque_Inst 
   | Rango '-' '>' Bloque_Inst 
@@ -426,7 +427,6 @@ def p_Casos(p):
   if len(p)==5:
     p[0] = [casos(p[1],p[4])]
   else:
-    print p[2]
     p[5].insert(0,casos(p[1],p[4]))
     p[0]=p[5]
     

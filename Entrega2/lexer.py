@@ -45,7 +45,7 @@ palabrasReservadas = {
 # Defino formalmente los tokens como una lista, y le concateno el diccionario
 tokens = ['NUMBER','MINUS','EQUAL','TIMES','DIVIDE','MOD','PLUS','GREAT','GREATEQ','LESS','LESSEQ','INTERSECTION',
           'RESERVED','RANGE','VAR_IDENTIFIER','COMMENT','COMMA','SEMICOLON','EQEQ','NEQEQ','IN','STRING','LPAREN','RPAREN','CASE_ASSIGN'] + list(palabrasReservadas.values());
-          
+
 
 # Estas son las formulas reconocedoras de tokens que solo necesiten una regexp
 t_MINUS = r'\-'

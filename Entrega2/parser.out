@@ -83,7 +83,7 @@ Rule 69    Lista_Aux -> Expresion COMMA Lista_Aux
 Rule 70    Lista_Aux -> STRING COMMA Lista_Aux
 Rule 71    Inst_If -> INST_IF Operacion_booleana INST_THEN Bloque_Inst
 Rule 72    Inst_If -> INST_IF Operacion_booleana INST_THEN Bloque_Inst INST_ELSE Bloque_Inst
-Rule 73    Inst_Case -> INST_CASE Operacion_binaria INST_OF Casos INST_END
+Rule 73    Inst_Case -> INST_CASE Operacion_binaria INST_OF Casos
 Rule 74    Casos -> VAR_IDENTIFIER - > Bloque_Inst
 Rule 75    Casos -> Rango - > Bloque_Inst
 Rule 76    Casos -> VAR_IDENTIFIER - > Bloque_Inst Casos
@@ -113,7 +113,7 @@ INST_CASE            : 73
 INST_DECLARE         : 23
 INST_DO              : 78 79
 INST_ELSE            : 72
-INST_END             : 2 3 4 73
+INST_END             : 2 3 4
 INST_FOR             : 78
 INST_IF              : 71 72
 INST_IN              : 78
@@ -222,7 +222,7 @@ state 2
     (79) Inst_While -> . INST_WHILE Operacion_booleana INST_DO Bloque_Inst
     (71) Inst_If -> . INST_IF Operacion_booleana INST_THEN Bloque_Inst
     (72) Inst_If -> . INST_IF Operacion_booleana INST_THEN Bloque_Inst INST_ELSE Bloque_Inst
-    (73) Inst_Case -> . INST_CASE Operacion_binaria INST_OF Casos INST_END
+    (73) Inst_Case -> . INST_CASE Operacion_binaria INST_OF Casos
     (65) Inst_Salida -> . INST_WRITE Lista_Aux
     (66) Inst_Salida -> . INST_WRITELN Lista_Aux
     (17) Inst_Funcion -> . RTOI LPAREN VAR_IDENTIFIER RPAREN
@@ -430,7 +430,7 @@ state 11
     (79) Inst_While -> . INST_WHILE Operacion_booleana INST_DO Bloque_Inst
     (71) Inst_If -> . INST_IF Operacion_booleana INST_THEN Bloque_Inst
     (72) Inst_If -> . INST_IF Operacion_booleana INST_THEN Bloque_Inst INST_ELSE Bloque_Inst
-    (73) Inst_Case -> . INST_CASE Operacion_binaria INST_OF Casos INST_END
+    (73) Inst_Case -> . INST_CASE Operacion_binaria INST_OF Casos
     (65) Inst_Salida -> . INST_WRITE Lista_Aux
     (66) Inst_Salida -> . INST_WRITELN Lista_Aux
     (17) Inst_Funcion -> . RTOI LPAREN VAR_IDENTIFIER RPAREN
@@ -482,7 +482,7 @@ state 12
     (79) Inst_While -> . INST_WHILE Operacion_booleana INST_DO Bloque_Inst
     (71) Inst_If -> . INST_IF Operacion_booleana INST_THEN Bloque_Inst
     (72) Inst_If -> . INST_IF Operacion_booleana INST_THEN Bloque_Inst INST_ELSE Bloque_Inst
-    (73) Inst_Case -> . INST_CASE Operacion_binaria INST_OF Casos INST_END
+    (73) Inst_Case -> . INST_CASE Operacion_binaria INST_OF Casos
     (65) Inst_Salida -> . INST_WRITE Lista_Aux
     (66) Inst_Salida -> . INST_WRITELN Lista_Aux
     (17) Inst_Funcion -> . RTOI LPAREN VAR_IDENTIFIER RPAREN
@@ -538,14 +538,14 @@ state 15
 
     (6) Bloque_Inst -> Inst .
 
+    $end            reduce using rule 6 (Bloque_Inst -> Inst .)
+    SEMICOLON       reduce using rule 6 (Bloque_Inst -> Inst .)
+    INST_END        reduce using rule 6 (Bloque_Inst -> Inst .)
+    INST_ELSE       reduce using rule 6 (Bloque_Inst -> Inst .)
     VAR_IDENTIFIER  reduce using rule 6 (Bloque_Inst -> Inst .)
     LPAREN          reduce using rule 6 (Bloque_Inst -> Inst .)
     NUMBER          reduce using rule 6 (Bloque_Inst -> Inst .)
     MINUS           reduce using rule 6 (Bloque_Inst -> Inst .)
-    INST_END        reduce using rule 6 (Bloque_Inst -> Inst .)
-    $end            reduce using rule 6 (Bloque_Inst -> Inst .)
-    SEMICOLON       reduce using rule 6 (Bloque_Inst -> Inst .)
-    INST_ELSE       reduce using rule 6 (Bloque_Inst -> Inst .)
 
 
 state 16
@@ -599,7 +599,7 @@ state 19
 
 state 20
 
-    (73) Inst_Case -> INST_CASE . Operacion_binaria INST_OF Casos INST_END
+    (73) Inst_Case -> INST_CASE . Operacion_binaria INST_OF Casos
     (48) Operacion_binaria -> . Operacion_binaria PLUS Term
     (49) Operacion_binaria -> . Operacion_binaria MINUS Term
     (50) Operacion_binaria -> . Term
@@ -612,11 +612,11 @@ state 20
     (57) Factor -> . MINUS Operacion_binaria
 
     NUMBER          shift and go to state 33
-    VAR_IDENTIFIER  shift and go to state 60
+    VAR_IDENTIFIER  shift and go to state 59
     LPAREN          shift and go to state 61
     MINUS           shift and go to state 36
 
-    Operacion_binaria              shift and go to state 59
+    Operacion_binaria              shift and go to state 60
     Term                           shift and go to state 39
     Factor                         shift and go to state 32
 
@@ -929,7 +929,7 @@ state 36
     (57) Factor -> . MINUS Operacion_binaria
 
     NUMBER          shift and go to state 33
-    VAR_IDENTIFIER  shift and go to state 60
+    VAR_IDENTIFIER  shift and go to state 59
     LPAREN          shift and go to state 61
     MINUS           shift and go to state 36
 
@@ -1377,14 +1377,14 @@ state 52
 
     (64) Inst_Lectura -> INST_READ VAR_IDENTIFIER .
 
+    $end            reduce using rule 64 (Inst_Lectura -> INST_READ VAR_IDENTIFIER .)
+    SEMICOLON       reduce using rule 64 (Inst_Lectura -> INST_READ VAR_IDENTIFIER .)
+    INST_END        reduce using rule 64 (Inst_Lectura -> INST_READ VAR_IDENTIFIER .)
+    INST_ELSE       reduce using rule 64 (Inst_Lectura -> INST_READ VAR_IDENTIFIER .)
     VAR_IDENTIFIER  reduce using rule 64 (Inst_Lectura -> INST_READ VAR_IDENTIFIER .)
     LPAREN          reduce using rule 64 (Inst_Lectura -> INST_READ VAR_IDENTIFIER .)
     NUMBER          reduce using rule 64 (Inst_Lectura -> INST_READ VAR_IDENTIFIER .)
     MINUS           reduce using rule 64 (Inst_Lectura -> INST_READ VAR_IDENTIFIER .)
-    INST_END        reduce using rule 64 (Inst_Lectura -> INST_READ VAR_IDENTIFIER .)
-    $end            reduce using rule 64 (Inst_Lectura -> INST_READ VAR_IDENTIFIER .)
-    SEMICOLON       reduce using rule 64 (Inst_Lectura -> INST_READ VAR_IDENTIFIER .)
-    INST_ELSE       reduce using rule 64 (Inst_Lectura -> INST_READ VAR_IDENTIFIER .)
 
 
 state 53
@@ -1407,7 +1407,7 @@ state 53
     (79) Inst_While -> . INST_WHILE Operacion_booleana INST_DO Bloque_Inst
     (71) Inst_If -> . INST_IF Operacion_booleana INST_THEN Bloque_Inst
     (72) Inst_If -> . INST_IF Operacion_booleana INST_THEN Bloque_Inst INST_ELSE Bloque_Inst
-    (73) Inst_Case -> . INST_CASE Operacion_binaria INST_OF Casos INST_END
+    (73) Inst_Case -> . INST_CASE Operacion_binaria INST_OF Casos
     (65) Inst_Salida -> . INST_WRITE Lista_Aux
     (66) Inst_Salida -> . INST_WRITELN Lista_Aux
     (17) Inst_Funcion -> . RTOI LPAREN VAR_IDENTIFIER RPAREN
@@ -1460,14 +1460,14 @@ state 56
 
     (5) Bloque_Inst -> Inst_Declare Inst .
 
+    $end            reduce using rule 5 (Bloque_Inst -> Inst_Declare Inst .)
+    SEMICOLON       reduce using rule 5 (Bloque_Inst -> Inst_Declare Inst .)
+    INST_END        reduce using rule 5 (Bloque_Inst -> Inst_Declare Inst .)
+    INST_ELSE       reduce using rule 5 (Bloque_Inst -> Inst_Declare Inst .)
     VAR_IDENTIFIER  reduce using rule 5 (Bloque_Inst -> Inst_Declare Inst .)
     LPAREN          reduce using rule 5 (Bloque_Inst -> Inst_Declare Inst .)
     NUMBER          reduce using rule 5 (Bloque_Inst -> Inst_Declare Inst .)
     MINUS           reduce using rule 5 (Bloque_Inst -> Inst_Declare Inst .)
-    INST_END        reduce using rule 5 (Bloque_Inst -> Inst_Declare Inst .)
-    $end            reduce using rule 5 (Bloque_Inst -> Inst_Declare Inst .)
-    SEMICOLON       reduce using rule 5 (Bloque_Inst -> Inst_Declare Inst .)
-    INST_ELSE       reduce using rule 5 (Bloque_Inst -> Inst_Declare Inst .)
 
 
 state 57
@@ -1525,17 +1525,6 @@ state 58
 
 state 59
 
-    (73) Inst_Case -> INST_CASE Operacion_binaria . INST_OF Casos INST_END
-    (48) Operacion_binaria -> Operacion_binaria . PLUS Term
-    (49) Operacion_binaria -> Operacion_binaria . MINUS Term
-
-    INST_OF         shift and go to state 103
-    PLUS            shift and go to state 91
-    MINUS           shift and go to state 92
-
-
-state 60
-
     (55) Factor -> VAR_IDENTIFIER .
 
     TIMES           reduce using rule 55 (Factor -> VAR_IDENTIFIER .)
@@ -1567,6 +1556,17 @@ state 60
     INST_THEN       reduce using rule 55 (Factor -> VAR_IDENTIFIER .)
 
 
+state 60
+
+    (73) Inst_Case -> INST_CASE Operacion_binaria . INST_OF Casos
+    (48) Operacion_binaria -> Operacion_binaria . PLUS Term
+    (49) Operacion_binaria -> Operacion_binaria . MINUS Term
+
+    INST_OF         shift and go to state 103
+    PLUS            shift and go to state 91
+    MINUS           shift and go to state 92
+
+
 state 61
 
     (56) Factor -> LPAREN . Operacion_binaria RPAREN
@@ -1582,7 +1582,7 @@ state 61
     (57) Factor -> . MINUS Operacion_binaria
 
     NUMBER          shift and go to state 33
-    VAR_IDENTIFIER  shift and go to state 60
+    VAR_IDENTIFIER  shift and go to state 59
     LPAREN          shift and go to state 61
     MINUS           shift and go to state 36
 
@@ -1841,7 +1841,7 @@ state 74
     (57) Factor -> . MINUS Operacion_binaria
 
     NUMBER          shift and go to state 33
-    VAR_IDENTIFIER  shift and go to state 60
+    VAR_IDENTIFIER  shift and go to state 59
     LPAREN          shift and go to state 61
     MINUS           shift and go to state 36
 
@@ -1856,7 +1856,7 @@ state 75
     (57) Factor -> . MINUS Operacion_binaria
 
     NUMBER          shift and go to state 33
-    VAR_IDENTIFIER  shift and go to state 60
+    VAR_IDENTIFIER  shift and go to state 59
     LPAREN          shift and go to state 61
     MINUS           shift and go to state 36
 
@@ -2040,7 +2040,7 @@ state 82
     (57) Factor -> . MINUS Operacion_binaria
 
     NUMBER          shift and go to state 33
-    VAR_IDENTIFIER  shift and go to state 60
+    VAR_IDENTIFIER  shift and go to state 59
     LPAREN          shift and go to state 61
     MINUS           shift and go to state 36
 
@@ -2093,7 +2093,7 @@ state 86
     (57) Factor -> . MINUS Operacion_binaria
 
     NUMBER          shift and go to state 33
-    VAR_IDENTIFIER  shift and go to state 60
+    VAR_IDENTIFIER  shift and go to state 59
     LPAREN          shift and go to state 61
     MINUS           shift and go to state 36
 
@@ -2136,7 +2136,7 @@ state 89
     (57) Factor -> . MINUS Operacion_binaria
 
     NUMBER          shift and go to state 33
-    VAR_IDENTIFIER  shift and go to state 60
+    VAR_IDENTIFIER  shift and go to state 59
     LPAREN          shift and go to state 61
     MINUS           shift and go to state 36
 
@@ -2166,7 +2166,7 @@ state 91
     (57) Factor -> . MINUS Operacion_binaria
 
     NUMBER          shift and go to state 33
-    VAR_IDENTIFIER  shift and go to state 60
+    VAR_IDENTIFIER  shift and go to state 59
     LPAREN          shift and go to state 61
     MINUS           shift and go to state 36
 
@@ -2185,7 +2185,7 @@ state 92
     (57) Factor -> . MINUS Operacion_binaria
 
     NUMBER          shift and go to state 33
-    VAR_IDENTIFIER  shift and go to state 60
+    VAR_IDENTIFIER  shift and go to state 59
     LPAREN          shift and go to state 61
     MINUS           shift and go to state 36
 
@@ -2274,7 +2274,7 @@ state 96
     (79) Inst_While -> . INST_WHILE Operacion_booleana INST_DO Bloque_Inst
     (71) Inst_If -> . INST_IF Operacion_booleana INST_THEN Bloque_Inst
     (72) Inst_If -> . INST_IF Operacion_booleana INST_THEN Bloque_Inst INST_ELSE Bloque_Inst
-    (73) Inst_Case -> . INST_CASE Operacion_binaria INST_OF Casos INST_END
+    (73) Inst_Case -> . INST_CASE Operacion_binaria INST_OF Casos
     (65) Inst_Salida -> . INST_WRITE Lista_Aux
     (66) Inst_Salida -> . INST_WRITELN Lista_Aux
     (17) Inst_Funcion -> . RTOI LPAREN VAR_IDENTIFIER RPAREN
@@ -2314,14 +2314,14 @@ state 97
 
     (4) Bloque_Inst -> INST_BEGIN Inst_Declare INST_END .
 
+    $end            reduce using rule 4 (Bloque_Inst -> INST_BEGIN Inst_Declare INST_END .)
+    SEMICOLON       reduce using rule 4 (Bloque_Inst -> INST_BEGIN Inst_Declare INST_END .)
+    INST_END        reduce using rule 4 (Bloque_Inst -> INST_BEGIN Inst_Declare INST_END .)
+    INST_ELSE       reduce using rule 4 (Bloque_Inst -> INST_BEGIN Inst_Declare INST_END .)
     VAR_IDENTIFIER  reduce using rule 4 (Bloque_Inst -> INST_BEGIN Inst_Declare INST_END .)
     LPAREN          reduce using rule 4 (Bloque_Inst -> INST_BEGIN Inst_Declare INST_END .)
     NUMBER          reduce using rule 4 (Bloque_Inst -> INST_BEGIN Inst_Declare INST_END .)
     MINUS           reduce using rule 4 (Bloque_Inst -> INST_BEGIN Inst_Declare INST_END .)
-    INST_END        reduce using rule 4 (Bloque_Inst -> INST_BEGIN Inst_Declare INST_END .)
-    $end            reduce using rule 4 (Bloque_Inst -> INST_BEGIN Inst_Declare INST_END .)
-    SEMICOLON       reduce using rule 4 (Bloque_Inst -> INST_BEGIN Inst_Declare INST_END .)
-    INST_ELSE       reduce using rule 4 (Bloque_Inst -> INST_BEGIN Inst_Declare INST_END .)
 
 
 state 98
@@ -2350,7 +2350,7 @@ state 99
     (79) Inst_While -> . INST_WHILE Operacion_booleana INST_DO Bloque_Inst
     (71) Inst_If -> . INST_IF Operacion_booleana INST_THEN Bloque_Inst
     (72) Inst_If -> . INST_IF Operacion_booleana INST_THEN Bloque_Inst INST_ELSE Bloque_Inst
-    (73) Inst_Case -> . INST_CASE Operacion_binaria INST_OF Casos INST_END
+    (73) Inst_Case -> . INST_CASE Operacion_binaria INST_OF Casos
     (65) Inst_Salida -> . INST_WRITE Lista_Aux
     (66) Inst_Salida -> . INST_WRITELN Lista_Aux
     (17) Inst_Funcion -> . RTOI LPAREN VAR_IDENTIFIER RPAREN
@@ -2386,14 +2386,14 @@ state 100
 
     (2) Bloque_Inst -> INST_BEGIN Lista_Inst INST_END .
 
+    $end            reduce using rule 2 (Bloque_Inst -> INST_BEGIN Lista_Inst INST_END .)
+    SEMICOLON       reduce using rule 2 (Bloque_Inst -> INST_BEGIN Lista_Inst INST_END .)
+    INST_END        reduce using rule 2 (Bloque_Inst -> INST_BEGIN Lista_Inst INST_END .)
+    INST_ELSE       reduce using rule 2 (Bloque_Inst -> INST_BEGIN Lista_Inst INST_END .)
     VAR_IDENTIFIER  reduce using rule 2 (Bloque_Inst -> INST_BEGIN Lista_Inst INST_END .)
     LPAREN          reduce using rule 2 (Bloque_Inst -> INST_BEGIN Lista_Inst INST_END .)
     NUMBER          reduce using rule 2 (Bloque_Inst -> INST_BEGIN Lista_Inst INST_END .)
     MINUS           reduce using rule 2 (Bloque_Inst -> INST_BEGIN Lista_Inst INST_END .)
-    INST_END        reduce using rule 2 (Bloque_Inst -> INST_BEGIN Lista_Inst INST_END .)
-    $end            reduce using rule 2 (Bloque_Inst -> INST_BEGIN Lista_Inst INST_END .)
-    SEMICOLON       reduce using rule 2 (Bloque_Inst -> INST_BEGIN Lista_Inst INST_END .)
-    INST_ELSE       reduce using rule 2 (Bloque_Inst -> INST_BEGIN Lista_Inst INST_END .)
 
 
 state 101
@@ -2419,7 +2419,7 @@ state 102
 
 state 103
 
-    (73) Inst_Case -> INST_CASE Operacion_binaria INST_OF . Casos INST_END
+    (73) Inst_Case -> INST_CASE Operacion_binaria INST_OF . Casos
     (74) Casos -> . VAR_IDENTIFIER - > Bloque_Inst
     (75) Casos -> . Rango - > Bloque_Inst
     (76) Casos -> . VAR_IDENTIFIER - > Bloque_Inst Casos
@@ -2519,7 +2519,7 @@ state 106
     (79) Inst_While -> . INST_WHILE Operacion_booleana INST_DO Bloque_Inst
     (71) Inst_If -> . INST_IF Operacion_booleana INST_THEN Bloque_Inst
     (72) Inst_If -> . INST_IF Operacion_booleana INST_THEN Bloque_Inst INST_ELSE Bloque_Inst
-    (73) Inst_Case -> . INST_CASE Operacion_binaria INST_OF Casos INST_END
+    (73) Inst_Case -> . INST_CASE Operacion_binaria INST_OF Casos
     (65) Inst_Salida -> . INST_WRITE Lista_Aux
     (66) Inst_Salida -> . INST_WRITELN Lista_Aux
     (17) Inst_Funcion -> . RTOI LPAREN VAR_IDENTIFIER RPAREN
@@ -3210,14 +3210,14 @@ state 136
 
     (3) Bloque_Inst -> INST_BEGIN Inst_Declare Lista_Inst INST_END .
 
+    $end            reduce using rule 3 (Bloque_Inst -> INST_BEGIN Inst_Declare Lista_Inst INST_END .)
+    SEMICOLON       reduce using rule 3 (Bloque_Inst -> INST_BEGIN Inst_Declare Lista_Inst INST_END .)
+    INST_END        reduce using rule 3 (Bloque_Inst -> INST_BEGIN Inst_Declare Lista_Inst INST_END .)
+    INST_ELSE       reduce using rule 3 (Bloque_Inst -> INST_BEGIN Inst_Declare Lista_Inst INST_END .)
     VAR_IDENTIFIER  reduce using rule 3 (Bloque_Inst -> INST_BEGIN Inst_Declare Lista_Inst INST_END .)
     LPAREN          reduce using rule 3 (Bloque_Inst -> INST_BEGIN Inst_Declare Lista_Inst INST_END .)
     NUMBER          reduce using rule 3 (Bloque_Inst -> INST_BEGIN Inst_Declare Lista_Inst INST_END .)
     MINUS           reduce using rule 3 (Bloque_Inst -> INST_BEGIN Inst_Declare Lista_Inst INST_END .)
-    INST_END        reduce using rule 3 (Bloque_Inst -> INST_BEGIN Inst_Declare Lista_Inst INST_END .)
-    $end            reduce using rule 3 (Bloque_Inst -> INST_BEGIN Inst_Declare Lista_Inst INST_END .)
-    SEMICOLON       reduce using rule 3 (Bloque_Inst -> INST_BEGIN Inst_Declare Lista_Inst INST_END .)
-    INST_ELSE       reduce using rule 3 (Bloque_Inst -> INST_BEGIN Inst_Declare Lista_Inst INST_END .)
 
 
 state 137
@@ -3280,9 +3280,16 @@ state 140
 
 state 141
 
-    (73) Inst_Case -> INST_CASE Operacion_binaria INST_OF Casos . INST_END
+    (73) Inst_Case -> INST_CASE Operacion_binaria INST_OF Casos .
 
-    INST_END        shift and go to state 149
+    SEMICOLON       reduce using rule 73 (Inst_Case -> INST_CASE Operacion_binaria INST_OF Casos .)
+    INST_END        reduce using rule 73 (Inst_Case -> INST_CASE Operacion_binaria INST_OF Casos .)
+    $end            reduce using rule 73 (Inst_Case -> INST_CASE Operacion_binaria INST_OF Casos .)
+    INST_ELSE       reduce using rule 73 (Inst_Case -> INST_CASE Operacion_binaria INST_OF Casos .)
+    VAR_IDENTIFIER  reduce using rule 73 (Inst_Case -> INST_CASE Operacion_binaria INST_OF Casos .)
+    LPAREN          reduce using rule 73 (Inst_Case -> INST_CASE Operacion_binaria INST_OF Casos .)
+    NUMBER          reduce using rule 73 (Inst_Case -> INST_CASE Operacion_binaria INST_OF Casos .)
+    MINUS           reduce using rule 73 (Inst_Case -> INST_CASE Operacion_binaria INST_OF Casos .)
 
 
 state 142
@@ -3292,7 +3299,7 @@ state 142
     (60) Rango -> Rango . TIMES Operacion_binaria
     (61) Rango -> Rango . INTERSECTION Rango
 
-    INST_DO         shift and go to state 150
+    INST_DO         shift and go to state 149
     PLUS            shift and go to state 81
     TIMES           shift and go to state 82
     INTERSECTION    shift and go to state 80
@@ -3311,7 +3318,7 @@ state 143
     LPAREN          reduce using rule 71 (Inst_If -> INST_IF Operacion_booleana INST_THEN Bloque_Inst .)
     NUMBER          reduce using rule 71 (Inst_If -> INST_IF Operacion_booleana INST_THEN Bloque_Inst .)
     MINUS           reduce using rule 71 (Inst_If -> INST_IF Operacion_booleana INST_THEN Bloque_Inst .)
-    INST_ELSE       shift and go to state 151
+    INST_ELSE       shift and go to state 150
 
   ! INST_ELSE       [ reduce using rule 71 (Inst_If -> INST_IF Operacion_booleana INST_THEN Bloque_Inst .) ]
 
@@ -3362,7 +3369,7 @@ state 147
     (74) Casos -> VAR_IDENTIFIER - . > Bloque_Inst
     (76) Casos -> VAR_IDENTIFIER - . > Bloque_Inst Casos
 
-    >               shift and go to state 152
+    >               shift and go to state 151
 
 
 state 148
@@ -3370,24 +3377,10 @@ state 148
     (75) Casos -> Rango - . > Bloque_Inst
     (77) Casos -> Rango - . > Bloque_Inst Casos
 
-    >               shift and go to state 153
+    >               shift and go to state 152
 
 
 state 149
-
-    (73) Inst_Case -> INST_CASE Operacion_binaria INST_OF Casos INST_END .
-
-    SEMICOLON       reduce using rule 73 (Inst_Case -> INST_CASE Operacion_binaria INST_OF Casos INST_END .)
-    INST_END        reduce using rule 73 (Inst_Case -> INST_CASE Operacion_binaria INST_OF Casos INST_END .)
-    VAR_IDENTIFIER  reduce using rule 73 (Inst_Case -> INST_CASE Operacion_binaria INST_OF Casos INST_END .)
-    LPAREN          reduce using rule 73 (Inst_Case -> INST_CASE Operacion_binaria INST_OF Casos INST_END .)
-    NUMBER          reduce using rule 73 (Inst_Case -> INST_CASE Operacion_binaria INST_OF Casos INST_END .)
-    MINUS           reduce using rule 73 (Inst_Case -> INST_CASE Operacion_binaria INST_OF Casos INST_END .)
-    $end            reduce using rule 73 (Inst_Case -> INST_CASE Operacion_binaria INST_OF Casos INST_END .)
-    INST_ELSE       reduce using rule 73 (Inst_Case -> INST_CASE Operacion_binaria INST_OF Casos INST_END .)
-
-
-state 150
 
     (78) Inst_For -> INST_FOR VAR_IDENTIFIER INST_IN Rango INST_DO . Bloque_Inst
     (2) Bloque_Inst -> . INST_BEGIN Lista_Inst INST_END
@@ -3412,7 +3405,68 @@ state 150
     (79) Inst_While -> . INST_WHILE Operacion_booleana INST_DO Bloque_Inst
     (71) Inst_If -> . INST_IF Operacion_booleana INST_THEN Bloque_Inst
     (72) Inst_If -> . INST_IF Operacion_booleana INST_THEN Bloque_Inst INST_ELSE Bloque_Inst
-    (73) Inst_Case -> . INST_CASE Operacion_binaria INST_OF Casos INST_END
+    (73) Inst_Case -> . INST_CASE Operacion_binaria INST_OF Casos
+    (65) Inst_Salida -> . INST_WRITE Lista_Aux
+    (66) Inst_Salida -> . INST_WRITELN Lista_Aux
+    (17) Inst_Funcion -> . RTOI LPAREN VAR_IDENTIFIER RPAREN
+    (18) Inst_Funcion -> . LENGTH LPAREN VAR_IDENTIFIER RPAREN
+    (19) Inst_Funcion -> . TOP LPAREN VAR_IDENTIFIER RPAREN
+    (20) Inst_Funcion -> . BOTTOM LPAREN VAR_IDENTIFIER RPAREN
+
+    INST_BEGIN      shift and go to state 11
+    INST_DECLARE    shift and go to state 3
+    VAR_IDENTIFIER  shift and go to state 18
+    INST_READ       shift and go to state 10
+    INST_FOR        shift and go to state 21
+    INST_WHILE      shift and go to state 9
+    INST_IF         shift and go to state 22
+    INST_CASE       shift and go to state 20
+    INST_WRITE      shift and go to state 5
+    INST_WRITELN    shift and go to state 23
+    RTOI            shift and go to state 25
+    LENGTH          shift and go to state 24
+    TOP             shift and go to state 6
+    BOTTOM          shift and go to state 13
+
+    Inst_Salida                    shift and go to state 8
+    Inst_Declare                   shift and go to state 12
+    Inst_Funcion                   shift and go to state 4
+    Bloque_Inst                    shift and go to state 153
+    Inst_If                        shift and go to state 19
+    Inst_While                     shift and go to state 16
+    Inst_For                       shift and go to state 14
+    Inst_Asignacion                shift and go to state 26
+    Inst                           shift and go to state 15
+    Inst_Case                      shift and go to state 27
+    Inst_Lectura                   shift and go to state 17
+    Inst_Declareau                 shift and go to state 28
+
+state 150
+
+    (72) Inst_If -> INST_IF Operacion_booleana INST_THEN Bloque_Inst INST_ELSE . Bloque_Inst
+    (2) Bloque_Inst -> . INST_BEGIN Lista_Inst INST_END
+    (3) Bloque_Inst -> . INST_BEGIN Inst_Declare Lista_Inst INST_END
+    (4) Bloque_Inst -> . INST_BEGIN Inst_Declare INST_END
+    (5) Bloque_Inst -> . Inst_Declare Inst
+    (6) Bloque_Inst -> . Inst
+    (21) Inst_Declare -> . Inst_Declareau
+    (22) Inst_Declare -> . Inst_Declareau SEMICOLON Inst_Declare
+    (9) Inst -> . Inst_Asignacion
+    (10) Inst -> . Inst_Lectura
+    (11) Inst -> . Inst_For
+    (12) Inst -> . Inst_While
+    (13) Inst -> . Inst_If
+    (14) Inst -> . Inst_Case
+    (15) Inst -> . Inst_Salida
+    (16) Inst -> . Inst_Funcion
+    (23) Inst_Declareau -> . INST_DECLARE Lista_Declare
+    (30) Inst_Asignacion -> . VAR_IDENTIFIER EQUAL Expresion
+    (64) Inst_Lectura -> . INST_READ VAR_IDENTIFIER
+    (78) Inst_For -> . INST_FOR VAR_IDENTIFIER INST_IN Rango INST_DO Bloque_Inst
+    (79) Inst_While -> . INST_WHILE Operacion_booleana INST_DO Bloque_Inst
+    (71) Inst_If -> . INST_IF Operacion_booleana INST_THEN Bloque_Inst
+    (72) Inst_If -> . INST_IF Operacion_booleana INST_THEN Bloque_Inst INST_ELSE Bloque_Inst
+    (73) Inst_Case -> . INST_CASE Operacion_binaria INST_OF Casos
     (65) Inst_Salida -> . INST_WRITE Lista_Aux
     (66) Inst_Salida -> . INST_WRITELN Lista_Aux
     (17) Inst_Funcion -> . RTOI LPAREN VAR_IDENTIFIER RPAREN
@@ -3440,17 +3494,18 @@ state 150
     Inst_Funcion                   shift and go to state 4
     Bloque_Inst                    shift and go to state 154
     Inst_If                        shift and go to state 19
-    Inst_While                     shift and go to state 16
     Inst_For                       shift and go to state 14
-    Inst_Asignacion                shift and go to state 26
+    Inst_While                     shift and go to state 16
     Inst                           shift and go to state 15
+    Inst_Asignacion                shift and go to state 26
     Inst_Case                      shift and go to state 27
     Inst_Lectura                   shift and go to state 17
     Inst_Declareau                 shift and go to state 28
 
 state 151
 
-    (72) Inst_If -> INST_IF Operacion_booleana INST_THEN Bloque_Inst INST_ELSE . Bloque_Inst
+    (74) Casos -> VAR_IDENTIFIER - > . Bloque_Inst
+    (76) Casos -> VAR_IDENTIFIER - > . Bloque_Inst Casos
     (2) Bloque_Inst -> . INST_BEGIN Lista_Inst INST_END
     (3) Bloque_Inst -> . INST_BEGIN Inst_Declare Lista_Inst INST_END
     (4) Bloque_Inst -> . INST_BEGIN Inst_Declare INST_END
@@ -3473,7 +3528,7 @@ state 151
     (79) Inst_While -> . INST_WHILE Operacion_booleana INST_DO Bloque_Inst
     (71) Inst_If -> . INST_IF Operacion_booleana INST_THEN Bloque_Inst
     (72) Inst_If -> . INST_IF Operacion_booleana INST_THEN Bloque_Inst INST_ELSE Bloque_Inst
-    (73) Inst_Case -> . INST_CASE Operacion_binaria INST_OF Casos INST_END
+    (73) Inst_Case -> . INST_CASE Operacion_binaria INST_OF Casos
     (65) Inst_Salida -> . INST_WRITE Lista_Aux
     (66) Inst_Salida -> . INST_WRITELN Lista_Aux
     (17) Inst_Funcion -> . RTOI LPAREN VAR_IDENTIFIER RPAREN
@@ -3511,8 +3566,8 @@ state 151
 
 state 152
 
-    (74) Casos -> VAR_IDENTIFIER - > . Bloque_Inst
-    (76) Casos -> VAR_IDENTIFIER - > . Bloque_Inst Casos
+    (75) Casos -> Rango - > . Bloque_Inst
+    (77) Casos -> Rango - > . Bloque_Inst Casos
     (2) Bloque_Inst -> . INST_BEGIN Lista_Inst INST_END
     (3) Bloque_Inst -> . INST_BEGIN Inst_Declare Lista_Inst INST_END
     (4) Bloque_Inst -> . INST_BEGIN Inst_Declare INST_END
@@ -3535,7 +3590,7 @@ state 152
     (79) Inst_While -> . INST_WHILE Operacion_booleana INST_DO Bloque_Inst
     (71) Inst_If -> . INST_IF Operacion_booleana INST_THEN Bloque_Inst
     (72) Inst_If -> . INST_IF Operacion_booleana INST_THEN Bloque_Inst INST_ELSE Bloque_Inst
-    (73) Inst_Case -> . INST_CASE Operacion_binaria INST_OF Casos INST_END
+    (73) Inst_Case -> . INST_CASE Operacion_binaria INST_OF Casos
     (65) Inst_Salida -> . INST_WRITE Lista_Aux
     (66) Inst_Salida -> . INST_WRITELN Lista_Aux
     (17) Inst_Funcion -> . RTOI LPAREN VAR_IDENTIFIER RPAREN
@@ -3563,77 +3618,15 @@ state 152
     Inst_Funcion                   shift and go to state 4
     Bloque_Inst                    shift and go to state 156
     Inst_If                        shift and go to state 19
-    Inst_For                       shift and go to state 14
     Inst_While                     shift and go to state 16
-    Inst                           shift and go to state 15
+    Inst_For                       shift and go to state 14
     Inst_Asignacion                shift and go to state 26
+    Inst                           shift and go to state 15
     Inst_Case                      shift and go to state 27
     Inst_Lectura                   shift and go to state 17
     Inst_Declareau                 shift and go to state 28
 
 state 153
-
-    (75) Casos -> Rango - > . Bloque_Inst
-    (77) Casos -> Rango - > . Bloque_Inst Casos
-    (2) Bloque_Inst -> . INST_BEGIN Lista_Inst INST_END
-    (3) Bloque_Inst -> . INST_BEGIN Inst_Declare Lista_Inst INST_END
-    (4) Bloque_Inst -> . INST_BEGIN Inst_Declare INST_END
-    (5) Bloque_Inst -> . Inst_Declare Inst
-    (6) Bloque_Inst -> . Inst
-    (21) Inst_Declare -> . Inst_Declareau
-    (22) Inst_Declare -> . Inst_Declareau SEMICOLON Inst_Declare
-    (9) Inst -> . Inst_Asignacion
-    (10) Inst -> . Inst_Lectura
-    (11) Inst -> . Inst_For
-    (12) Inst -> . Inst_While
-    (13) Inst -> . Inst_If
-    (14) Inst -> . Inst_Case
-    (15) Inst -> . Inst_Salida
-    (16) Inst -> . Inst_Funcion
-    (23) Inst_Declareau -> . INST_DECLARE Lista_Declare
-    (30) Inst_Asignacion -> . VAR_IDENTIFIER EQUAL Expresion
-    (64) Inst_Lectura -> . INST_READ VAR_IDENTIFIER
-    (78) Inst_For -> . INST_FOR VAR_IDENTIFIER INST_IN Rango INST_DO Bloque_Inst
-    (79) Inst_While -> . INST_WHILE Operacion_booleana INST_DO Bloque_Inst
-    (71) Inst_If -> . INST_IF Operacion_booleana INST_THEN Bloque_Inst
-    (72) Inst_If -> . INST_IF Operacion_booleana INST_THEN Bloque_Inst INST_ELSE Bloque_Inst
-    (73) Inst_Case -> . INST_CASE Operacion_binaria INST_OF Casos INST_END
-    (65) Inst_Salida -> . INST_WRITE Lista_Aux
-    (66) Inst_Salida -> . INST_WRITELN Lista_Aux
-    (17) Inst_Funcion -> . RTOI LPAREN VAR_IDENTIFIER RPAREN
-    (18) Inst_Funcion -> . LENGTH LPAREN VAR_IDENTIFIER RPAREN
-    (19) Inst_Funcion -> . TOP LPAREN VAR_IDENTIFIER RPAREN
-    (20) Inst_Funcion -> . BOTTOM LPAREN VAR_IDENTIFIER RPAREN
-
-    INST_BEGIN      shift and go to state 11
-    INST_DECLARE    shift and go to state 3
-    VAR_IDENTIFIER  shift and go to state 18
-    INST_READ       shift and go to state 10
-    INST_FOR        shift and go to state 21
-    INST_WHILE      shift and go to state 9
-    INST_IF         shift and go to state 22
-    INST_CASE       shift and go to state 20
-    INST_WRITE      shift and go to state 5
-    INST_WRITELN    shift and go to state 23
-    RTOI            shift and go to state 25
-    LENGTH          shift and go to state 24
-    TOP             shift and go to state 6
-    BOTTOM          shift and go to state 13
-
-    Inst_Salida                    shift and go to state 8
-    Inst_Declare                   shift and go to state 12
-    Inst_Funcion                   shift and go to state 4
-    Bloque_Inst                    shift and go to state 157
-    Inst_If                        shift and go to state 19
-    Inst_While                     shift and go to state 16
-    Inst_For                       shift and go to state 14
-    Inst_Asignacion                shift and go to state 26
-    Inst                           shift and go to state 15
-    Inst_Case                      shift and go to state 27
-    Inst_Lectura                   shift and go to state 17
-    Inst_Declareau                 shift and go to state 28
-
-state 154
 
     (78) Inst_For -> INST_FOR VAR_IDENTIFIER INST_IN Rango INST_DO Bloque_Inst .
 
@@ -3647,7 +3640,7 @@ state 154
     MINUS           reduce using rule 78 (Inst_For -> INST_FOR VAR_IDENTIFIER INST_IN Rango INST_DO Bloque_Inst .)
 
 
-state 155
+state 154
 
     (72) Inst_If -> INST_IF Operacion_booleana INST_THEN Bloque_Inst INST_ELSE Bloque_Inst .
 
@@ -3661,7 +3654,7 @@ state 155
     MINUS           reduce using rule 72 (Inst_If -> INST_IF Operacion_booleana INST_THEN Bloque_Inst INST_ELSE Bloque_Inst .)
 
 
-state 156
+state 155
 
     (74) Casos -> VAR_IDENTIFIER - > Bloque_Inst .
     (76) Casos -> VAR_IDENTIFIER - > Bloque_Inst . Casos
@@ -3686,19 +3679,31 @@ state 156
     (56) Factor -> . LPAREN Operacion_binaria RPAREN
     (57) Factor -> . MINUS Operacion_binaria
 
+  ! shift/reduce conflict for VAR_IDENTIFIER resolved as shift
+  ! shift/reduce conflict for LPAREN resolved as shift
+  ! shift/reduce conflict for NUMBER resolved as shift
+  ! shift/reduce conflict for MINUS resolved as shift
+    $end            reduce using rule 74 (Casos -> VAR_IDENTIFIER - > Bloque_Inst .)
+    SEMICOLON       reduce using rule 74 (Casos -> VAR_IDENTIFIER - > Bloque_Inst .)
     INST_END        reduce using rule 74 (Casos -> VAR_IDENTIFIER - > Bloque_Inst .)
+    INST_ELSE       reduce using rule 74 (Casos -> VAR_IDENTIFIER - > Bloque_Inst .)
     VAR_IDENTIFIER  shift and go to state 139
     LPAREN          shift and go to state 126
     NUMBER          shift and go to state 33
     MINUS           shift and go to state 36
 
+  ! VAR_IDENTIFIER  [ reduce using rule 74 (Casos -> VAR_IDENTIFIER - > Bloque_Inst .) ]
+  ! LPAREN          [ reduce using rule 74 (Casos -> VAR_IDENTIFIER - > Bloque_Inst .) ]
+  ! NUMBER          [ reduce using rule 74 (Casos -> VAR_IDENTIFIER - > Bloque_Inst .) ]
+  ! MINUS           [ reduce using rule 74 (Casos -> VAR_IDENTIFIER - > Bloque_Inst .) ]
+
     Operacion_binaria              shift and go to state 124
     Term                           shift and go to state 39
     Factor                         shift and go to state 32
     Rango                          shift and go to state 140
-    Casos                          shift and go to state 158
+    Casos                          shift and go to state 157
 
-state 157
+state 156
 
     (75) Casos -> Rango - > Bloque_Inst .
     (77) Casos -> Rango - > Bloque_Inst . Casos
@@ -3723,30 +3728,56 @@ state 157
     (56) Factor -> . LPAREN Operacion_binaria RPAREN
     (57) Factor -> . MINUS Operacion_binaria
 
+  ! shift/reduce conflict for VAR_IDENTIFIER resolved as shift
+  ! shift/reduce conflict for LPAREN resolved as shift
+  ! shift/reduce conflict for NUMBER resolved as shift
+  ! shift/reduce conflict for MINUS resolved as shift
+    $end            reduce using rule 75 (Casos -> Rango - > Bloque_Inst .)
+    SEMICOLON       reduce using rule 75 (Casos -> Rango - > Bloque_Inst .)
     INST_END        reduce using rule 75 (Casos -> Rango - > Bloque_Inst .)
+    INST_ELSE       reduce using rule 75 (Casos -> Rango - > Bloque_Inst .)
     VAR_IDENTIFIER  shift and go to state 139
     LPAREN          shift and go to state 126
     NUMBER          shift and go to state 33
     MINUS           shift and go to state 36
 
+  ! VAR_IDENTIFIER  [ reduce using rule 75 (Casos -> Rango - > Bloque_Inst .) ]
+  ! LPAREN          [ reduce using rule 75 (Casos -> Rango - > Bloque_Inst .) ]
+  ! NUMBER          [ reduce using rule 75 (Casos -> Rango - > Bloque_Inst .) ]
+  ! MINUS           [ reduce using rule 75 (Casos -> Rango - > Bloque_Inst .) ]
+
     Operacion_binaria              shift and go to state 124
     Term                           shift and go to state 39
     Factor                         shift and go to state 32
     Rango                          shift and go to state 140
-    Casos                          shift and go to state 159
+    Casos                          shift and go to state 158
 
-state 158
+state 157
 
     (76) Casos -> VAR_IDENTIFIER - > Bloque_Inst Casos .
 
+    $end            reduce using rule 76 (Casos -> VAR_IDENTIFIER - > Bloque_Inst Casos .)
+    SEMICOLON       reduce using rule 76 (Casos -> VAR_IDENTIFIER - > Bloque_Inst Casos .)
     INST_END        reduce using rule 76 (Casos -> VAR_IDENTIFIER - > Bloque_Inst Casos .)
+    INST_ELSE       reduce using rule 76 (Casos -> VAR_IDENTIFIER - > Bloque_Inst Casos .)
+    VAR_IDENTIFIER  reduce using rule 76 (Casos -> VAR_IDENTIFIER - > Bloque_Inst Casos .)
+    LPAREN          reduce using rule 76 (Casos -> VAR_IDENTIFIER - > Bloque_Inst Casos .)
+    NUMBER          reduce using rule 76 (Casos -> VAR_IDENTIFIER - > Bloque_Inst Casos .)
+    MINUS           reduce using rule 76 (Casos -> VAR_IDENTIFIER - > Bloque_Inst Casos .)
 
 
-state 159
+state 158
 
     (77) Casos -> Rango - > Bloque_Inst Casos .
 
+    $end            reduce using rule 77 (Casos -> Rango - > Bloque_Inst Casos .)
+    SEMICOLON       reduce using rule 77 (Casos -> Rango - > Bloque_Inst Casos .)
     INST_END        reduce using rule 77 (Casos -> Rango - > Bloque_Inst Casos .)
+    INST_ELSE       reduce using rule 77 (Casos -> Rango - > Bloque_Inst Casos .)
+    VAR_IDENTIFIER  reduce using rule 77 (Casos -> Rango - > Bloque_Inst Casos .)
+    LPAREN          reduce using rule 77 (Casos -> Rango - > Bloque_Inst Casos .)
+    NUMBER          reduce using rule 77 (Casos -> Rango - > Bloque_Inst Casos .)
+    MINUS           reduce using rule 77 (Casos -> Rango - > Bloque_Inst Casos .)
 
 WARNING: 
 WARNING: Conflicts:
@@ -3757,6 +3788,14 @@ WARNING: shift/reduce conflict for MINUS in state 44 resolved as shift
 WARNING: shift/reduce conflict for MINUS in state 130 resolved as shift
 WARNING: shift/reduce conflict for - in state 139 resolved as shift
 WARNING: shift/reduce conflict for INST_ELSE in state 143 resolved as shift
+WARNING: shift/reduce conflict for VAR_IDENTIFIER in state 155 resolved as shift
+WARNING: shift/reduce conflict for LPAREN in state 155 resolved as shift
+WARNING: shift/reduce conflict for NUMBER in state 155 resolved as shift
+WARNING: shift/reduce conflict for MINUS in state 155 resolved as shift
+WARNING: shift/reduce conflict for VAR_IDENTIFIER in state 156 resolved as shift
+WARNING: shift/reduce conflict for LPAREN in state 156 resolved as shift
+WARNING: shift/reduce conflict for NUMBER in state 156 resolved as shift
+WARNING: shift/reduce conflict for MINUS in state 156 resolved as shift
 WARNING: reduce/reduce conflict in state 41 resolved using rule (Operacion_booleana -> VAR_IDENTIFIER)
 WARNING: rejected rule (Rango -> VAR_IDENTIFIER) in state 41
 WARNING: reduce/reduce conflict in state 41 resolved using rule (Factor -> VAR_IDENTIFIER)
