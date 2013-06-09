@@ -145,8 +145,8 @@ class Asignacion:
     self.expresion = expresion
   
   def printArbol(self):
-    print " a " + self.variable + " se le asigna " + self.expresion.printArbol()
-
+    print "A la variable: " + str(self.variable) + " se le asigna ",
+    self.expresion.printArbol()
     
 def p_Inst_Asignacion(p):
   '''Inst_Asignacion : VAR_IDENTIFIER EQUAL Expresion'''
@@ -167,12 +167,15 @@ precedence = (
 
 class Operacion:
   def __init__(self,left,opr="",right=""):
-    this.left = left
-    this.opr = opr
-    this.right = right
+    self.left = left
+    self.opr = opr
+    self.right = right
   def printArbol(self):
     if self.opr!="":
-      print "Operacion binaria:\n" + "Operador: " + self.opr + "\n" + "Operando izquierdo: " + self.left.printArbol() + "\nOperador Derecho: " + self.right.printArbol() + "\n"
+      print "Operacion binaria:\n" + "Operador: " + self.opr + "\n" + "Operando izquierdo: "
+      self.left.printArbol()
+      print "\nOperador Derecho: ",
+      self.right.printArbol()
     else:
       print self.left
   
@@ -183,17 +186,22 @@ def p_Expresion(p):
   | Rango'''
   p[0] = p[1]
 
+  
 def p_Operacion_booleana(p):
   ''' Operacion_booleana : Operacion_binaria Opr_bool Operacion_binaria
   | Operacion_booleana AND Operacion_booleana 
   | Operacion_booleana OR Operacion_booleana 
+  | LPAREN Operacion_booleana RPAREN
   | TRUE
   | FALSE '''
 
   if len(p)>=3:
-	  p[0] = Operacion(p[1],p[2],p[3])
+    if p[1]!='(':
+      p[0] = Operacion(p[1],p[2],p[3])
+    else:
+      p[0]=p[2]
   else: 
-	  p[0] = Operacion(p[1])
+    p[0] = Operacion(p[1])
 
 	  
 def p_Opr_bool(p):
@@ -212,8 +220,8 @@ def p_Operacion_binaria(p):
   if len(p) >= 3:
 	  p[0] = Operacion(p[1],p[2],p[3])
   else:
-	  p[0] = Operacion(p[1])
-
+	  p[0] = p[1]
+	  
 def p_Term(p):
   '''Term : Term TIMES Factor
   | Term DIVIDE Factor
@@ -221,7 +229,7 @@ def p_Term(p):
   if len(p) >=3:
 	  p[0] = Operacion(p[1],p[2],p[3])
   else:
-	  p[0] = Operacion(p[1])
+	  p[0] = p[1]
 
 def p_Factor(p):
   ''' Factor : NUMBER
