@@ -40,7 +40,6 @@ def p_Bloque_Inst(p):
     '''Bloque_Inst : INST_BEGIN Lista_Inst INST_END
     | INST_BEGIN Inst_Declare Lista_Inst INST_END
     | INST_BEGIN Inst_Declare INST_END'''
-    #| Inst_Declare Inst
     if p[1]=='begin':
       if p[3]=='end':
 	p[0] = bloque('BLOQUE',[p[2]])
@@ -225,17 +224,26 @@ class Operacion(indentable):
     self.right = right
   def printArbol(self):
     if self.right!="":
+      self.printIndent(),
       print "Operacion binaria:" 
+      self.level +=1
       self.printIndent(),
       print "Operador: " + self.opr
+      self.printIndent()
       print "Operando izquierdo: ",
+      
+      self.left.level = self.level+1
       self.left.printArbol()
+      self.printIndent()
       print "Operando Derecho: ",
+      self.right.level = self.level+1
       self.right.printArbol()
     elif self.opr!="":
+      
       print "Operacion unaria:\n" + "Operador: " + self.opr + "\n" + "Operando: "
       self.left.printArbol()
     else:
+      
       print self.left
   
   
@@ -355,7 +363,7 @@ class Salida(indentable):
       else:
 	self.printIndent()
 	print "Valor: "
-      
+      self.printIndent()
       i.printArbol()
       print ""
 
@@ -403,7 +411,6 @@ class ifc(indentable):
   def __init__(self,cond,bloque,bloque2=None):
     self.cond = cond
     self.bloque = bloque
-    self.bloque.level = self.level
     self.bloque2 = bloque2
     
   def printArbol(self):
@@ -418,10 +425,23 @@ class ifc(indentable):
     if self.bloque2!=None:
       print "Bloque del else"
       self.bloque2.printArbol()
+
+class bloqueControl(indentable):
+  def __init__(self,content):
+    self.contenido = content
     
+  def printArbol(self):
+    self.contenido.printArbol()
+    
+def p_Bloque_Control(p):
+  '''Bloque_Control : Inst
+  | Bloque_Inst'''
+  p[0] = p[1]
+  
 def p_Inst_If(p):
-  '''Inst_If : INST_IF Operacion_booleana INST_THEN Bloque_Inst 
-  | INST_IF Operacion_booleana INST_THEN Bloque_Inst INST_ELSE Bloque_Inst'''
+  '''Inst_If : INST_IF Operacion_booleana INST_THEN Bloque_Control 
+  | INST_IF Operacion_booleana INST_THEN Bloque_Control INST_ELSE Bloque_Control'''
+  
   if len(p)>=6:
 	  p[0] = ifc(p[2],p[4],p[6])
   else:
@@ -487,14 +507,22 @@ class forc(indentable):
       self.inst = inst
       
     def printArbol(self):
+      self.printIndent()
+      print "Bloque FOR"
+      self.printIndent()
+      print "CONDICION:"
+      
+      self.rango.level = self.level+1
       self.rango.printArbol()
-      print "Bloque de instrucciones: \n" 
+      self.printIndent()
+      print "Bloque de instrucciones:" 
+      self.inst.level = self.level + 1
       self.inst.printArbol()
       
       
 
 def p_Inst_For(p):
-  '''Inst_For : INST_FOR VAR_IDENTIFIER INST_IN Rango INST_DO Bloque_Inst '''
+  '''Inst_For : INST_FOR VAR_IDENTIFIER INST_IN Rango INST_DO Bloque_Control '''
   p[0] = forc(p[2],p[4],p[6])
 
   
@@ -515,8 +543,11 @@ def p_Inst_While(p):
 
   
 def p_error(p):
-    print "Syntax error in input!"
-    print p
+    print "Error de sintaxis en la linea",
+    print p.lineno -1 ,
+    print ": token inesperado:",
+    print p.value
+    yacc.restart()
 
 
 # Build the parser
@@ -529,8 +560,10 @@ def main():
     
   # Se abre el archivo con permisos de lectura
   string = str(open(str(sys.argv[1]),'r').read())
-
   result = parser.parse(string)
-  result.printArbol()
+  try:
+    result.printArbol()
+  except AttributeError:
+    return
 if __name__ == '__main__':
   main()
