@@ -48,6 +48,7 @@ tokens = ['NUMBER','MINUS','EQUAL','TIMES','DIVIDE','MOD','PLUS','GREAT','GREATE
 
 
 # Estas son las formulas reconocedoras de tokens que solo necesiten una regexp
+t_CASE_ASSIGN = r'->'
 t_MINUS = r'\-'
 t_EQUAL = r'='
 t_TIMES = r'\*'
@@ -65,7 +66,6 @@ t_IN = r'\>\>'
 t_LPAREN = r'\('
 t_RPAREN = r'\)'
 t_RANGE = r'\.\.'
-t_CASE_ASSIGN = r'\-\>'
 t_ignore  = ' \t'
 #t_TRUE = r'true'
 #t_FALSE = r'false'
