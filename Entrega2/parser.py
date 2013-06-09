@@ -475,7 +475,6 @@ class casos(indentable):
   def __init__(self,rango,bloque):
     self.rango = rango
     self.bloque = bloque
-    self.rango.level = self.level
     self.bloque.level = self.level
     
   def printArbol(self):
@@ -483,8 +482,13 @@ class casos(indentable):
     print "Caso "
     self.printIndent(),
     print "Ran: "
-    self.rango.level = self.level+1
-    self.rango.printArbol()
+    if ( isinstance(self.rango,str) ):
+      self.printIndent(),
+      print('  Variable: ' + self.rango)
+    else:
+      self.rango.level = self.level+1
+      self.rango.printArbol()    
+      
     self.bloque.level = self.level
     self.bloque.printArbol()
 
