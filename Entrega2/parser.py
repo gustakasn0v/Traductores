@@ -22,17 +22,26 @@ class bloque:
     
   def printArbol(self):
     print self.nombre
-    self.contenido.printArbol()
+    for i in self.contenido:
+      i.printArbol()
     
     
 def p_Bloque_Inst(p):
     '''Bloque_Inst : INST_BEGIN Lista_Inst INST_END
-    | Inst'''
+    | INST_BEGIN Inst_Declare Lista_Inst INST_END
+    | INST_BEGIN Inst_Declare INST_END
+    | Inst_Declare Inst
+    | Inst '''
     if p[1]=='begin':
-      p[0] = bloque('BLOQUE',p[2])
+      if p[3]=='end':
+	p[0] = bloque('BLOQUE',[p[2]])
+      else:
+	p[0] = bloque('BLOQUE',[p[2],p[3]])
+    elif len(p)==3:
+      p[0] = bloque('UNICA INSTRUCCION',[p[1],p[2]])
     else:
-      p[0] = bloque('UNICA INSTRUCCION',p[1])
-    
+      p[0] = bloque('UNICA INSTRUCCION',[p[1]])
+
 
 
 class listaInstrucciones:
@@ -62,8 +71,7 @@ def p_Lista_Inst(p):
       p[0] = listaInstrucciones([p[1]])
       
 def p_Inst(p):
-  '''Inst : Inst_Declare 
-  | Inst_Asignacion
+  '''Inst : Inst_Asignacion
   | Inst_Lectura 
   | Inst_For 
   | Inst_While
@@ -178,9 +186,11 @@ precedence = (
     ('nonassoc', 'EQEQ' ,'NEQEQ','LESS','LESSEQ' ,'GREAT','GREATEQ'),
     ('left', 'PLUS', 'MINUS'),
     ('left', 'TIMES', 'DIVIDE'),
+    ('nonassoc','UMINUS'),
     ('nonassoc', 'RANGE'),
 ) 
 
+  
 
 class Operacion:
   def __init__(self,left,opr="",right=""):
@@ -240,11 +250,13 @@ def p_Opr_bool(p):
 def p_Operacion_binaria(p):
   ''' Operacion_binaria : Operacion_binaria PLUS Term
   | Operacion_binaria MINUS Term
-  | Term'''	
-  if len(p) >= 3:
-	  p[0] = Operacion(p[1],p[2],p[3])
+  | Term'''
+  if len(p)>=4:
+    p[0] = Operacion(p[1],p[2],p[3])
+  elif len(p)==3:
+    p[0] = Operacion(p[2],p[1])
   else:
-	  p[0] = p[1]
+    p[0] = p[1]
 	  
 def p_Term(p):
   '''Term : Term TIMES Factor
@@ -258,7 +270,8 @@ def p_Term(p):
 def p_Factor(p):
   ''' Factor : NUMBER
   | VAR_IDENTIFIER
-  | LPAREN Operacion_binaria RPAREN '''
+  | LPAREN Operacion_binaria RPAREN 
+  | MINUS Operacion_binaria %prec UMINUS'''
   if len(p)>=3:
 	  p[0] = p[2]
   else:
@@ -269,15 +282,19 @@ def p_Rango(p):
   | Rango PLUS Rango
   | Rango TIMES Operacion_binaria
   | Rango INTERSECTION Rango 
-  | RangoF'''
+  | LPAREN Rango RPAREN
+  | VAR_IDENTIFIER '''
   if len(p)>=3:
-	  p[0] = Operacion(p[1],p[2],p[3])
+   if p[1]!='(':
+      p[0] = Operacion(p[1],p[2],p[3])
+   else:
+     p[0] = p[2]
   else:
-	  p[0] = p[1]
+    p[0] = Operacion(p[1])
 
-def p_RangoF(p):
-  ''' RangoF : LPAREN Rango RPAREN'''
-  p[0] = p[2]
+#def p_RangoF(p):
+  #''' RangoF : LPAREN Rango RPAREN'''
+  #p[0] = p[2]
 
 
 class Lectura:
@@ -375,19 +392,44 @@ def p_Inst_If(p):
 	  p[0] = ifc(p[2], p[4])
   
 
-
+class case :
+  def __init__(self,var,lista):
+    self.lista = lista
+    self.var = var
   
+  def printArbol(self):
+    print "Condicional case, con expresion: ",
+    self.var.printArbol()
+    for i in self.lista:
+      i.printArbol()
+
+class casos:
+  def __init__(self,rango,bloque):
+    self.rango = rango
+    self.bloque = bloque
+    
+  def printArbol(self):
+    print "Caso "
+    print "Ran: ",
+    self.rango.printArbol()
+    self.bloque.printArbol()
 
 def p_Inst_Case(p):
-  '''Inst_Case : INST_CASE Operacion_binaria INST_OF Casos '''
-
-  
+  '''Inst_Case : INST_CASE Operacion_binaria INST_OF Casos INST_END'''
+  p[0] = case(p[2],p[4])
 def p_Casos(p):
   ''' Casos : VAR_IDENTIFIER '-' '>' Bloque_Inst 
   | Rango '-' '>' Bloque_Inst 
-  | Casos Casos '''
+  | VAR_IDENTIFIER '-' '>' Bloque_Inst Casos 
+  | Rango '-' '>' Bloque_Inst Casos'''
 
-
+  if len(p)==5:
+    p[0] = [casos(p[1],p[4])]
+  else:
+    print p[2]
+    p[5].insert(0,casos(p[1],p[4]))
+    p[0]=p[5]
+    
 class forc:
     def __init__(self,var,rango,inst):
       self.var = var

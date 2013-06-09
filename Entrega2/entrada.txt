@@ -1,5 +1,9 @@
 program
 begin
 	declare x,y,z as int;
-	declare p,q as bool
+	declare a,b as bool
+
+	case x of
+		1..2->read hola
+	end	
 end
