@@ -42,7 +42,13 @@ class listaInstrucciones:
   def printArbol(self):
     for i in self.listaInst:
       i.printArbol()
-      
+
+class String:
+  def __init__(self,cadena):
+    self.cad = cadena
+  
+  def printArbol(self):
+    print self.cad	
       
 def p_Lista_Inst(p):
     '''Lista_Inst : Inst 
@@ -90,12 +96,22 @@ class bloqueDeclaracion:
     
   def printArbol(self):
     print('DECLARACION:')
-    print self.listaDeclaraciones.printArbol()
+    for i in self.listaDeclaraciones:
+      i.printArbol()
 
-    
 def p_Inst_Declare(p):
-  '''Inst_Declare : INST_DECLARE Lista_Declare'''
-  p[0] = bloqueDeclaracion(p[2])
+  '''Inst_Declare : Inst_Declareau
+  | Inst_Declareau SEMICOLON Inst_Declare'''
+  if len(p)>=3:
+    p[3].listaDeclaraciones.insert(0,p[1])
+    p[0] = bloqueDeclaracion(p[3].listaDeclaraciones)
+  else:
+    p[0]=bloqueDeclaracion([p[1]])
+    
+    
+def p_Inst_Declareau(p):
+  '''Inst_Declareau : INST_DECLARE Lista_Declare'''
+  p[0] = p[2]
   
 
 class unaDeclaracion:
@@ -158,6 +174,7 @@ precedence = (
     ('left','INTERSECTION'),
     ('left', 'OR'),
     ('left', 'AND'),
+    ('nonassoc', 'NOT'),
     ('nonassoc', 'EQEQ' ,'NEQEQ','LESS','LESSEQ' ,'GREAT','GREATEQ'),
     ('left', 'PLUS', 'MINUS'),
     ('left', 'TIMES', 'DIVIDE'),
@@ -171,11 +188,14 @@ class Operacion:
     self.opr = opr
     self.right = right
   def printArbol(self):
-    if self.opr!="":
+    if self.right!="":
       print "Operacion binaria:\n" + "Operador: " + self.opr + "\n" + "Operando izquierdo: "
       self.left.printArbol()
-      print "\nOperador Derecho: ",
+      print "\nOperando Derecho: ",
       self.right.printArbol()
+    elif self.opr!="":
+      print "Operacion unaria:\n" + "Operador: " + self.opr + "\n" + "Operando: "
+      self.left.printArbol()
     else:
       print self.left
   
@@ -193,11 +213,15 @@ def p_Operacion_booleana(p):
   | Operacion_booleana OR Operacion_booleana 
   | LPAREN Operacion_booleana RPAREN
   | TRUE
-  | FALSE '''
+  | FALSE
+  | VAR_IDENTIFIER
+  | NOT Operacion_booleana '''
 
   if len(p)>=3:
-    if p[1]!='(':
+    if p[1]!='(' and p[1]!="not":
       p[0] = Operacion(p[1],p[2],p[3])
+    elif p[1]=="not":
+      p[0] = Operacion(p[2],p[1])
     else:
       p[0]=p[2]
   else: 
@@ -271,27 +295,41 @@ def p_Inst_Lectura(p):
   
 class Salida:
   def __init__(self,tipow,lista):
-    self.tipo = tipow 
+    self.tipo = tipow
     self.lista = lista
   
   def printArbol(self):
-    print tipow + "\n"
-    for i in lista:
+    print self.tipo + "\n"
+    for i in self.lista:
+      print "Expresion: ",
+      print i.tipo
+      
+      if i.tipo=="Variable":
+	print "Nombre: ",
+      else:
+	print "Valor: "
       i.printArbol()
+      print ""
 
       
 #Esta clase se usa para facilitar el write
-class String:
-  def __init__(self,cadena):
-    self.cadena = cadena
+class Aux:
+  def __init__(self,tipo,valor):
+    self.val = valor
+    self.tipo = tipo
     
   def printArbol(self):
-    print self.cadena
+    self.val.printArbol()
 
 
+    
 def p_Inst_Salida(p):
   '''Inst_Salida : INST_WRITE Lista_Aux
   | INST_WRITELN  Lista_Aux '''
+  if p[1]=="write":
+    p[1]="WRITE"
+  else:
+    p[1]="WRITELN"
   p[0] = Salida(p[1],p[2])
 
   
@@ -300,23 +338,33 @@ def p_Lista_Aux(p):
   | STRING 
   | Expresion COMMA Lista_Aux
   | STRING COMMA Lista_Aux '''
+  print p[1]
   if(len(p)>=3):
-    p[0] = [ p[3] ].insert(0,p[1])
+    if isinstance(p[1],Operacion):
+      p[3].insert(0,Aux("Variable",p[1]))
+    else:
+      p[3].insert(0,Aux("Cadena",String(p[1])))
+    p[0] = p[3]
   else:
-    p[0] = listaInstrucciones([p[1]])
+    if isinstance(p[1],Operacion):
+      p[0] = [Aux("Variable",p[1])]
+    else:
+      p[0] = [Aux("Cadena",String(p[1]))]
 
 class ifc:
   def __init__(self,cond,bloque,bloque2=""):
-    this.cond = cond
-    this.bloque = bloque
-    this.bloque2 = bloque2
+    self.cond = cond
+    self.bloque = bloque
+    self.bloque2 = bloque2
     
   def printArbol(self):
-    print "Condicional if \n Condicion: "
-    print self.cond.printArbol()
-    print "Bloque: " + self.bloque.printArbol()
-    if bloque2!="":
-      print "Bloque 2: " + self.bloque2
+    print "Condicional if \n Condicion: ",
+    self.cond.printArbol()
+    
+    self.bloque.printArbol()
+    if self.bloque2!="":
+      print "Bloque del else"
+      self.bloque2.printArbol()
     
 def p_Inst_If(p):
   '''Inst_If : INST_IF Operacion_booleana INST_THEN Bloque_Inst 
@@ -327,6 +375,8 @@ def p_Inst_If(p):
 	  p[0] = ifc(p[2], p[4])
   
 
+
+  
 
 def p_Inst_Case(p):
   '''Inst_Case : INST_CASE Operacion_binaria INST_OF Casos '''
@@ -340,13 +390,14 @@ def p_Casos(p):
 
 class forc:
     def __init__(self,var,rango,inst):
-      this.var = var
-      this.rango = rango
-      this.inst = inst
+      self.var = var
+      self.rango = rango
+      self.inst = inst
       
     def printArbol(self):
-      print "Ciclo for con variable " + self.var + " y rango " + self.rango
-      print "Bloque de instrucciones: \n" + self.inst
+      self.rango.printArbol()
+      print "Bloque de instrucciones: \n" 
+      self.inst.printArbol()
       
       
 
@@ -357,11 +408,14 @@ def p_Inst_For(p):
   
 class whilec:
     def __init__(self,cond,inst):
-      this.cond = cond
-      this.inst = inst
+      self.cond = cond
+      self.inst = inst
       
     def printArbol(self):
-      print "Ciclo while con condicion " + self.cond.printArbol() + " e instrucciones " + self.inst.printArbol()
+      print "Ciclo while con condicion ",
+      self.cond.printArbol()
+      print " e instrucciones "
+      self.inst.printArbol()
 
 def p_Inst_While(p):
   '''Inst_While : INST_WHILE Operacion_booleana INST_DO Bloque_Inst '''
