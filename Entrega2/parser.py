@@ -80,6 +80,9 @@ class listaInstrucciones(indentable):
     for i in self.listaInst:
       i.level = self.level
       i.printArbol()
+      self.printIndent()
+      if i!= self.listaInst[len(self.listaInst)-1]:
+	print "SEPARADOR"
       
 
 #Clase que se utiliza para representar un string pero al ser una clase
@@ -305,6 +308,7 @@ class Operacion(indentable):
     #Este if revisa si la operacion es binaria
     if self.right!="":
       print ""
+      self.level +=1
       self.printIndent(),
       print "Operacion binaria:" 
       self.level +=1
