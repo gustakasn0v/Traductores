@@ -1,6 +1,29 @@
 program
 begin
+declare 
+	x,y,z as int;
+	p,q as bool
+	if x==y /= true then
+		if true then
+			read x
+	else
+		read y;
+	
+	rtoi(algo..5);
+	x = not x==y /= x==y ;
 	case x of
-		lkajs -> atoi(5)
-	end
+		algo-> begin
+				x=y;
+				write 5,x,"Hola"
+			   end
+	end;
+	x = 5 * (-var2 -(3 +var));
+
+	for i in 1..2 do
+		for j in 1..3 do
+			read x;
+
+	while x<=y do
+			write y,x
+
 end
