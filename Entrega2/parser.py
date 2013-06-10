@@ -104,15 +104,22 @@ class InstFuncion(indentable):
     self.printIndent(),
     print "Funcion: " + self.funcion
     self.printIndent(),
-    print "Variable: " + self.var
+    print "Expresion: ",
+    self.var.printArbol()
     
 def p_Inst_Funcion(p):
   ''' Inst_Funcion : RTOI LPAREN Rango RPAREN 
   | LENGTH LPAREN Rango RPAREN
   | TOP LPAREN Rango RPAREN
-  | BOTTOM LPAREN Rango RPAREN '''
-  
-  p[0] = InstFuncion(p[1],p[3])
+  | BOTTOM LPAREN Rango RPAREN 
+  | RTOI LPAREN VAR_IDENTIFIER RPAREN 
+  | LENGTH LPAREN VAR_IDENTIFIER RPAREN
+  | TOP LPAREN VAR_IDENTIFIER RPAREN
+  | BOTTOM LPAREN VAR_IDENTIFIER RPAREN'''
+  if type(p[3])==str:
+    p[0]= InstFuncion(p[1],Operacion(p[3]))
+  else:
+    p[0] = InstFuncion(p[1],p[3])
   
 class bloqueDeclaracion(indentable):
   def __init__(self,listaDeclaraciones):
@@ -213,7 +220,7 @@ precedence = (
     ('nonassoc','IN'),
     ('left', 'PLUS', 'MINUS'),
     ('left', 'TIMES', 'DIVIDE'),
-    ('nonassoc','UMINUS'),
+    ('right','UMINUS'),
     ('nonassoc', 'RANGE'),
 ) 
 
@@ -241,11 +248,20 @@ class Operacion(indentable):
       self.right.level = self.level+1
       self.right.printArbol()
     elif self.opr!="":
-      
-      print "Operacion unaria:\n" + "Operador: " + self.opr + "\n" + "Operando: "
+      self.level+=1
+      self.printIndent(),
+      print "Operacion unaria:\n" 
+      self.printIndent(),
+      print "Operador: " + self.opr + "\n" 
+      self.printIndent(),
+      print "Operando: ",
+      self.left.level = self.level+1
       self.left.printArbol()
     else:
-      
+      if type(self.left)==str:
+	print "Variable: ",
+      else:
+	print "Constante: ",
       print self.left
   
   
@@ -290,20 +306,26 @@ def p_Opr_bool(p):
 def p_Operacion_binaria(p):
   ''' Operacion_binaria : Operacion_binaria PLUS Term
   | Operacion_binaria MINUS Term
+  | MINUS Operacion_binaria PLUS Term %prec UMINUS
+  | MINUS Operacion_binaria MINUS  Term %prec UMINUS
   | Term'''
-  if len(p)>=4:
+  if len(p)==4:
     p[0] = Operacion(p[1],p[2],p[3])
-  elif len(p)==3:
-    p[0] = Operacion(p[2],p[1])
+  elif len(p)==5:
+    p[0] = Operacion(Operacion(p[2],p[1]),p[3],p[4])
   else:
     p[0] = p[1]
 	  
 def p_Term(p):
   '''Term : Term TIMES Factor
   | Term DIVIDE Factor
+  | MINUS Operacion_binaria TIMES  Factor %prec UMINUS
+  | MINUS Operacion_binaria DIVIDE  Factor %prec UMINUS
   | Factor'''
-  if len(p) >=3:
-	  p[0] = Operacion(p[1],p[2],p[3])
+  if len(p) ==4:
+    p[0] = Operacion(p[1],p[2],p[3])
+  elif len(p)==5:
+    p[0] = Operacion(Operacion(p[2],p[1]),p[3],p[4])
   else:
 	  p[0] = p[1]
 
@@ -311,11 +333,13 @@ def p_Factor(p):
   ''' Factor : NUMBER
   | VAR_IDENTIFIER
   | LPAREN Operacion_binaria RPAREN 
-  | MINUS Operacion_binaria %prec UMINUS'''
-  if len(p)>=3:
-	  p[0] = p[2]
+  | MINUS Operacion_binaria %prec UMINUS '''
+  if len(p)>=4:
+    p[0] = p[2]
+  elif len(p)==3:
+    p[0] = Operacion(p[2],p[1])
   else:
-	  p[0] = Operacion(p[1])
+    p[0] = Operacion(p[1])
 
 def p_Rango(p):
   ''' Rango : Operacion_binaria RANGE Operacion_binaria
