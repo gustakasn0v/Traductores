@@ -271,6 +271,7 @@ class Asignacion(indentable):
   def printArbol(self):
     self.printIndent()
     print "A la variable: " + str(self.variable) + " se le asigna ",
+    self.expresion.level = self.level
     self.expresion.printArbol()
     
 #Regla de la gramatica utilizada para reconocer una asignacion
@@ -308,10 +309,10 @@ class Operacion(indentable):
     #Este if revisa si la operacion es binaria
     if self.right!="":
       print ""
-      self.level +=1
+      self.level = self.level+ 1
       self.printIndent(),
-      print "Operacion binaria:" 
-      self.level +=1
+      print "Operacion binaria:"
+      self.level = self.level + 1
       self.printIndent(),
       print "Operador: " + self.opr
       self.printIndent()
@@ -364,6 +365,8 @@ def p_Operacion_booleana(p):
   | LPAREN Operacion_booleana RPAREN
   | Operacion_booleana EQEQ Operacion_booleana
   | Operacion_booleana NEQEQ Operacion_booleana
+  | Operacion_binaria EQEQ Operacion_binaria
+  | Operacion_binaria NEQEQ Operacion_binaria
   | TRUE
   | FALSE
   | VAR_IDENTIFIER
@@ -476,16 +479,17 @@ class Salida(indentable):
     self.printIndent()
     print self.tipo
     j = int(1)
+    self.level = self.level + 1
     self.printIndent()
-    print "\tLas Expresiones de la operacion de escritura son:"
+    print "Las Expresiones de la operacion de escritura son:"
     #Para cada elemento en la lista de expresiones, se imprime
     #que tipo es y como se llama o su valor
     for i in self.lista:
+      i.level = self.level + 1
       self.printIndent(),
-      print "\t",
       print "Expresion " + str(j) + ": ",
-      j+=1
       
+      j+=1
       if i.tipo=="Cadena":
 	#self.printIndend(),
 	print "Cadena",
@@ -499,12 +503,13 @@ class Salida(indentable):
 	#print "Nombre: "
       else:
 	self.printIndent(),
-	print "\t\t",
+	#print "\t\t",
 	print "Valor: "
-      self.printIndent(),
-      print "\t\t",
+      #self.printIndent(),
+      #print "\t\t",
+      self.printIndent()
       i.printArbol()
-      print ""
+      #print ""
 
       
 #Esta clase se usa para facilitar la implementacion de las clases
@@ -515,6 +520,7 @@ class Aux(indentable):
     self.tipo = tipo
     
   def printArbol(self):
+    self.val.level = self.level+1
     self.val.printArbol()
 
 
@@ -562,7 +568,7 @@ class ifc(indentable):
     print "Condicional if"
     self.printIndent(),
     print "Condicion: ",
-    self.cond.level+=1
+    self.cond.level = self.level+1
     self.cond.printArbol()
     
     self.bloque.level = self.level+1
@@ -654,7 +660,7 @@ class casos(indentable):
 #Regla del parser utilizada para reconocer una instruccion case
 #de rangeX
 def p_Inst_Case(p):
-  '''Inst_Case : INST_CASE Operacion_booleana INST_OF Casos INST_END'''
+  '''Inst_Case : INST_CASE Operacion_binaria INST_OF Casos INST_END'''
   p[0] = case(p[2],p[4])
     
 #Regla del parser utilizada para reconocer los casos de una instruccion
@@ -711,13 +717,12 @@ class whilec(indentable):
       
     def printArbol(self):
       self.printIndent()
-      print "\tCiclo while con condicion:"
+      print "Ciclo while con condicion:"
       self.cond.level = self.level+1
-      self.printIndent(),
       self.cond.printArbol()
-      self.printIndent()
-      print "\tinstrucciones del while: "
       self.printIndent(),
+      print "instrucciones del while: "
+      #self.printIndent(),
       self.inst.level = self.level+1
       self.inst.printArbol()
 
