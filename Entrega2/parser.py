@@ -660,8 +660,8 @@ def p_Inst_Case(p):
 #Regla del parser utilizada para reconocer los casos de una instruccion
 #case de rangeX
 def p_Casos(p):
-  ''' Casos : VAR_IDENTIFIER CASE_ASSIGN Bloque_Control
-  | Rango CASE_ASSIGN Bloque_Control
+  ''' Casos : VAR_IDENTIFIER CASE_ASSIGN Bloque_Control SEMICOLON
+  | Rango CASE_ASSIGN Bloque_Control SEMICOLON
   | VAR_IDENTIFIER CASE_ASSIGN Bloque_Control SEMICOLON Casos 
   | Rango CASE_ASSIGN Bloque_Control SEMICOLON Casos'''
 
