@@ -107,10 +107,10 @@ class InstFuncion(indentable):
     print "Variable: " + self.var
     
 def p_Inst_Funcion(p):
-  ''' Inst_Funcion : RTOI LPAREN VAR_IDENTIFIER RPAREN 
-  | LENGTH LPAREN VAR_IDENTIFIER RPAREN
-  | TOP LPAREN VAR_IDENTIFIER RPAREN
-  | BOTTOM LPAREN VAR_IDENTIFIER RPAREN '''
+  ''' Inst_Funcion : RTOI LPAREN Rango RPAREN 
+  | LENGTH LPAREN Rango RPAREN
+  | TOP LPAREN Rango RPAREN
+  | BOTTOM LPAREN Rango RPAREN '''
   
   p[0] = InstFuncion(p[1],p[3])
   
@@ -208,7 +208,9 @@ precedence = (
     ('left', 'OR'),
     ('left', 'AND'),
     ('nonassoc', 'NOT'),
-    ('nonassoc', 'EQEQ' ,'NEQEQ','LESS','LESSEQ' ,'GREAT','GREATEQ'),
+    ('nonassoc','LESS','LESSEQ' ,'GREAT','GREATEQ'),
+    ('left','EQEQ' ,'NEQEQ'),
+    ('nonassoc','IN'),
     ('left', 'PLUS', 'MINUS'),
     ('left', 'TIMES', 'DIVIDE'),
     ('nonassoc','UMINUS'),
@@ -258,7 +260,10 @@ def p_Operacion_booleana(p):
   ''' Operacion_booleana : Operacion_binaria Opr_bool Operacion_binaria
   | Operacion_booleana AND Operacion_booleana 
   | Operacion_booleana OR Operacion_booleana 
+  | Operacion_binaria IN Rango
   | LPAREN Operacion_booleana RPAREN
+  | Operacion_booleana EQEQ Operacion_booleana
+  | Operacion_booleana NEQEQ Operacion_booleana
   | TRUE
   | FALSE
   | VAR_IDENTIFIER
@@ -276,9 +281,7 @@ def p_Operacion_booleana(p):
 
 	  
 def p_Opr_bool(p):
-  ''' Opr_bool : EQEQ
-  | NEQEQ
-  | GREAT
+  ''' Opr_bool : GREAT
   | LESS
   | GREATEQ
   | LESSEQ '''
