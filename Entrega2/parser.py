@@ -211,17 +211,17 @@ def p_Inst_Asignacion(p):
 
 precedence = (
     ('right','INST_ELSE'),
-    ('left','INTERSECTION'),
     ('left', 'OR'),
     ('left', 'AND'),
     ('nonassoc', 'NOT'),
     ('nonassoc','LESS','LESSEQ' ,'GREAT','GREATEQ'),
     ('left','EQEQ' ,'NEQEQ'),
     ('nonassoc','IN'),
+    ('left','INTERSECTION'),
     ('left', 'PLUS', 'MINUS'),
-    ('left', 'TIMES', 'DIVIDE'),
-    ('right','UMINUS'),
+    ('left', 'TIMES', 'DIVIDE','MOD'),
     ('nonassoc', 'RANGE'),
+    ('right','UMINUS'),
 ) 
 
   
@@ -306,8 +306,6 @@ def p_Opr_bool(p):
 def p_Operacion_binaria(p):
   ''' Operacion_binaria : Operacion_binaria PLUS Term
   | Operacion_binaria MINUS Term
-  | MINUS Operacion_binaria PLUS Term %prec UMINUS
-  | MINUS Operacion_binaria MINUS  Term %prec UMINUS
   | Term'''
   if len(p)==4:
     p[0] = Operacion(p[1],p[2],p[3])
@@ -319,8 +317,7 @@ def p_Operacion_binaria(p):
 def p_Term(p):
   '''Term : Term TIMES Factor
   | Term DIVIDE Factor
-  | MINUS Operacion_binaria TIMES  Factor %prec UMINUS
-  | MINUS Operacion_binaria DIVIDE  Factor %prec UMINUS
+  | Term MOD Factor
   | Factor'''
   if len(p) ==4:
     p[0] = Operacion(p[1],p[2],p[3])
@@ -332,9 +329,9 @@ def p_Term(p):
 def p_Factor(p):
   ''' Factor : NUMBER
   | VAR_IDENTIFIER
-  | LPAREN Operacion_binaria RPAREN 
-  | MINUS Operacion_binaria %prec UMINUS '''
-  if len(p)>=4:
+  | LPAREN Operacion_binaria RPAREN
+  | MINUS Factor %prec UMINUS '''
+  if len(p)==4:
     p[0] = p[2]
   elif len(p)==3:
     p[0] = Operacion(p[2],p[1])
