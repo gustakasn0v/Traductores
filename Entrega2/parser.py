@@ -379,18 +379,32 @@ class Salida(indentable):
   def printArbol(self):
     self.printIndent()
     print self.tipo
+    j = int(1)
+    self.printIndent()
+    print "Las Expresiones son:"
     for i in self.lista:
-      self.printIndent()
-      print "Expresion: ",
-      print i.tipo
+      self.printIndent(),
+      print "\t",
+      print "Expresion " + str(j) + ": ",
+      j+=1
       
+      if i.tipo=="Cadena":
+	#self.printIndend(),
+	print "Cadena",
+	#self.printIndend(),
+	#print "\t",
+	#print i.tipo
+      print ""
       if i.tipo=="Variable":
-	self.printIndent()
-	print "Nombre: ",
+	pass
+	#self.printIndent(),
+	#print "Nombre: "
       else:
-	self.printIndent()
+	self.printIndent(),
+	print "\t\t",
 	print "Valor: "
-      self.printIndent()
+      self.printIndent(),
+      print "\t\t",
       i.printArbol()
       print ""
 
@@ -445,12 +459,18 @@ class ifc(indentable):
     print "Condicional if"
     self.printIndent(),
     print "Condicion: ",
+    self.cond.level+=1
     self.cond.printArbol()
     
-    self.bloque.level = self.level
+    self.bloque.level = self.level+1
+    self.printIndent(),
+    print "Instrucciones del if:"
     self.bloque.printArbol()
     if self.bloque2!=None:
+      self.printIndent(),
       print "Bloque del else"
+      self.printIndent(),
+      self.bloque2.level+=1
       self.bloque2.printArbol()
 
 class bloqueControl(indentable):
@@ -526,12 +546,12 @@ def p_Inst_Case(p):
 def p_Casos(p):
   ''' Casos : VAR_IDENTIFIER CASE_ASSIGN Bloque_Control
   | Rango CASE_ASSIGN Bloque_Control
-  | VAR_IDENTIFIER CASE_ASSIGN Bloque_Control Casos 
-  | Rango CASE_ASSIGN Bloque_Control Casos'''
+  | VAR_IDENTIFIER CASE_ASSIGN Bloque_Control SEMICOLON Casos 
+  | Rango CASE_ASSIGN Bloque_Control SEMICOLON Casos'''
 
-  if len(p)==5:
-    p[4].lista.insert(0,casos(p[1],p[3]))
-    p[0] = listaCasos(p[4].lista)
+  if len(p)==6:
+    p[5].lista.insert(0,casos(p[1],p[3]))
+    p[0] = listaCasos(p[5].lista)
   else:
     p[0]=listaCasos([casos(p[1],p[3])])
     
