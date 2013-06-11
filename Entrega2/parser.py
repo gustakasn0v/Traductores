@@ -8,7 +8,7 @@
 import ply.yacc as yacc
 import ply.lex as lex
 import sys
-from lexer import tokens
+from lexer import tokens, find_column
 
 
 #Esta es una clase que sera utilizada para herencia posteriormente
@@ -317,7 +317,6 @@ class Operacion(indentable):
       print "Operador: " + self.opr
       self.printIndent()
       print "Operando izquierdo: ",
-      
       self.left.level = self.level+1
       self.left.printArbol()
       self.printIndent()
@@ -488,28 +487,17 @@ class Salida(indentable):
       i.level = self.level + 1
       self.printIndent(),
       print "Expresion " + str(j) + ": ",
-      
       j+=1
       if i.tipo=="Cadena":
-	#self.printIndend(),
 	print "Cadena",
-	#self.printIndend(),
-	#print "\t",
-	#print i.tipo
       print ""
       if i.tipo=="Variable":
 	pass
-	#self.printIndent(),
-	#print "Nombre: "
       else:
 	self.printIndent(),
-	#print "\t\t",
 	print "Valor: "
-      #self.printIndent(),
-      #print "\t\t",
       self.printIndent()
       i.printArbol()
-      #print ""
 
       
 #Esta clase se usa para facilitar la implementacion de las clases
@@ -737,6 +725,7 @@ def p_Inst_While(p):
 def p_error(p):
     print "Error de sintaxis en la linea",
     print p.lineno -1 ,
+    print ", columna: " + str(find_column(p.lexer.lexdata,p)),
     print ": token inesperado:",
     print p.value
     yacc.restart()
