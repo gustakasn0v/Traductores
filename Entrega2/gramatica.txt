@@ -8,24 +8,39 @@
 # Gustavo El Khoury 10-10226       #
 ####################################
 
-S               -> INST_PROGRAM Bloque_Inst
+S               -> INST_PROGRAM Bloque_Inst | INST_PROGRAM Inst
 
-Bloque_Inst     -> INST_BEGIN Lista_Inst INST_END | Inst
+Bloque_Inst     -> INST_BEGIN Lista_Inst INST_END
+		  | INST_BEGIN Inst_Declare Lista_Inst INST_END
+		  | INST_BEGIN Inst_Declare INST_END
 
-Lista_Inst      -> Inst | Inst ; Lista_Inst
+Lista_Inst      -> Inst | Inst SEMICOLON Lista_Inst
 
-Inst            -> Inst_Declare | Inst_Asignacion | Inst_Lectura | Inst_Salida
-                   Inst_If | Inst_Case | Inst_For | Inst_While
+Inst            -> Inst_Declare | Inst_Asignacion | Inst_Lectura | Inst_Salida |
+                   Inst_If | Inst_Case | Inst_For | Inst_While | Inst_Funcion
+
+Inst_Funcion    -> RTOI LPAREN Rango RPAREN 
+		  | LENGTH LPAREN Rango RPAREN
+		  | TOP LPAREN Rango RPAREN
+		  | BOTTOM LPAREN Rango RPAREN 
+		  | RTOI LPAREN VAR_IDENTIFIER RPAREN 
+		  | LENGTH LPAREN VAR_IDENTIFIER RPAREN
+		  | TOP LPAREN VAR_IDENTIFIER RPAREN
+		  | BOTTOM LPAREN VAR_IDENTIFIER RPAREN'''
+
                
-Inst_Declare    -> INST_DECLARE Lista_Declare
+Inst_Declare    -> INST_DECLARE Lista_DeclareTipos
+
+Lista_DeclareTipos   -> Lista_Declare
+		        | Lista_Declare SEMICOLON Lista_DeclareTipos
 
 Lista_Declare   -> Lista_Variables INST_AS Tipo
 
 Tipo            -> TYPEDEF_INT | TYPEDEF_BOOL | TYPEDEF_RANGE
 
-Lista_Variables -> VAR_IDENTIFIER | VAR_IDENTIFIER ; Lista_Variables
+Lista_Variables -> VAR_IDENTIFIER | VAR_IDENTIFIER COMMA Lista_Variables
 
-Inst_Asignacion -> VAR_IDENTIFIER = Expresion
+Inst_Asignacion -> VAR_IDENTIFIER EQUAL Expresion
 
 Expresion       -> Expresion_Bool | Expresion_Aritm | Rango
 
@@ -37,21 +52,22 @@ Lista_cStrings  -> VarString | VarString ; Lista_cStrings
 
 VarString       -> VAR_IDENTIFIER | STRING
 
-Inst_If         -> INST_IF Expresion_Booleana THEN ResultBlock SiNo
+Inst_If         -> INST_IF Operacion_booleana INST_THEN Bloque_Control 
+                   | INST_IF Operacion_booleana INST_THEN Bloque_Control INST_ELSE Bloque_Control
 
-SiNo            -> lambda | INST_ELSE ResultBlock
+BloqueControl   -> Bloque_Inst | Inst
 
-ResultBlock     -> Bloque_Inst
+Inst_Case       -> INST_CASE Expresion_Aritm OF Casos INST_END
 
-Inst_Case       -> INST_CASE Expresion_Aritm OF ListaRangos
+Casos           -> VAR_IDENTIFIER CASE_ASSIGN Bloque_Control SEMICOLON
+		  | Rango CASE_ASSIGN Bloque_Control SEMICOLON
+		  | VAR_IDENTIFIER CASE_ASSIGN Bloque_Control SEMICOLON Casos 
+		  | Rango CASE_ASSIGN Bloque_Control SEMICOLON Casos
 
-ListaRangos     -> RangoAccion | RangoAccion ListaRangos
+Inst_For        -> INST_FOR VAR_IDENTIFIER INST_IN Rango INST_DO Bloque_Control
 
-RangoAccion     -> Rango CASE_ASSIGN Inst
-
-Inst_For        -> INST_FOR VAR_IDENTIFIER INST_IN Rango INST_DO ResultBlock
-
-Inst_While      -> INST_WHILE Expresion_Bool INST_DO ResultBlock
+Inst_While      -> INST_WHILE Operacion_booleana INST_DO Bloque_Inst 
+		  | INST_WHILE Operacion_booleana INST_DO Inst
 
 Expresion_Bool
 
