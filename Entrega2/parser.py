@@ -516,7 +516,7 @@ class Aux(indentable):
     self.val.printArbol()
 
 
-#Definicion de la regla de la grmaatica que reconoce la instruccion 
+#Definicion de la regla de la gramatica que reconoce la instruccion 
 #write o writeln
 def p_Inst_Salida(p):
   '''Inst_Salida : INST_WRITE Lista_Aux

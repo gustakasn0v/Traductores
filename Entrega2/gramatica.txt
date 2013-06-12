@@ -42,22 +42,25 @@ Lista_Variables -> VAR_IDENTIFIER | VAR_IDENTIFIER COMMA Lista_Variables
 
 Inst_Asignacion -> VAR_IDENTIFIER EQUAL Expresion
 
-Expresion       -> Expresion_Bool | Expresion_Aritm | Rango
+Expresion       -> Operacion_booleana | Operacion_binaria | Rango
 
 Inst_Lectura    -> INST_READ VAR_IDENTIFIER
 
-Inst_Salida     -> INST_WRITE Lista_cStrings
+Inst_Salida     -> INST_WRITE Lista_Aux
+		  | INST_WRITELN  Lista_Aux
 
-Lista_cStrings  -> VarString | VarString ; Lista_cStrings
+Lista_Aux       -> Expresion
+		  | STRING 
+		  | Expresion COMMA Lista_Aux
+		  | STRING COMMA Lista_Aux
 
-VarString       -> VAR_IDENTIFIER | STRING
 
 Inst_If         -> INST_IF Operacion_booleana INST_THEN Bloque_Control 
                    | INST_IF Operacion_booleana INST_THEN Bloque_Control INST_ELSE Bloque_Control
 
 BloqueControl   -> Bloque_Inst | Inst
 
-Inst_Case       -> INST_CASE Expresion_Aritm OF Casos INST_END
+Inst_Case       -> INST_CASE Operacion_binaria INST_OF Casos INST_END
 
 Casos           -> VAR_IDENTIFIER CASE_ASSIGN Bloque_Control SEMICOLON
 		  | Rango CASE_ASSIGN Bloque_Control SEMICOLON
@@ -69,8 +72,40 @@ Inst_For        -> INST_FOR VAR_IDENTIFIER INST_IN Rango INST_DO Bloque_Control
 Inst_While      -> INST_WHILE Operacion_booleana INST_DO Bloque_Inst 
 		  | INST_WHILE Operacion_booleana INST_DO Inst
 
-Expresion_Bool
+Operacion_booleana -> Operacion_binaria Opr_bool Operacion_binaria
+		    | Operacion_booleana AND Operacion_booleana 
+		    | Operacion_booleana OR Operacion_booleana 
+		    | Operacion_binaria IN Rango
+		    | LPAREN Operacion_booleana RPAREN
+		    | Operacion_booleana EQEQ Operacion_booleana
+		    | Operacion_booleana NEQEQ Operacion_booleana
+		    | Operacion_binaria EQEQ Operacion_binaria
+		    | Operacion_binaria NEQEQ Operacion_binaria
+		    | TRUE
+		    | FALSE
+		    | VAR_IDENTIFIER
+		    | NOT Operacion_booleana
 
-Expresion_Aritm
+Opr_bool        -> GREAT | LESS | GREATEQ | LESSEQ
 
-Rango 
+Operacion_binaria -> Operacion_binaria PLUS Term
+		    | Operacion_binaria MINUS Term
+		    | Term
+
+Term              -> Term TIMES Factor
+		    | Term DIVIDE Factor
+		    | Term MOD Factor
+		    | Factor
+		    
+Factor            -> NUMBER
+		    | VAR_IDENTIFIER
+		    | LPAREN Operacion_binaria RPAREN
+		    | Inst_Funcion
+		    | MINUS Factor
+		    
+Rango             -> Operacion_binaria RANGE Operacion_binaria
+		    | Rango PLUS Rango
+		    | Rango TIMES Operacion_binaria
+		    | Rango INTERSECTION Rango 
+		    | LPAREN Rango RPAREN
+		    | VAR_IDENTIFIER
