@@ -426,11 +426,14 @@ def p_Factor(p):
   ''' Factor : NUMBER
   | VAR_IDENTIFIER
   | LPAREN Operacion_binaria RPAREN
+  | Inst_Funcion
   | MINUS Factor %prec UMINUS '''
   if len(p)==4:
     p[0] = p[2]
   elif len(p)==3:
     p[0] = Operacion(p[2],p[1])
+  elif type(p[1]) != str and type(p[1])!= int:  
+    p[0]= p[1]
   else:
     p[0] = Operacion(p[1])
 

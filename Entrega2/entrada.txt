@@ -15,7 +15,7 @@ declare
 		algo-> begin
 				x=y;
 				write 5,x,"Hola"
-			   end
+			   end;
 	end;
 	x = 5 * (-var2 -(3 +var));
 
@@ -24,6 +24,7 @@ declare
 			read x;
 
 	while x<=y do
-			write y,x
+			write y,x;
 
+	x = rtoi(1*2..bottom(1..2))
 end
