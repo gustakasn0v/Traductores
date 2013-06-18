@@ -8,6 +8,7 @@
 import ply.yacc as yacc
 import ply.lex as lex
 import sys
+import SymTable
 from lexer import tokens, find_column
 
 
@@ -38,7 +39,11 @@ class bloque(indentable):
   def __init__(self,nombre,contenido):
     self.nombre = nombre
     self.contenido = contenido
+    self.tablaSimbolos = SymTable()
+    for i in self.contenido:
+      i.papa = self
     self.level=0
+    
     
   def printArbol(self):
     self.printIndent(),
@@ -124,7 +129,6 @@ def p_Inst(p):
   | Inst_If 
   | Inst_Case 
   | Inst_Salida
-  | Inst_Funcion 
   | Bloque_Inst
   '''
   p[0] = p[1]
@@ -199,6 +203,8 @@ class unaDeclaracion(indentable):
   def __init__(self,listaVariables,tipo):
     self.listaVariables = listaVariables
     self.tipo = tipo
+    for i in self.listaVariables:
+      self.papa.insert(variable(i,self.tipo))
     
   def printArbol(self):
    self.printIndent()
