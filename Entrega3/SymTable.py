@@ -44,12 +44,26 @@ class SymTable():
       return self.lista[self.lista.index(variable(id,''))]
     else:
       return None
+    
+  def merge(self,nuevaTabla):
+    for i in nuevaTabla.lista:
+      if self.isMember(i,0):
+	print 'Variable declarada dos veces'
+      else:
+	self.insert(i)
+	
+  def __str__(self):
+    retorno = ''
+    for i in self.lista:
+      retorno += str(i)
+      retorno += '\n'
+    return retorno
 
-lista = SymTable()
-lista.insert(variable('xx1','boolean'))
-print lista.isMember(variable('xx1','boolean'),0)
-lista.delete(variable('xx1','boolean'))
-print lista.isMember(variable('xx1','boolean'),0)
-lista.insert(variable('xx1','boolean'))
-print lista.find('xx12')
+#lista = SymTable()
+#lista.insert(variable('xx1','boolean'))
+#print lista.isMember(variable('xx1','boolean'),0)
+#lista.delete(variable('xx1','boolean'))
+#print lista.isMember(variable('xx1','boolean'),0)
+#lista.insert(variable('xx1','boolean'))
+#print lista.find('xx12')
 

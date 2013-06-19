@@ -39,7 +39,7 @@ class bloque(indentable):
   def __init__(self,nombre,contenido):
     self.nombre = nombre
     self.contenido = contenido
-    self.tablaSimbolos = SymTable()
+    self.tablaSimbolos = SymTable.SymTable()
     for i in self.contenido:
       i.papa = self
     self.level=0
@@ -111,7 +111,6 @@ def p_Lista_Inst(p):
       #p[3].listaInst.insert(0,String("\nSEPARADOR\n"))
       p[3].listaInst.insert(0,p[1])
       p[0] = listaInstrucciones( p[3].listaInst )
-      
     else:
       p[0] = listaInstrucciones([p[1]])
       
@@ -188,6 +187,11 @@ class bloqueDeclaracion(indentable):
 class declareTipos(indentable):
   def __init__(self,listaPorTipos):
     self.listaPorTipos = listaPorTipos
+    self.tablaSimbolos = SymTable.SymTable()
+    for i in self.listaPorTipos:
+      print i.tablaSimbolos
+      self.tablaSimbolos.merge(i.tablaSimbolos)
+    #print self.tablaSimbolos
     
   def printArbol(self):
     for i in self.listaPorTipos:
@@ -203,8 +207,9 @@ class unaDeclaracion(indentable):
   def __init__(self,listaVariables,tipo):
     self.listaVariables = listaVariables
     self.tipo = tipo
-    for i in self.listaVariables:
-      self.papa.insert(variable(i,self.tipo))
+    self.tablaSimbolos = SymTable.SymTable()
+    for i in self.listaVariables.lista:      
+      self.tablaSimbolos.insert(SymTable.variable(i,self.tipo))
     
   def printArbol(self):
    self.printIndent()
