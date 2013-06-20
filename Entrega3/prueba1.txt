@@ -1,0 +1,25 @@
+// (a ** b) % c
+program
+  begin  
+    declare 
+       a, b, c, res as int;
+       c, b, e, res1 as int
+    read q;
+    read b;
+    read c;
+    begin
+      declare
+	a1, a2 as int
+      read a1
+    end;
+    read a1;
+    // Exponenciacion simple O(n)
+    res = 1;
+    for x in (0..b) do 
+    begin
+      read x;
+      res = (res*a)%c
+    end;
+    read x;
+    write res
+end

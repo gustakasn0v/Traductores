@@ -5,9 +5,13 @@
 # Gustavo El Khoury. 1010226
 
 class variable():
-  def __init__(self,id,type):
+  def __init__(self,id,type,block = None):
     self.id = id
     self.type = type
+    if block is None:
+      self.blocked = 0
+    else:
+      self.blocked = block    
   
   def __eq__(self,otro):
     return self.id == otro.id
@@ -48,7 +52,7 @@ class SymTable():
   def merge(self,nuevaTabla):
     for i in nuevaTabla.lista:
       if self.isMember(i,0):
-	print 'Variable declarada dos veces'
+	print 'Variable '+ i.id +' declarada dos veces'
       else:
 	self.insert(i)
 	

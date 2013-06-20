@@ -11,6 +11,7 @@ import sys
 import SymTable
 from lexer import tokens, find_column
 
+listaTablas = []
 
 #Esta es una clase que sera utilizada para herencia posteriormente
 #Para facilitar la indentacion y asi hacer mas visible la salida
@@ -21,6 +22,11 @@ class indentable:
     for i in range(self.level):
       print('  '),
     return ''
+  
+class verificable:
+  listaVariables = []
+  def verify(self):
+    pass
 
     
 #Se define una regla de la gramatica que identifica el inicio de un 
@@ -39,9 +45,6 @@ class bloque(indentable):
   def __init__(self,nombre,contenido):
     self.nombre = nombre
     self.contenido = contenido
-    self.tablaSimbolos = SymTable.SymTable()
-    for i in self.contenido:
-      i.papa = self
     self.level=0
     
     
@@ -67,6 +70,10 @@ def p_Bloque_Inst(p):
       if p[3]=='end':
 	p[0] = bloque('BLOQUE',[p[2]])
       else:
+	try:
+	  listaTablas.pop()
+	except IndexError:
+	  pass
 	p[0] = bloque('BLOQUE',[p[2],p[3]])
     elif len(p)==3:
       p[0] = bloque('UNICA INSTRUCCION',[p[1],p[2]])
@@ -174,8 +181,11 @@ def p_Inst_Funcion(p):
 #rangeX
 class bloqueDeclaracion(indentable):
   def __init__(self,listaDeclaraciones):
-    # Esta es una lista de cada linea del declare
+    # Esta es una lista de lineas del declare
     self.listaDeclaraciones = listaDeclaraciones
+    self.tablaSimbolos = SymTable.SymTable()
+    for i in self.listaDeclaraciones.listaPorTipos:
+      self.tablaSimbolos.merge(i.tablaSimbolos)
     
   def printArbol(self):
     #self.printIndent(),
@@ -187,11 +197,7 @@ class bloqueDeclaracion(indentable):
 class declareTipos(indentable):
   def __init__(self,listaPorTipos):
     self.listaPorTipos = listaPorTipos
-    self.tablaSimbolos = SymTable.SymTable()
-    for i in self.listaPorTipos:
-      print i.tablaSimbolos
-      self.tablaSimbolos.merge(i.tablaSimbolos)
-    #print self.tablaSimbolos
+    
     
   def printArbol(self):
     for i in self.listaPorTipos:
@@ -208,7 +214,7 @@ class unaDeclaracion(indentable):
     self.listaVariables = listaVariables
     self.tipo = tipo
     self.tablaSimbolos = SymTable.SymTable()
-    for i in self.listaVariables.lista:      
+    for i in self.listaVariables.lista: 
       self.tablaSimbolos.insert(SymTable.variable(i,self.tipo))
     
   def printArbol(self):
@@ -232,6 +238,8 @@ class listaVariables(indentable):
 def p_Inst_Declare(p):
   '''Inst_Declare : INST_DECLARE Lista_DeclareTipos'''
   p[0] = bloqueDeclaracion(p[2])
+  global listaTablas
+  listaTablas.append(p[0].tablaSimbolos)
 
   
 #Regla de la gramatica utilizada para reconocer varias lineas
@@ -468,9 +476,10 @@ def p_Rango(p):
 
 #Clase utilizada para representar una instruccion de salida
 #aceptada por rangeX
-class Lectura(indentable):
+class Lectura(indentable,verificable):
   def __init__(self,var):
     self.variable = var
+    self.listaVariables.append(var)
   
   def printArbol(self):
     self.printIndent(),
@@ -481,6 +490,16 @@ class Lectura(indentable):
 def p_Inst_Lectura(p):
   '''Inst_Lectura : INST_READ VAR_IDENTIFIER '''
   p[0] = Lectura(p[2])
+  global listaTablas
+  check = 0
+  for i in range(len(listaTablas),0,-1):
+    tabla = listaTablas[i-1]
+    if (tabla.isMember(SymTable.variable(p[0].variable,'int'),0)):
+      check = 1
+      break
+  if not check:
+    print 'Variable del read ' + p[2] + ' no declarada'
+  
   
 #Clase utilizada para representar una instruccion de lectura
 #aceptada por rangeX, la cual puede escribir una o mas expresiones
@@ -706,10 +725,28 @@ class forc(indentable):
       
       
 #Regla del a gramatica utilizada para reconocer una instruccion for
-#en rangeX
+#en rangeX  
 def p_Inst_For(p):
-  '''Inst_For : INST_FOR VAR_IDENTIFIER INST_IN Rango INST_DO Bloque_Control '''
+  '''Inst_For : INST_FOR Variable_For INST_IN Rango INST_DO Bloque_Control '''
   p[0] = forc(p[2],p[4],p[6])
+  
+  # Elimino la tabla de simbolos que contiene la variable del for 
+  try:
+    listaTablas.pop()
+  except IndexError:
+    pass
+  
+def p_Variable_For(p):
+  '''Variable_For : VAR_IDENTIFIER'''
+  p[0] = p[1]
+  
+  # Se crea una tabla de simbolos con una entrada para la variable del for
+  # Se bloquea la modificacion de dicha variable
+  tabla = SymTable.SymTable()
+  tabla.insert(SymTable.variable(p[1],'int',1))
+  listaTablas.append(tabla)
+  
+  
 
   
 #Clase utilizada para representar una instruccion while en rangeX
