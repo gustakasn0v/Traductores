@@ -152,10 +152,10 @@ class InstFuncion(indentable):
 #una variable si esta es de tipo rango (aunque por ahora no nos
 #interesa el tipo del mismo ya que estamos construyendo un AST)
 def p_Inst_Funcion(p):
-  ''' Inst_Funcion : RTOI LPAREN Rango RPAREN 
-  | LENGTH LPAREN Rango RPAREN
-  | TOP LPAREN Rango RPAREN
-  | BOTTOM LPAREN Rango RPAREN 
+  ''' Inst_Funcion : RTOI LPAREN Operacion_binaria RPAREN 
+  | LENGTH LPAREN Operacion_binaria RPAREN
+  | TOP LPAREN Operacion_binaria RPAREN
+  | BOTTOM LPAREN Operacion_binaria RPAREN 
   | RTOI LPAREN VAR_IDENTIFIER RPAREN 
   | LENGTH LPAREN VAR_IDENTIFIER RPAREN
   | TOP LPAREN VAR_IDENTIFIER RPAREN
@@ -350,8 +350,7 @@ class Operacion(indentable):
 #efectos representa en realidad una operacion arimetica), 
 #operacion booleana o un rango
 def p_Expresion(p):
-  '''Expresion : Operacion_binaria
-  | Rango'''
+  '''Expresion : Operacion_binaria'''
   #| Operacion_booleana 
   p[0] = p[1]
 
@@ -412,7 +411,7 @@ def p_Operacion_binaria(p):
   | Operacion_binaria GREATEQ Operacion_binaria
   | Operacion_binaria LESS Operacion_binaria
   | Operacion_binaria LESSEQ Operacion_binaria
-  | Operacion_binaria IN Rango
+  | Operacion_binaria IN Operacion_binaria
   | NOT Operacion_binaria
   | NUMBER
   | VAR_IDENTIFIER
@@ -420,7 +419,10 @@ def p_Operacion_binaria(p):
   | Inst_Funcion
   | MINUS Operacion_binaria %prec UMINUS 
   | TRUE
-  | FALSE'''
+  | FALSE
+  | Operacion_binaria RANGE Operacion_binaria
+  | Operacion_binaria INTERSECTION Operacion_binaria
+  '''
   if len(p)>=4:
     if p[1]=='(':
       p[0]=p[2]
@@ -467,20 +469,20 @@ def p_Operacion_binaria(p):
 
     
 #Regla de la gramatica utilizada para reoconocer un rango
-def p_Rango(p):
-  ''' Rango : Operacion_binaria RANGE Operacion_binaria
-  | Rango PLUS Rango
-  | Rango TIMES Operacion_binaria
-  | Rango INTERSECTION Rango 
-  | LPAREN Rango RPAREN
-  | VAR_IDENTIFIER '''
-  if len(p)>=3:
-   if p[1]!='(':
-      p[0] = Operacion(p[1],p[2],p[3])
-   else:
-     p[0] = p[2]
-  else:
-    p[0] = Operacion(p[1])
+#def p_Rango(p):
+  #''' Rango : Operacion_binaria RANGE Operacion_binaria
+  #| Rango PLUS Rango
+  #| Rango TIMES Operacion_binaria
+  #| Rango INTERSECTION Rango 
+  #| LPAREN Rango RPAREN
+  #| VAR_IDENTIFIER '''
+  #if len(p)>=3:
+   #if p[1]!='(':
+      #p[0] = Operacion(p[1],p[2],p[3])
+   #else:
+     #p[0] = p[2]
+  #else:
+    #p[0] = Operacion(p[1])
 
 #Clase utilizada para representar una instruccion de salida
 #aceptada por rangeX
@@ -686,9 +688,9 @@ def p_Inst_Case(p):
 #case de rangeX
 def p_Casos(p):
   ''' Casos : VAR_IDENTIFIER CASE_ASSIGN Bloque_Control SEMICOLON
-  | Rango CASE_ASSIGN Bloque_Control SEMICOLON
+  | Operacion_binaria CASE_ASSIGN Bloque_Control SEMICOLON
   | VAR_IDENTIFIER CASE_ASSIGN Bloque_Control SEMICOLON Casos 
-  | Rango CASE_ASSIGN Bloque_Control SEMICOLON Casos'''
+  | Operacion_binaria CASE_ASSIGN Bloque_Control SEMICOLON Casos'''
 
   if len(p)==6:
     p[5].lista.insert(0,casos(p[1],p[3]))
@@ -724,7 +726,7 @@ class forc(indentable):
 #Regla del a gramatica utilizada para reconocer una instruccion for
 #en rangeX
 def p_Inst_For(p):
-  '''Inst_For : INST_FOR VAR_IDENTIFIER INST_IN Rango INST_DO Bloque_Control '''
+  '''Inst_For : INST_FOR VAR_IDENTIFIER INST_IN Operacion_binaria INST_DO Bloque_Control '''
   p[0] = forc(p[2],p[4],p[6])
 
   
