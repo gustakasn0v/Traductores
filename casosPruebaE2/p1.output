@@ -1,0 +1,40 @@
+BLOQUE
+  READ
+    variable: a
+  SEPARADOR
+  READ
+    variable: b
+  SEPARADOR
+  READ
+    variable: c
+  SEPARADOR
+  ASIGNACION
+    var: res
+    val: CONSTANTE_ENT
+           valor: 1
+  SEPARADOR
+  ITERACION_DET
+    variable: x
+    rango: EXPRESION_BIN
+             operador: construccion
+             operando izq: CONSTANTE_ENT
+                             valor: 0
+             operando der: VARIABLE
+                             nombre: b
+    instruccion: BLOQUE
+                   ASIGNACION
+                     var: res
+                     val: EXPRESION_BIN
+                            operador: modulo
+                            operando izq: EXPRESION_BIN
+                                            operador: POR
+                                            operando izq: VARIABLE
+                                                            nombre: res
+                                            operando der: VARIABLE
+                                                            nombre: a
+                            operando der: VARIABLE
+                                            nombre: c
+  SEPARADOR
+  WRITE
+    elemento: VARIABLE
+                 nombre: res

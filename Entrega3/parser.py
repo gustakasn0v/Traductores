@@ -8,6 +8,7 @@
 import ply.yacc as yacc
 import ply.lex as lex
 import sys
+import SymTable
 from lexer import tokens, find_column
 
 
@@ -38,7 +39,11 @@ class bloque(indentable):
   def __init__(self,nombre,contenido):
     self.nombre = nombre
     self.contenido = contenido
+    self.tablaSimbolos = SymTable.SymTable()
+    for i in self.contenido:
+      i.papa = self
     self.level=0
+    
     
   def printArbol(self):
     self.printIndent(),
@@ -106,7 +111,6 @@ def p_Lista_Inst(p):
       #p[3].listaInst.insert(0,String("\nSEPARADOR\n"))
       p[3].listaInst.insert(0,p[1])
       p[0] = listaInstrucciones( p[3].listaInst )
-      
     else:
       p[0] = listaInstrucciones([p[1]])
       
@@ -124,7 +128,6 @@ def p_Inst(p):
   | Inst_If 
   | Inst_Case 
   | Inst_Salida
-  | Inst_Funcion 
   | Bloque_Inst
   '''
   p[0] = p[1]
@@ -184,6 +187,11 @@ class bloqueDeclaracion(indentable):
 class declareTipos(indentable):
   def __init__(self,listaPorTipos):
     self.listaPorTipos = listaPorTipos
+    self.tablaSimbolos = SymTable.SymTable()
+    for i in self.listaPorTipos:
+      print i.tablaSimbolos
+      self.tablaSimbolos.merge(i.tablaSimbolos)
+    #print self.tablaSimbolos
     
   def printArbol(self):
     for i in self.listaPorTipos:
@@ -199,6 +207,9 @@ class unaDeclaracion(indentable):
   def __init__(self,listaVariables,tipo):
     self.listaVariables = listaVariables
     self.tipo = tipo
+    self.tablaSimbolos = SymTable.SymTable()
+    for i in self.listaVariables.lista:      
+      self.tablaSimbolos.insert(SymTable.variable(i,self.tipo))
     
   def printArbol(self):
    self.printIndent()
@@ -339,7 +350,7 @@ class Operacion(indentable):
     #Revisa si la instacia no es una operacion sino una variable o 
     #numero
     else:
-      if type(self.left)==str and self.left!="true" and self.left!="false":
+      if type(self.left)==str:
 	print "Variable: ",
       else:
 	print "Constante: ",
@@ -351,119 +362,92 @@ class Operacion(indentable):
 #operacion booleana o un rango
 def p_Expresion(p):
   '''Expresion : Operacion_binaria
+  | Operacion_booleana 
   | Rango'''
-  #| Operacion_booleana 
   p[0] = p[1]
 
-##Regla que permite reconocer una operacion booleana en 
-##rangeX
-#def p_Operacion_booleana(p):
-  #''' Operacion_booleana : Operacion_binaria Opr_bool Operacion_binaria
-  #| Operacion_booleana AND Operacion_booleana 
-  #| Operacion_booleana OR Operacion_booleana 
-  #| Operacion_binaria IN Rango
-  #| LPAREN Operacion_booleana RPAREN
-  #| Operacion_booleana EQEQ Operacion_booleana
-  #| Operacion_booleana NEQEQ Operacion_booleana
-  #| Operacion_binaria EQEQ Operacion_binaria
-  #| Operacion_binaria NEQEQ Operacion_binaria
-  #| TRUE
-  #| FALSE
-  #| VAR_IDENTIFIER
-  #| NOT Operacion_booleana '''
+#Regla que permite reconocer una operacion booleana en 
+#rangeX
+def p_Operacion_booleana(p):
+  ''' Operacion_booleana : Operacion_binaria Opr_bool Operacion_binaria
+  | Operacion_booleana AND Operacion_booleana 
+  | Operacion_booleana OR Operacion_booleana 
+  | Operacion_binaria IN Rango
+  | LPAREN Operacion_booleana RPAREN
+  | Operacion_booleana EQEQ Operacion_booleana
+  | Operacion_booleana NEQEQ Operacion_booleana
+  | Operacion_binaria EQEQ Operacion_binaria
+  | Operacion_binaria NEQEQ Operacion_binaria
+  | TRUE
+  | FALSE
+  | VAR_IDENTIFIER
+  | NOT Operacion_booleana '''
 
-  #if len(p)>=3:
-    ##Revisa si la operacion no esta entre parentesis y no es un not
-    #if p[1]!='(' and p[1]!="not":
-      #p[0] = Operacion(p[1],p[2],p[3])
-    ##Si la operacion es un not se hace una operacion unaria con la 
-    ##expresion reconocida de segunda
-    #elif p[1]=="not":
-      #p[0] = Operacion(p[2],p[1])
-    ##La expresion reconocida esta entre parentesis y por lo tanto
-    ##Le asigno a p el valor del valor que esta en medio de los parentesis
-    #else:
-      #p[0]=p[2]
-  #else: 
-    #p[0] = Operacion(p[1])
+  if len(p)>=3:
+    #Revisa si la operacion no esta entre parentesis y no es un not
+    if p[1]!='(' and p[1]!="not":
+      p[0] = Operacion(p[1],p[2],p[3])
+    #Si la operacion es un not se hace una operacion unaria con la 
+    #expresion reconocida de segunda
+    elif p[1]=="not":
+      p[0] = Operacion(p[2],p[1])
+    #La expresion reconocida esta entre parentesis y por lo tanto
+    #Le asigno a p el valor del valor que esta en medio de los parentesis
+    else:
+      p[0]=p[2]
+  else: 
+    p[0] = Operacion(p[1])
 
-##Regla de la gramatica utilizada para reconocer los operadores no 
-##asociativos de rangeX
-#def p_Opr_bool(p):
-  #''' Opr_bool : GREAT
-  #| LESS
-  #| GREATEQ
-  #| LESSEQ '''
-  #p[0] = p[1]
+#Regla de la gramatica utilizada para reconocer los operadores no 
+#asociativos de rangeX
+def p_Opr_bool(p):
+  ''' Opr_bool : GREAT
+  | LESS
+  | GREATEQ
+  | LESSEQ '''
+  p[0] = p[1]
 
 #Regla de la gramatica utilizada para reconocer una operacion
 #aritmetica
 def p_Operacion_binaria(p):
-  ''' Operacion_binaria : Operacion_binaria PLUS Operacion_binaria
-  | Operacion_binaria MINUS Operacion_binaria
-  | Operacion_binaria TIMES Operacion_binaria
-  | Operacion_binaria DIVIDE Operacion_binaria
-  | Operacion_binaria MOD Operacion_binaria
-  | Operacion_binaria AND Operacion_binaria
-  | Operacion_binaria OR Operacion_binaria
-  | Operacion_binaria EQEQ Operacion_binaria
-  | Operacion_binaria NEQEQ Operacion_binaria
-  | Operacion_binaria GREAT Operacion_binaria
-  | Operacion_binaria GREATEQ Operacion_binaria
-  | Operacion_binaria LESS Operacion_binaria
-  | Operacion_binaria LESSEQ Operacion_binaria
-  | Operacion_binaria IN Rango
-  | NOT Operacion_binaria
-  | NUMBER
+  ''' Operacion_binaria : Operacion_binaria PLUS Term
+  | Operacion_binaria MINUS Term
+  | Term'''
+  if len(p)>=3:
+    p[0] = Operacion(p[1],p[2],p[3])
+  else:
+    p[0] = p[1]
+
+#Regla del parser utilizada para reconocer una multiplicacion,
+#una division o una operacion de modulo
+def p_Term(p):
+  '''Term : Term TIMES Factor
+  | Term DIVIDE Factor
+  | Term MOD Factor
+  | Factor'''
+  if len(p) ==4:
+    p[0] = Operacion(p[1],p[2],p[3])
+  elif len(p)==5:
+    p[0] = Operacion(Operacion(p[2],p[1]),p[3],p[4])
+  else:
+	  p[0] = p[1]
+
+#Regla de la gramatica utilizada para reconocer un numero, una variable,
+#algun menos unario con una expresion o una expresion entre parentesis
+def p_Factor(p):
+  ''' Factor : NUMBER
   | VAR_IDENTIFIER
   | LPAREN Operacion_binaria RPAREN
   | Inst_Funcion
-  | MINUS Operacion_binaria %prec UMINUS 
-  | TRUE
-  | FALSE'''
-  if len(p)>=4:
-    if p[1]=='(':
-      p[0]=p[2]
-    else:
-      p[0] = Operacion(p[1],p[2],p[3])
-  elif len(p)>=3:
+  | MINUS Factor %prec UMINUS '''
+  if len(p)==4:
+    p[0] = p[2]
+  elif len(p)==3:
     p[0] = Operacion(p[2],p[1])
+  elif type(p[1]) != str and type(p[1])!= int:  
+    p[0]= p[1]
   else:
     p[0] = Operacion(p[1])
-
-##Regla del parser utilizada para reconocer una multiplicacion,
-##una division o una operacion de modulo
-#def p_Term(p):
-  #'''Term : Term TIMES Factor
-  #| Term DIVIDE Factor
-  #| Term MOD Factor
-  #| Factor'''
-  #if len(p) ==4:
-    #p[0] = Operacion(p[1],p[2],p[3])
-  #elif len(p)==5:
-    #p[0] = Operacion(Operacion(p[2],p[1]),p[3],p[4])
-  #else:
-	  #p[0] = p[1]
-
-##Regla de la gramatica utilizada para reconocer un numero, una variable,
-##algun menos unario con una expresion o una expresion entre parentesis
-#def p_Factor(p):
-  #''' Factor : NUMBER
-  #| VAR_IDENTIFIER
-  #| LPAREN Operacion_binaria RPAREN
-  #| Inst_Funcion
-  #| MINUS Factor %prec UMINUS 
-  #| TRUE
-  #| FALSE '''
-  
-  #if len(p)==4:
-    #p[0] = p[2]
-  #elif len(p)==3:
-    #p[0] = Operacion(p[2],p[1])
-  #elif type(p[1]) != str and type(p[1])!= int:  
-    #p[0]= p[1]
-  #else:
-    #p[0] = Operacion(p[1])
 
     
 #Regla de la gramatica utilizada para reoconocer un rango
@@ -619,8 +603,8 @@ def p_Bloque_Control(p):
   
 #Regla de la gramatica utilizada para reconocer un if
 def p_Inst_If(p):
-  '''Inst_If : INST_IF Expresion INST_THEN Bloque_Control 
-  | INST_IF Expresion INST_THEN Bloque_Control INST_ELSE Bloque_Control'''
+  '''Inst_If : INST_IF Operacion_booleana INST_THEN Bloque_Control 
+  | INST_IF Operacion_booleana INST_THEN Bloque_Control INST_ELSE Bloque_Control'''
   
   if len(p)>=6:
 	  p[0] = ifc(p[2],p[4],p[6])
@@ -747,8 +731,8 @@ class whilec(indentable):
 
 #Regla de la gramatica que reconoce una instruccion while en rangeX
 def p_Inst_While(p):
-  '''Inst_While : INST_WHILE Expresion INST_DO Bloque_Inst 
-  | INST_WHILE Expresion INST_DO Inst '''
+  '''Inst_While : INST_WHILE Operacion_booleana INST_DO Bloque_Inst 
+  | INST_WHILE Operacion_booleana INST_DO Inst '''
   p[0] = whilec(p[2],p[4])
 
 #Regla del parser que especifica que debe hacerse en caso de un 

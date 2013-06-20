@@ -1,0 +1,16 @@
+// (a ** b) % c
+program
+  begin
+    declare a, b, c, res as int
+    read a;
+    read b;
+    read c;
+  
+    // Exponenciacion simple O(n)
+    res = 1;
+    for x in (0..b) do 
+    begin 
+      res = (res*a)%c
+    end;
+    write res
+end

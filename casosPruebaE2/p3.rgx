@@ -1,0 +1,28 @@
+program
+  begin
+    declare n, m as int
+    read n;
+    read m;
+    for i in (0..n) do 
+    begin 
+      for j in (0..m) do 
+      begin 
+        if (((i + j) %2) /= 0) then 
+        begin
+          write i * j, " "
+        end
+      end
+    end;
+    
+    for i in (0..n) do 
+    begin 
+      for j in (0..m) do 
+      begin 
+        case (i * j) of
+          ((i-j) .. (i+j)) -> write 1
+          (n .. m) -> write 0
+        end;
+        write "\n"
+      end
+    end   
+  end

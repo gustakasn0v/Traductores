@@ -1,0 +1,94 @@
+BLOQUE
+  READ
+    variable: a
+  SEPARADOR
+  READ
+    variable: b
+  SEPARADOR
+  READ
+    variable: c
+  SEPARADOR
+  ASIGNACION
+    var: res
+    val: CONSTANTE_ENT
+           valor: 1
+  SEPARADOR
+  BLOQUE
+    ASIGNACION
+      var: x
+      val: VARIABLE
+             nombre: a
+    SEPARADOR
+    ASIGNACION
+      var: n
+      val: VARIABLE
+             nombre: b
+    SEPARADOR
+    ITERACION_INDET
+      condicion: EXPRESION_BIN
+                   operador: mayor o igual que
+                   operando izq: VARIABLE
+                                   nombre: n
+                   operando der: CONSTANTE_ENT
+                                   valor: 0
+      instruccion: BLOQUE
+                     CONDICIONAL
+                       condicion: EXPRESION_BIN
+                                    operador: no igual a
+                                    operando izq: EXPRESION_BIN
+                                                    operador: modulo
+                                                    operando izq: VARIABLE
+                                                                    nombre: n
+                                                    operando der: CONSTANTE_ENT
+                                                                    valor: 2
+                                    operando der: CONSTANTE_ENT
+                                                    valor: 0
+                       verdadero: BLOQUE
+                                    BLOQUE
+                                      ASIGNACION
+                                        var: res
+                                        val: EXPRESION_BIN
+                                               operador: modulo
+                                               operando izq: EXPRESION_BIN
+                                                               operador: POR
+                                                               operando izq: VARIABLE
+                                                                               nombre: res
+                                                               operando der: VARIABLE
+                                                                               nombre: x
+                                               operando der: VARIABLE
+                                                               nombre: c
+                                      SEPARADOR
+                                      ASIGNACION
+                                        var: n
+                                        val: EXPRESION_BIN
+                                               operador: menos
+                                               operando izq: VARIABLE
+                                                               nombre: n
+                                               operando der: CONSTANTE_ENT
+                                                               valor: 1
+                                    SEPARADOR 
+                                    ASIGNACION
+                                      var: x
+                                      val: EXPRESION_BIN
+                                             operador: modulo
+                                             operando izq: EXPRESION_BIN
+                                                             operador: POR
+                                                             operando izq: VARIABLE
+                                                                             nombre: x
+                                                             operando der: VARIABLE
+                                                                             nombre: x
+                                             operando der: VARIABLE
+                                                             nombre: c
+                                    SEPARADOR
+																		ASIGNACION
+																			var: n
+																			val: EXPRESION_BIN
+																						 operador: division
+																						 operando izq: VARIABLE
+																														 nombre: n
+																						 operando der: CONSTANTE_ENT
+																													   valor: 2
+  SEPARADOR
+  WRITE
+    elemento: VARIABLE
+                 nombre: res
