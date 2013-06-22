@@ -21,5 +21,7 @@ program
       res = (res*a)%c
     end;
     read x;
+	x = rtoi(x..y);
+	x = 1+ true - false;
     write res
 end

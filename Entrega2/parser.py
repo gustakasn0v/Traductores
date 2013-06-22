@@ -140,10 +140,10 @@ class InstFuncion(indentable):
   def printArbol(self):
     print
     self.printIndent(),
-    print "Funcion: " + self.funcion
-    self.level+=1
-    self.printIndent(),
-    print "Expresion: ",
+    print "Funcion: " + self.funcion,
+    #self.printIndent(),
+    print "Expresion: "
+    self.var.level = self.level+1
     self.var.printArbol()
     
     
