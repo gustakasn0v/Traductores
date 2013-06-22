@@ -147,13 +147,16 @@ class InstFuncion(indentable):
   def __init__(self,func,var):
     self.funcion = func
     self.var = var
+    self.ok = self.var.ok and self.var.tipo =="range"
+    self.tipo = "None"
+    if self.ok:
+      self.tipo = "int"
   def printArbol(self):
     print
     self.printIndent(),
-    print "Funcion: " + self.funcion
-    
+    print "Funcion: " + self.funcion  #", Expresion:" + str(self.ok) + self.tipo
     self.printIndent(),
-    print "Expresion: ",
+    print "Expresion: " ,
     self.var.level=self.level+1
     self.var.printArbol()
     
@@ -309,11 +312,11 @@ precedence = (
     ('nonassoc', 'NOT'),
     ('nonassoc','LESS','LESSEQ' ,'GREAT','GREATEQ'),
     ('left','EQEQ' ,'NEQEQ'),
-    ('nonassoc','IN'),
+    ('left','IN'),
     ('left','INTERSECTION'),
     ('left', 'PLUS', 'MINUS'),
     ('left', 'TIMES', 'DIVIDE','MOD'),
-    ('nonassoc', 'RANGE'),
+    ('left', 'RANGE'),
     ('right','UMINUS'),
 ) 
 
@@ -326,13 +329,88 @@ class Operacion(indentable):
     self.left = left
     self.opr = opr
     self.right = right
-    
+    global listaTablas
+
     if right != "":
-      print "aja"
-    elif opr != "":
-      print "aja2"
+      if self.opr=="+" or self.opr == "*" or self.opr==">" or self.opr==">=" or self.opr=="<" or self.opr=="<=":
+	self.ok = self.left.ok and self.right.ok and self.left.tipo==self.right.tipo and (self.left.tipo=="int" or self.left.tipo=="range")
+	self.tipo = "None"
+	if self.ok:
+	  if self.opr==">" or self.opr==">=" or self.opr=="<" or self.opr=="<=":
+	    self.tipo = "bool"
+	  else:
+	    self.tipo = self.left.tipo
+	
+      elif self.opr=="-" or self.opr=="/" or self.opr=="%":
+	self.ok = self.left.ok and self.right.ok and self.left.tipo==self.right.tipo and (self.left.tipo=="int")
+	self.tipo = "None"
+	if self.ok:
+	  self.tipo = self.left.tipo
+	
+      elif self.opr=="and" or self.opr=="or":
+	self.ok = self.left.ok and self.right.ok and self.left.tipo==self.right.tipo and (self.left.tipo=="bool")
+	self.tipo = "None"
+	if self.ok:
+	  self.tipo = self.left.tipo
+	
+      elif self.opr=="==" or self.opr=="/=": 
+	self.ok = self.left.ok and self.right.ok and self.left.tipo==self.right.tipo
+	self.tipo = "None"
+	if self.ok:
+	  self.tipo = "bool"
+      
+      elif self.opr==">>":
+	self.ok = self.left.ok and self.right.ok and self.left.tipo=="int" and self.right.tipo=="range"
+	self.tipo = "None"
+	if self.ok:
+	  self.tipo = "bool"
+	
+      elif self.opr=="..":
+	self.ok = self.left.ok and self.right.ok and self.left.tipo==self.right.tipo and (self.left.tipo=="int")
+	self.tipo = "None"
+	if self.ok:
+	  self.tipo = "range"
+	
+      elif self.opr=="<>":
+	self.ok = self.left.ok and self.right.ok and self.left.tipo==self.right.tipo and (self.left.tipo=="range")
+	self.tipo = "None"
+	if self.ok:
+	  self.tipo = "range"
+	
+	
+    elif self.opr != "":
+      if self.opr=="-":
+	self.ok = self.left.ok and self.left.tipo == "int"
+	self.tipo = "int"
+      else:
+	self.ok = self.left.ok and self.left.tipo == "bool"
+	self.tipo = "bool"
+      
     else:
-      print "aja3"
+      if type(self.left)==str and self.left!="true" and self.left!="false":
+	no = False
+	var = SymTable.variable(self.left,'bool')
+	for i in range(1,len(listaTablas)+1):
+	  if listaTablas[-i].isMember(var,0)==1:
+	    tmp = listaTablas[-i].find(self.left)
+	    self.tipo = tmp.type
+	    no = True
+	    break
+	    
+	if not no:
+	  self.ok = False
+	  self.tipo = "None"
+	else:
+	  self.ok = True
+      elif type(self.left)==int:
+	self.ok = True
+	self.tipo = "int"
+      elif self.left == "true" or self.left == "false":
+	self.ok = True
+	self.tipo = "bool"
+      else:
+	self.ok = self.left.var.ok and (self.left.var.tipo == "range")
+	self.tipo = "int"
       
        
     
@@ -342,7 +420,7 @@ class Operacion(indentable):
       print ""
       self.level = self.level+ 1
       self.printIndent(),
-      print "Operacion binaria:"
+      print "Operacion binaria:" 
       self.level = self.level + 1
       self.printIndent(),
       print "Operador: " + self.opr
@@ -359,9 +437,9 @@ class Operacion(indentable):
       self.level+=1
       print ""
       self.printIndent(),
-      print "Operacion unaria:\n" 
+      print "Operacion unaria:"+ "\n" 
       self.printIndent(),
-      print "Operador: " + self.opr + "\n" 
+      print "Operador: " +  "\n" 
       self.printIndent(),
       print "Operando: ",
       self.left.level = self.level+1
@@ -369,11 +447,11 @@ class Operacion(indentable):
     #Revisa si la instacia no es una operacion sino una variable o 
     #numero
     else:
-      if type(self.left)==str:
-	print "Variable: ",
+      if type(self.left)==str and self.left!="true" and self.left!="false":
+	print "Variable: " ,
 	print self.left
       elif type(self.left)==int or self.left == "true" or self.left == "false":
-	print "Constante: ",
+	print "Constante: " ,
 	print self.left
       else:
 	self.left.level = self.level+1
@@ -407,19 +485,19 @@ def p_Operacion_binaria(p):
   | Operacion_binaria LESS Operacion_binaria
   | Operacion_binaria LESSEQ Operacion_binaria
   | Operacion_binaria IN Operacion_binaria
+  | Operacion_binaria RANGE Operacion_binaria
+  | Operacion_binaria INTERSECTION Operacion_binaria
   | NOT Operacion_binaria
   | NUMBER
   | VAR_IDENTIFIER
   | LPAREN Operacion_binaria RPAREN
-  | RTOI LPAREN Expresion RPAREN 
-  | LENGTH LPAREN Expresion RPAREN
-  | TOP LPAREN Expresion RPAREN
-  | BOTTOM LPAREN Expresion RPAREN 
+  | RTOI LPAREN Operacion_binaria RPAREN 
+  | LENGTH LPAREN Operacion_binaria RPAREN
+  | TOP LPAREN Operacion_binaria RPAREN
+  | BOTTOM LPAREN Operacion_binaria RPAREN 
   | MINUS Operacion_binaria %prec UMINUS 
   | TRUE
   | FALSE
-  | Operacion_binaria RANGE Operacion_binaria
-  | Operacion_binaria INTERSECTION Operacion_binaria
   '''
   if len(p)>=5:
     p[0] = Operacion(InstFuncion(p[1],p[3]))

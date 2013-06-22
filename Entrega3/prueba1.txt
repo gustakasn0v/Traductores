@@ -3,7 +3,9 @@ program
   begin  
     declare 
        a, b, c, res as int;
-       c, b, e, res1 as int
+       c, b, e, res1 as int;
+	   p as range
+
     read q;
     read b;
     read c;
@@ -21,7 +23,9 @@ program
       res = (res*a)%c
     end;
     read x;
-	x = rtoi(x..y);
-	x = 1+ true - false;
+	x = rtoi(rtoi(p)..rtoi(p));
+	x = 1+ (true == false);
+	y = y + 10;
+	y = p + 50;
     write res
 end
