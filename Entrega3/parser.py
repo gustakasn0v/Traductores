@@ -12,6 +12,7 @@ import SymTable
 from lexer import tokens, find_column
 
 listaTablas = []
+error = 0
 
 #Esta es una clase que sera utilizada para herencia posteriormente
 #Para facilitar la indentacion y asi hacer mas visible la salida
@@ -28,7 +29,16 @@ class verificable:
   def verify(self):
     pass
 
-    
+
+def fueDeclarada(id):
+  global listaTablas
+  for i in range(1,len(listaTablas)+1):
+    if listaTablas[-i].isMember(id,0)==1:
+      tmp = listaTablas[-i].find(id)
+      return tmp
+  return None
+
+
 #Se define una regla de la gramatica que identifica el inicio de un 
 #programa escrito en rangeX y su bloque de instrucciones respectivo
 def p_program(p):
@@ -127,6 +137,7 @@ def p_Lista_Inst(p):
 #Una instruccion de lectura o salida
 #Una instruccion de iteracion
 #Una instruccion que sea una funcion
+  
 def p_Inst(p):
   '''Inst : Inst_Asignacion
   | Inst_Lectura 
@@ -189,7 +200,12 @@ class bloqueDeclaracion(indentable):
     self.listaDeclaraciones = listaDeclaraciones
     self.tablaSimbolos = SymTable.SymTable()
     for i in self.listaDeclaraciones.listaPorTipos:
-      self.tablaSimbolos.merge(i.tablaSimbolos)
+      retorno = self.tablaSimbolos.merge(i.tablaSimbolos)
+      global error
+      if retorno is not None:
+	print 'Error: Linea '+str(retorno[0])+', columna '+str(retorno[1])+': Variable "'+retorno[2]+'" declarada dos veces'
+	error = 1
+	
     
   def printArbol(self):
     #self.printIndent(),
@@ -219,7 +235,12 @@ class unaDeclaracion(indentable):
     self.tipo = tipo
     self.tablaSimbolos = SymTable.SymTable()
     for i in self.listaVariables.lista: 
-      self.tablaSimbolos.insert(SymTable.variable(i,self.tipo))
+      retorno = self.tablaSimbolos.insert(i)
+      global error
+      if retorno == 1:
+	error = retorno
+	print 'Error: Linea '+str(i.lineno)+', columna '+str(i.colno)+': Variable "'+i.id+'" declarada dos veces'
+
     
   def printArbol(self):
    self.printIndent()
@@ -235,7 +256,7 @@ class listaVariables(indentable):
     
   def printArbol(self):
     for i in self.lista:
-      print i +",",
+      print i.id +",",
 
 #Regla de la gramatica utilizada para reconocer una declaracion de
 #variables asi como sus tipos
@@ -264,18 +285,21 @@ def p_Lista_DeclareTipos(p):
 def p_Lista_Declare(p):
   '''Lista_Declare : Lista_Variables INST_AS Tipo'''
   p[0] = unaDeclaracion(p[1],p[3])
-    
-
+  for i in p[1].lista:
+    i.setType(p[3])
+  
 #Regla de la gramatica que representa una lista de variables
 def p_Lista_Variables(p):
   '''Lista_Variables : VAR_IDENTIFIER
   | VAR_IDENTIFIER COMMA Lista_Variables '''
-  
-  if(len(p)>=3):
-    p[3].lista.insert(0,p[1])
+  insercion = SymTable.variable(p[1],'')
+  insercion.setLine(p.lineno(1))
+  insercion.setColumn(find_column(p.stack[1].lexer.lexdata,p.stack[1]))
+  if(len(p)>=3):  
+    p[3].lista.insert(0,insercion)
     p[0] = listaVariables( p[3].lista)
   else:
-    p[0] = listaVariables([p[1]])
+    p[0] = listaVariables([insercion])
   
 #Regla de la grmaatica utilizada que reconoce cualquiera de los 
 #3 tipos de variables disponibles en rangeX
@@ -302,6 +326,22 @@ class Asignacion(indentable):
 def p_Inst_Asignacion(p):
   '''Inst_Asignacion : VAR_IDENTIFIER EQUAL Expresion'''
   p[0] = Asignacion(p[1],p[3])
+  # Verifico que la variable a asignar haya sido declarada,
+  # y si su tipo coincide con el tipo de la expresion
+  existente = fueDeclarada(p[1])
+  col = find_column(p.stack[1].lexer.lexdata,p.stack[1])
+  if existente is None:
+    print '''Error: Linea %d, columna %d: Variable "%s" no declarada'''  % (p.lineno(1),col,p[1])
+  else:
+    if existente.blocked == 1:
+      print '''Error: Linea %d, columna %d: Variable "%s" es el indice de un bloque FOR, y no puede modificarse'''% (p.lineno(1),col,p[1])
+    elif existente.type != p[3].tipo:
+      print 'Error: Linea '+str(p.lineno(1))+', columna ' + str(col) + ':',
+      print 'A la variable "'+p[1]+'"',
+      print 'de tipo "' + existente.type  + '" no se le puede asignar',
+      print 'una expresion de tipo "' + p[3].tipo + '"'
+      
+  
 
   
 #Reglas de precedencia de los operadores permitidos por rangeX
@@ -389,9 +429,9 @@ class Operacion(indentable):
     else:
       if type(self.left)==str and self.left!="true" and self.left!="false":
 	no = False
-	var = SymTable.variable(self.left,'bool')
+	#var = SymTable.variable(self.left,'bool')
 	for i in range(1,len(listaTablas)+1):
-	  if listaTablas[-i].isMember(var,0)==1:
+	  if listaTablas[-i].isMember(self.left,0)==1:
 	    tmp = listaTablas[-i].find(self.left)
 	    self.tipo = tmp.type
 	    no = True
@@ -400,6 +440,9 @@ class Operacion(indentable):
 	if not no:
 	  self.ok = False
 	  self.tipo = "None"
+	  #print "Variable " + self.left + " no declarada"
+	  #global error
+	  #error = 1
 	else:
 	  self.ok = True
       elif type(self.left)==int:
@@ -510,6 +553,14 @@ def p_Operacion_binaria(p):
     p[0] = Operacion(p[2],p[1])
   else:
     p[0] = Operacion(p[1])
+    # Verificacion de si la variable fue declarada o no
+    if p[1] != 'true' and p[1] != 'false' and type(p[1]) != int:
+      retorno = fueDeclarada(p[1])
+      if retorno is None:
+	col = find_column(p.stack[1].lexer.lexdata,p.stack[1])
+	print 'Error: Linea '+str(p.lineno(1))+', columna '+str(col)+': Variable "'+p[1]+'" no declarada'
+	global error
+	error = 1
 
 #def p_Expresion(p):
   #'''Expresion : Operacion_binaria
@@ -635,13 +686,25 @@ def p_Inst_Lectura(p):
   p[0] = Lectura(p[2])
   global listaTablas
   check = 0
-  for i in range(len(listaTablas),0,-1):
-    tabla = listaTablas[i-1]
-    if (tabla.isMember(SymTable.variable(p[0].variable,'int'),0)):
-      check = 1
-      break
-  if not check:
-    print 'Variable del read ' + p[2] + ' no declarada'
+  retorno = fueDeclarada(p[2])
+  if retorno is None:
+    col = find_column(p.stack[2].lexer.lexdata,p.stack[2])
+    print 'Error: Linea '+str(p.lineno(2))+', columna '+ str(col)+': Variable "'+p[2]+'" no declarada'
+    global error
+    error = 1
+  elif retorno.blocked:
+    col = find_column(p.stack[1].lexer.lexdata,p.stack[1])
+    print 'Error: Linea '+str(p.lineno(2))+', columna '+ str(col)+': Variable "'+p[2]+'"',
+    print 'es el indice de un bloque FOR, y no puede modificarse'
+  #for i in range(len(listaTablas),0,-1):
+    #tabla = listaTablas[i-1]
+    #if (tabla.isMember(p[0].variable,0)):
+      #check = 1
+      #break
+  #if not check:
+    #print 'Error: Linea '+str(p.lineno(2))+': Variable "'+p[2]+'" no declarada'
+    #global error
+    #error = 1
   
   
 #Clase utilizada para representar una instruccion de lectura
@@ -938,7 +1001,9 @@ def main():
   string = str(open(str(sys.argv[1]),'r').read())
   result = parser.parse(string)
   try:
-    result.printArbol()
+    global error
+    if not error:
+      result.printArbol()
   except AttributeError:
     return
 if __name__ == '__main__':

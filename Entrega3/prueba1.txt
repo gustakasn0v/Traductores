@@ -2,27 +2,32 @@
 program
   begin  
     declare 
-       a, b, c, res as int;
-       c, b, e, res1 as int;
-	   p as range
+       a, b, c, c, res as int;
+       h, b, e, res1 as int;
+	p as range;
+	y as int
 
     read q;
     read b;
     read c;
+    caass = as1+a;
+    if a+as1 == 0 then
     begin
       declare
 	a1, a2 as int
       read a1
     end;
-    read a1;
+    
+    //read a1;
     // Exponenciacion simple O(n)
     res = 1;
     for x in (0..b) do 
     begin
       read x;
+      x = 1;
       res = (res*a)%c
     end;
-    read x;
+    //read x;
 	x = rtoi(rtoi(p)..rtoi(p));
 	x = 1+ (true == false);
 	y = y + 10;
