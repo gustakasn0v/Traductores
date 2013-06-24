@@ -831,7 +831,6 @@ def p_Lista_Aux(p):
   | STRING 
   | Expresion COMMA Lista_Aux
   | STRING COMMA Lista_Aux '''
-  print p[1]
   if(len(p)>=3):
     if isinstance(p[1],Operacion):
       p[3].insert(0,Aux("Variable",p[1]))
