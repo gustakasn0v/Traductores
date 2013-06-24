@@ -226,6 +226,7 @@ class bloqueDeclaracion(indentable):
 	print 'Error: Linea '+str(retorno[0])+', columna '+str(retorno[1])+': Variable "'+retorno[2]+'" declarada dos veces'
 	error = 1
 	
+	
     
   def printArbol(self):
     #self.printIndent(),
@@ -251,15 +252,19 @@ class declareTipos(indentable):
 #declaradas
 class unaDeclaracion(indentable):
   def __init__(self,listaVariables,tipo):
+    global error
     self.listaVariables = listaVariables
     self.tipo = tipo
     self.tablaSimbolos = SymTable.SymTable()
     for i in self.listaVariables.lista: 
-      retorno = self.tablaSimbolos.insert(i)
-      global error
-      if retorno == 1:
-	error = retorno
+      if fueDeclarada(i.id):
 	print 'Error: Linea '+str(i.lineno)+', columna '+str(i.colno)+': Variable "'+i.id+'" declarada dos veces'
+	error = 1
+      else:
+	retorno = self.tablaSimbolos.insert(i)
+	if retorno == 1:
+	  error = retorno
+	  print 'Error: Linea '+str(i.lineno)+', columna '+str(i.colno)+': Variable "'+i.id+'" declarada dos veces'
 
     
   def printArbol(self):
