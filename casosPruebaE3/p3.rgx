@@ -1,0 +1,26 @@
+//Caso 3: Errores no-declaradas, mismo-bloque
+program
+begin
+  declare x1, x2 as int
+
+  x1 = 9;
+  x2 = 10+x1;
+
+  begin
+    declare x1, x1 as range
+
+    x1 = 1..10;
+    write x1
+  end;
+
+  writeln x1+x3;
+  if x1 > 7 then
+    begin
+      declare x3 as int
+
+      x3 = x1+x2;
+      x2 = x1+x4
+    end
+  else
+    write "Hola"
+end

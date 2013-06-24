@@ -1,0 +1,78 @@
+//Caso 1: Muchos bloques.
+program
+begin
+  declare x1, x2, x3 as int
+
+  x1 = 4;
+  x2 = 5;
+  x3 = 6;
+
+  begin
+    declare x1, y1, y2 as range
+
+    x1 = 7..37;
+    y1 = 1..5;
+    y2 = 2..7;
+
+    if 8 >> y2 then
+      write "Hola, como estas?"
+    else
+      writeln "Hola, soy x1:", x1;
+    
+    begin
+      declare
+        x2, x3 as range;
+        y2, y3 as int
+
+      y2 = 42;
+
+      begin
+        declare
+          y3 as bool;
+          y2, y4 as int
+
+        y2 = 7;
+        y4 = y2 + 3;
+        y3 = false;
+
+        if y3 then
+          writeln "Hola"
+        else
+          begin
+            declare
+              y3 as int;
+              y4 as range
+            
+            y3 = 8;
+            begin
+              declare y3 as range
+              y3 = 1..5;
+              write y3
+            end;
+            writeln y3
+          end;
+
+        x2 = 1..10;
+        x3 = x2;
+        writeln "Soy y2:", y2
+      end;
+
+      writeln "Soy tambien y2:", y2
+    end;
+
+    writeln "Soy tambien y2:", y2
+  end;
+
+  begin
+    declare y1, y2, y3 as int
+
+    y1 = 1;
+    y2 = 2;
+    y3 = 3;
+
+    write "Hola somos numeros: ", y1, y2, y3, x1, x2, x3
+  end;
+
+  x1 = x2+x3+x1;
+  writeln "Chao: ", x1
+end

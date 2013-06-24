@@ -1,0 +1,44 @@
+//Caso 2: Bloques en if y for
+program
+begin
+  declare x1, x2, x3 as int
+  
+  read x1;
+
+  for x1 in 1..10 do
+  begin
+    declare x2 as range
+
+    x2 = 1..20;
+    read x3;
+    if x3 >> x2 then
+      write "Hola"
+    else
+      begin
+        declare x2 as int
+
+        read x2;
+        writeln x2
+      end
+  end;
+
+  if x1 >= 20 then
+    begin
+      declare x1 as int
+
+      x1 = 20;
+      writeln x1;
+      begin
+        declare x1 as range
+
+        x1 = 50..70;
+        read x2;
+        if x2 >> x1 then
+          writeln "Hola"
+        else
+          writeln "Chao, te dejo esto: ", length(x1)
+      end
+    end
+  else
+    write "Chao"
+end

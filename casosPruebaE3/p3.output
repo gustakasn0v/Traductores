@@ -1,0 +1,3 @@
+Error en línea 10, columna 17: la variable "x1" ya ha sido declarada.
+Error en línea 16, columna 14: no puede usar la variable "x3" pues no ha sido declarada.
+Error en línea 22, columna 15: no puede usar la variable "x4" pues no ha sido declarada.

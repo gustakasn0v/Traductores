@@ -1,0 +1,110 @@
+BLOQUE
+  TABLA DE SIMBOLOS
+  variable x1 | tipo: int
+  variable x2 | tipo: int
+  variable x3 | tipo: int
+
+  READ
+    variable: x1
+  SEPARADOR
+  ITERACION_DET
+    variable: x1
+    rango: EXPRESION_BIN
+            operador: construccion
+            operando_izq: CONSTANTE_ENT
+                            valor: 1
+            operando_der: CONSTANTE_ENT
+                            valor: 10
+    instruccion: BLOQUE
+                  TABLA DE SIMBOLOS
+                  variable: x2 | tipo: range
+
+                  ASIGNACION
+                  variable: x2
+                  valor: EXPRESION_BIN
+                          operador: construccion
+                          operando_izq: CONSTANTE_ENT
+                                          valor: 1
+                          operando_der: CONSTANTE_ENT
+                                          valor: 20
+                  SEPARADOR
+                  READ
+                    variable: x3
+                  SEPARADOR
+                  CONDICIONAL
+                    condicion: EXPRESION_BIN
+                                operador: pertenece
+                                operando_izq: VARIABLE
+                                                nombre: x3
+                                operando_der: VARIABLE
+                                                nombre: x2
+                    verdadero: WRITE
+                                elemento: CADENA
+                                            valor: "Hola"
+                    falso: BLOQUE
+                            TABLA DE SIMBOLOS
+                            variable: x2 | tipo: int
+
+                            READ
+                              variable: x2
+                            SEPARADOR
+                            WRITELN
+                              elemento: VARIABLE
+                                          nombre: x2
+    SEPARADOR
+    CONDICIONAL
+      condicion: EXPRESION_BIN
+                  operador: mayor igual
+                  operando_izq: VARIABLE
+                                  nombre: x1
+                  operando_der: CONSTANTE_ENT
+                                  valor: 20
+      verdadero: BLOQUE
+                  TABLA DE SIMBOLOS
+                  variable: x1 | tipo: int
+
+                  ASIGNACION
+                  variable: x1
+                  valor: CONSTANTE_ENT
+                          valor: 20
+                  SEPARADOR
+                  WRITELN
+                    elemento: VARIABLE
+                                nombre: x1
+                  SEPARADOR
+                  BLOQUE
+                    TABLA DE SIMBOLOS
+                    variable: x1 | tipo: range
+
+                    ASIGNACION
+                    variable: x1
+                    valor: EXPRESION_BIN
+                            operador: construccion
+                            operando_izq: CONSTANTE_ENT
+                                            valor: 50
+                            operando_der: CONSTANTE_ENT
+                                            valor: 70
+                    SEPARADOR
+                    READ
+                      variable: x2
+                    SEPARADOR
+                    CONDICIONAL
+                      condicion: EXPRESION_BIN
+                                  operador: pertenece
+                                  operando_izq: VARIABLE
+                                                  nombre: x2
+                                  operando_der: VARIABLE
+                                                  nombre: x1
+                      verdadero: WRITELN
+                                  elemento: CADENA
+                                              valor: "Hola"
+                      falso: WRITELN
+                              elemento: CADENA
+                                          valor: "Chao, te dejo esto: "
+                              elemento: FUNCION_EMB
+                                          funcion: length
+                                          argumento: VARIABLE
+                                                      nombre: x1
+      falso: WRITE
+              elemento: CADENA
+                          valor: "Chao"

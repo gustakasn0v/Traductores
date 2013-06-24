@@ -1,0 +1,41 @@
+//Caso 4: Errores tipo, iteracion
+program
+begin
+  declare a,b,c as int
+
+  a = 5;
+  b = 1;
+  c = 1;
+
+  for i in 1..100 do
+  begin
+    declare x, y, z as int
+
+    x = a+7;
+    begin
+      declare i as range
+
+      i = 1..10;
+      if 3 >> i then
+        write "Hola"
+      else
+        writeln "Chao: ", i
+    end;
+
+    i = 1+b*2
+  end;
+
+  begin
+    declare a, b as bool
+
+    a = true;
+    b = false;
+
+    if a and b then
+      c = 1+b-a
+    else
+      c = 2*(b or a)
+  end;
+
+  writeln "Chao, te dejo esto: ", rtoi(a), length(b)
+end
