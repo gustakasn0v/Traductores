@@ -80,20 +80,13 @@ class SymTable():
     return error
 	
   def __str__(self):
-    retorno = self.indent + '  ' + 'Tabla de simbolos:\n'
+    self.indent = self.indent + '  '
+    retorno = self.indent + 'Tabla de simbolos:\n'
     
     for i in self.lista:
-      i.indent = self.indent + '    '
+      i.indent = self.indent
       retorno += str(i)
       retorno += '\n'
-    retorno += self.indent + '    '+'---\n'
+    retorno = retorno + self.indent +'---\n'
     return retorno
-
-#lista = SymTable()
-#lista.insert(variable('xx1','boolean'))
-#print lista.isMember(variable('xx1','boolean'),0)
-#lista.delete(variable('xx1','boolean'))
-#print lista.isMember(variable('xx1','boolean'),0)
-#lista.insert(variable('xx1','boolean'))
-#print lista.find('xx12')
 

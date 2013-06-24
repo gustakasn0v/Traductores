@@ -22,8 +22,8 @@ class indentable:
   def printIndent(self):
     retorno = ''
     for i in range(self.level):
-      print('  '),
-      retorno = retorno + str('  ')
+      print(' '),
+      retorno = retorno + '  '
     return str(retorno)
   
   
@@ -331,7 +331,7 @@ class Asignacion(indentable):
     self.expresion = expresion
   
   def printArbol(self):
-    self.printIndent()
+    self.printIndent(),
     print "A la variable: " + str(self.variable) + " se le asigna ",
     self.expresion.level = self.level
     self.expresion.printArbol()
@@ -868,8 +868,7 @@ class ifc(indentable):
     if self.bloque2!=None:
       self.printIndent(),
       print "Bloque del else"
-      self.printIndent(),
-      self.bloque2.level+=1
+      self.bloque2.level = self.level + 1
       self.bloque2.printArbol()
 
 #Clase utilizada para representar un bloque de control de la
