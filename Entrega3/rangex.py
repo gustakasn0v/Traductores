@@ -263,9 +263,9 @@ class unaDeclaracion(indentable):
 	if str(anterior.type) == str(tipo): 
 	  print 'Error: Linea '+str(i.lineno)+', columna '+str(i.colno)+': Variable "'+i.id+'" declarada dos veces'
 	  error = 1
-	elif anterior.blocked:
-	  print 'Error: Linea '+str(i.lineno)+', columna '+str(i.colno)+': Variable "'+i.id+'" es del FOR, y no puede ser redeclarada'
-	  error = 1
+	#elif anterior.blocked:
+	  #print 'Error: Linea '+str(i.lineno)+', columna '+str(i.colno)+': Variable "'+i.id+'" es del FOR, y no puede ser redeclarada'
+	  #error = 1
       else:
 	retorno = self.tablaSimbolos.insert(i)
 	if retorno == 1:
