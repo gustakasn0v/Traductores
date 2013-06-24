@@ -68,8 +68,9 @@ class bloque(indentable):
   def printArbol(self):
     indentacion=self.printIndent()
     print self.nombre
-    self.tabla.indent = indentacion
-    print str(self.tabla)
+    if self.tabla is not None:
+      self.tabla.indent = indentacion
+      print str(self.tabla)
     for i in self.contenido:
       i.level = self.level+1
       i.printArbol()
@@ -88,11 +89,11 @@ def p_Bloque_Inst(p):
     if p[1]=='begin':
       if p[3]=='end':
 	p[0] = bloque('BLOQUE',[p[2]])
+	p[0].tabla = None
       else:
 	p[0] = bloque('BLOQUE',[p[2],p[3]])
 	
 	try:
-	  pass
 	  p[0].tabla = listaTablas.pop()
 	except IndexError:
 	  pass
@@ -257,9 +258,14 @@ class unaDeclaracion(indentable):
     self.tipo = tipo
     self.tablaSimbolos = SymTable.SymTable()
     for i in self.listaVariables.lista: 
-      if fueDeclarada(i.id):
-	print 'Error: Linea '+str(i.lineno)+', columna '+str(i.colno)+': Variable "'+i.id+'" declarada dos veces'
-	error = 1
+      anterior = fueDeclarada(i.id)
+      if anterior is not None:
+	if str(anterior.type) == str(tipo): 
+	  print 'Error: Linea '+str(i.lineno)+', columna '+str(i.colno)+': Variable "'+i.id+'" declarada dos veces'
+	  error = 1
+	elif anterior.blocked:
+	  print 'Error: Linea '+str(i.lineno)+', columna '+str(i.colno)+': Variable "'+i.id+'" es del FOR, y no puede ser redeclarada'
+	  error = 1
       else:
 	retorno = self.tablaSimbolos.insert(i)
 	if retorno == 1:
