@@ -641,7 +641,6 @@ def p_Operacion_binaria(p):
 class Lectura(indentable):
   def __init__(self,var):
     self.variable = var
-    #self.listaVariables.append(var)
   
   def printArbol(self):
     self.printIndent(),
