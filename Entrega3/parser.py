@@ -506,8 +506,7 @@ class Operacion(indentable):
     self.colno = columna
     
   def getPosition(self):
-    if self.opr == '' and self.right == '' and not isinstance(self.left,Operacion) and not isinstance(self.left,InstFuncion):      
-      print self.left
+    if self.opr == '' and self.right == '' and not isinstance(self.left,Operacion) and not isinstance(self.left,InstFuncion):
       return (self.lineno,self.colno+1)
     else:
       return self.left.getPosition()
