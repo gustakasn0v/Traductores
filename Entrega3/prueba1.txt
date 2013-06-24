@@ -11,7 +11,7 @@ program
     read q;
     read b;
     read c;
-    caass = as1+a;
+    caass = a+as1;
     if a+as1 == 0 then
     begin
       declare
@@ -29,7 +29,7 @@ program
       res = (res*a)%c
     end;
     //read x;
-	x = 1 + bottom(true+1);
+	x = 1 + bottom(true);
 	a = bla + ble+ rtoi(1..2);
 	x = 1+ (true == false);
 	y = y + 10;
@@ -42,5 +42,4 @@ program
 	pal = 1 >> true;
 	p = 1..2<>1..true;
     write res
-	
 end

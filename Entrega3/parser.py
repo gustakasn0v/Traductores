@@ -162,8 +162,9 @@ class InstFuncion(indentable):
     self.tipo = "None"
     if self.ok:
       self.tipo = "int"
-    else:
-      print "Error: Linea %d, Columna %d: La funcion \"%s\" recibe una expresion de tipo \"range\" y se le esta pasando una expresion de tipo \"%s\"" % (1,1,self.funcion,self.var.tipo)
+    elif self.var.tipo != 'None':
+      pos = self.getPosition()
+      print "Error: Linea %d, Columna %d: La funcion \"%s\" recibe una expresion de tipo \"range\" y se le esta pasando una expresion de tipo \"%s\"" % (pos[0],pos[1],self.funcion,self.var.tipo)
   def printArbol(self):
     print
     self.printIndent(),
@@ -172,6 +173,9 @@ class InstFuncion(indentable):
     print "Expresion: " ,
     self.var.level=self.level+1
     self.var.printArbol()
+    
+  def getPosition(self):
+    return self.var.getPosition()
     
     
 #Regla del parser que se utiliza para la representacion de una funcion
@@ -296,7 +300,7 @@ def p_Lista_Variables(p):
   | VAR_IDENTIFIER COMMA Lista_Variables '''
   insercion = SymTable.variable(p[1],'')
   insercion.setLine(p.lineno(1))
-  insercion.setColumn(find_column(p.stack[1].lexer.lexdata,p.stack[1]))
+  insercion.setColumn(find_column(p.slice[1].lexer.lexdata,p.slice[1]))
   if(len(p)>=3):  
     p[3].lista.insert(0,insercion)
     p[0] = listaVariables( p[3].lista)
@@ -331,13 +335,13 @@ def p_Inst_Asignacion(p):
   # Verifico que la variable a asignar haya sido declarada,
   # y si su tipo coincide con el tipo de la expresion
   existente = fueDeclarada(p[1])
-  col = find_column(p.stack[1].lexer.lexdata,p.stack[1])
+  col = find_column(p.slice[1].lexer.lexdata,p.slice[1])
   if existente is None:
     print '''Error: Linea %d, columna %d: Variable "%s" no declarada'''  % (p.lineno(1),col,p[1])
   else:
     if existente.blocked == 1:
       print '''Error: Linea %d, columna %d: Variable "%s" es el indice de un bloque FOR, y no puede modificarse'''% (p.lineno(1),col,p[1])
-    elif existente.type != p[3].tipo:
+    elif existente.type != p[3].tipo and p[3].tipo != 'None':
       print 'Error: Linea '+str(p.lineno(1))+', columna ' + str(col) + ':',
       print 'A la variable "'+p[1]+'"',
       print 'de tipo "' + existente.type  + '" no se le puede asignar',
@@ -382,73 +386,83 @@ class Operacion(indentable):
 	    self.tipo = "bool"
 	  else:
 	    self.tipo = self.left.tipo
-	else:
+	elif self.left.tipo != 'None' and self.right.tipo != 'None':
 	  if self.opr==">" or self.opr==">=" or self.opr=="<" or self.opr=="<=":
-	    print "Error: Linea %d, Columna %d: El operador %s compara dos expresiones de tipo \"int\" o de tipo rango y se le estan pasando las expresiones de tipo \"%s\" y tipo \"%s\" respectivamente." % (1,1,self.opr,self.left.tipo,self.right.tipo)
+	    pos = self.right.getPosition()
+	    print "Error: Linea %d, Columna %d: El operador %s compara dos expresiones de tipo \"int\" o de tipo rango y se le estan pasando las expresiones de tipo \"%s\" y tipo \"%s\" respectivamente." % (pos[0],pos[1],self.opr,self.left.tipo,self.right.tipo)
 	  else:
+	    pos = self.right.getPosition()
 	    if self.opr=="*":
-	      print "Error: Linea %d, Columna %d: El operador * opera sobre dos expresiones de tipo \"int\" o una de tipo \"range\" y la otrade tipo \"int\" y se le estan pasando las expresiones de tipo \"%s\" y tipo \"%s\" respectivamente." % (1,1,self.left.tipo,self.right.tipo)
+	      print "Error: Linea %d, Columna %d: El operador * opera sobre dos expresiones de tipo \"int\" o una de tipo \"range\" y la otrade tipo \"int\" y se le estan pasando las expresiones de tipo \"%s\" y tipo \"%s\" respectivamente." % (pos[0],pos[1],self.left.tipo,self.right.tipo)
 	    else:
-	      print "Error: Linea %d, Columna %d: El operador + opera sobre dos expresiones de tipo \"int\" o dos de tipo \"range\" y se le estan pasando las expresiones de tipo \"%s\" y tipo \"%s\" respectivamente." % (1,1,self.left.tipo,self.right.tipo)
+	      print "Error: Linea %d, Columna %d: El operador + opera sobre dos expresiones de tipo \"int\" o dos de tipo \"range\" y se le estan pasando las expresiones de tipo \"%s\" y tipo \"%s\" respectivamente." % (pos[0],pos[1],self.left.tipo,self.right.tipo)
       elif self.opr=="-" or self.opr=="/" or self.opr=="%":
 	self.ok = self.left.ok and self.right.ok and self.left.tipo==self.right.tipo and (self.left.tipo=="int")
 	self.tipo = "None"
 	if self.ok:
 	  self.tipo = self.left.tipo
-	else:
-	  print "Error: Linea %d, Columna %d: El operador %s opera sobre dos expresiones de tipo \"int\" y se le estan pasando las expresiones de tipo \"%s\" y tipo \"%s\" respectivamente." % (1,1,self.opr,self.left.tipo,self.right.tipo)
+	elif self.left.tipo != 'None' and self.right.tipo != 'None':
+	  pos = self.right.getPosition()
+	  print "Error: Linea %d, Columna %d: El operador %s opera sobre dos expresiones de tipo \"int\" y se le estan pasando las expresiones de tipo \"%s\" y tipo \"%s\" respectivamente." % (pos[0],pos[1],self.opr,self.left.tipo,self.right.tipo)
       elif self.opr=="and" or self.opr=="or":
 	self.ok = self.left.ok and self.right.ok and self.left.tipo==self.right.tipo and (self.left.tipo=="bool")
 	self.tipo = "None"
 	if self.ok:
 	  self.tipo = self.left.tipo
-	else:
-	  print "Error: Linea %d, Columna %d: El operador %s opera sobre dos expresiones de tipo \"bool\" y se le estan pasando las expresiones de tipo \"%s\" y tipo \"%s\" respectivamente." % (1,1,self.opr,self.left.tipo,self.right.tipo)
+	elif self.left.tipo != 'None' and self.right.tipo != 'None':
+	  pos = self.right.getPosition()
+	  print "Error: Linea %d, Columna %d: El operador %s opera sobre dos expresiones de tipo \"bool\" y se le estan pasando las expresiones de tipo \"%s\" y tipo \"%s\" respectivamente." % (pos[0],pos[1],self.opr,self.left.tipo,self.right.tipo)
 	  
       elif self.opr=="==" or self.opr=="/=": 
 	self.ok = self.left.ok and self.right.ok and self.left.tipo==self.right.tipo
 	self.tipo = "None"
 	if self.ok:
 	  self.tipo = "bool"
-	else:
-	  print "Error: Linea %d, Columna %d: El operador %s opera sobre dos expresiones de tipo \"bool\" y se le estan pasando las expresiones de tipo \"%s\" y tipo \"%s\" respectivamente." % (1,1,self.opr,self.left.tipo,self.right.tipo)
+	elif self.left.tipo != 'None' and self.right.tipo != 'None':
+	  pos = self.right.getPosition()
+	  print "Error: Linea %d, Columna %d: El operador %s opera sobre dos expresiones de tipo \"bool\" y se le estan pasando las expresiones de tipo \"%s\" y tipo \"%s\" respectivamente." % (pos[0],pos[1],self.opr,self.left.tipo,self.right.tipo)
       
       elif self.opr==">>":
 	self.ok = self.left.ok and self.right.ok and self.left.tipo=="int" and self.right.tipo=="range"
 	self.tipo = "None"
 	if self.ok:
 	  self.tipo = "bool"
-	else:
-	   print "Error: Linea %d, Columna %d: El operador >> opera sobre una expresion de tipo \"int\" y una de tipo \"range\" y se le estan pasando las expresiones de tipo \"%s\" y tipo \"%s\" respectivamente." % (1,1,self.left.tipo,self.right.tipo)
+	elif self.left.tipo != 'None' and self.right.tipo != 'None':
+	   pos = self.right.getPosition()
+	   print "Error: Linea %d, Columna %d: El operador >> opera sobre una expresion de tipo \"int\" y una de tipo \"range\" y se le estan pasando las expresiones de tipo \"%s\" y tipo \"%s\" respectivamente." % (pos[0],pos[1],self.left.tipo,self.right.tipo)
 	
       elif self.opr=="..":
 	self.ok = self.left.ok and self.right.ok and self.left.tipo==self.right.tipo and (self.left.tipo=="int")
 	self.tipo = "None"
 	if self.ok:
 	  self.tipo = "range"
-	else:
-	  print "Error: Linea %d, Columna %d: El operador .. opera sobre dos expresiones de tipo \"int\" y se le estan pasando las expresiones de tipo \"%s\" y tipo \"%s\" respectivamente." % (1,1,self.left.tipo,self.right.tipo)
+	elif self.left.tipo != 'None' and self.right.tipo != 'None':
+	  pos = self.right.getPosition()
+	  print "Error: Linea %d, Columna %d: El operador .. opera sobre dos expresiones de tipo \"int\" y se le estan pasando las expresiones de tipo \"%s\" y tipo \"%s\" respectivamente." % (pos[0],pos[1],self.left.tipo,self.right.tipo)
 	
       elif self.opr=="<>":
 	self.ok = self.left.ok and self.right.ok and self.left.tipo==self.right.tipo and (self.left.tipo=="range")
 	self.tipo = "None"
 	if self.ok:
 	  self.tipo = "range"
-	else:
-	  print "Error: Linea %d, Columna %d: El operador <> opera sobre dos expresiones de tipo \"range\" y se le estan pasando las expresiones de tipo \"%s\" y tipo \"%s\" respectivamente." % (1,1,self.left.tipo,self.right.tipo)
+	elif self.left.tipo != 'None' and self.right.tipo != 'None':
+	  pos = self.right.getPosition()
+	  print "Error: Linea %d, Columna %d: El operador <> opera sobre dos expresiones de tipo \"range\" y se le estan pasando las expresiones de tipo \"%s\" y tipo \"%s\" respectivamente." % (pos[0],pos[1],self.left.tipo,self.right.tipo)
 	
     elif self.opr != "":
       if self.opr=="-":
 	self.ok = self.left.ok and self.left.tipo == "int"
 	self.tipo = "int"
 	if not self.ok:
-	  print "Error: Linea %d, Columna %d: El operador \"-\" unario debe estar seguido de una expresion de tipo \"int\"" % (1,1)
+	  pos = self.left.getPosition()
+	  print "Error: Linea %d, Columna %d: El operador \"-\" unario debe estar seguido de una expresion de tipo \"int\"" % (pos[0],pos[1])
 	  self.tipo = "None"
       else:
 	self.ok = self.left.ok and self.left.tipo == "bool"
 	self.tipo = "bool"
 	if not self.ok:
-	  print "Error: Linea %d, Columna %d: El operador \"not\" debe estar seguido de una expresion de tipo \"bool\"" % (1,1)
+	  pos = self.left.getPosition()
+	  print "Error: Linea %d, Columna %d: El operador \"not\" debe estar seguido de una expresion de tipo \"bool\"" % (pos[0],pos[1])
 	  self.tipo="None"
     else:
       if type(self.left)==str and self.left!="true" and self.left!="false":
@@ -478,7 +492,17 @@ class Operacion(indentable):
       else:
 	self.ok = self.left.var.ok and (self.left.var.tipo == "range")
 	self.tipo = "int"
-      
+	
+  def setPosition(self,fila,columna):
+    self.lineno = fila
+    self.colno = columna
+    
+  def getPosition(self):
+    if self.opr == '' and self.right == '' and not isinstance(self.left,Operacion) and not isinstance(self.left,InstFuncion):      
+      print self.left
+      return (self.lineno,self.colno+1)
+    else:
+      return self.left.getPosition()
        
     
   def printArbol(self):
@@ -577,11 +601,14 @@ def p_Operacion_binaria(p):
     p[0] = Operacion(p[2],p[1])
   else:
     p[0] = Operacion(p[1])
+    col = find_column(p.slice[1].lexer.lexdata,p.slice[1])+1
+    #print 'machete ' + str(p.slice[1])
+    p[0].setPosition(p.lineno(1),col)
     # Verificacion de si la variable fue declarada o no
     if p[1] != 'true' and p[1] != 'false' and type(p[1]) != int:
       retorno = fueDeclarada(p[1])
       if retorno is None:
-	col = find_column(p.stack[1].lexer.lexdata,p.stack[1])
+	col = find_column(p.slice[1].lexer.lexdata,p.slice[1])
 	print 'Error: Linea '+str(p.lineno(1))+', columna '+str(col)+': Variable "'+p[1]+'" no declarada'
 	global error
 	error = 1
@@ -712,12 +739,12 @@ def p_Inst_Lectura(p):
   check = 0
   retorno = fueDeclarada(p[2])
   if retorno is None:
-    col = find_column(p.stack[2].lexer.lexdata,p.stack[2])
+    col = find_column(p.slice[2].lexer.lexdata,p.slice[2])
     print 'Error: Linea '+str(p.lineno(2))+', columna '+ str(col)+': Variable "'+p[2]+'" no declarada'
     global error
     error = 1
   elif retorno.blocked:
-    col = find_column(p.stack[1].lexer.lexdata,p.stack[1])
+    col = find_column(p.slice[1].lexer.lexdata,p.slice[1])
     print 'Error: Linea '+str(p.lineno(2))+', columna '+ str(col)+': Variable "'+p[2]+'"',
     print 'es el indice de un bloque FOR, y no puede modificarse'
   #for i in range(len(listaTablas),0,-1):
