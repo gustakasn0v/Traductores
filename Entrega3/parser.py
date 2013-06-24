@@ -499,7 +499,10 @@ class Operacion(indentable):
 	self.tipo = "bool"
       else:
 	self.ok = self.left.var.ok and (self.left.var.tipo == "range")
-	self.tipo = "int"
+	if self.ok:
+	  self.tipo = "int"
+	else:
+	  self.tipo = "None" 
 	
   def setPosition(self,fila,columna):
     self.lineno = fila
