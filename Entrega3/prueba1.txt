@@ -5,7 +5,8 @@ program
        a, b, c, c, res as int;
        h, b, e, res1 as int;
 	p as range;
-	y as int
+	y as int;
+	pal as bool
 
     read q;
     read b;
@@ -28,9 +29,18 @@ program
       res = (res*a)%c
     end;
     //read x;
-	x = rtoi(rtoi(p)..rtoi(p));
+	x = 1 + bottom(true+1);
+	a = bla + ble+ rtoi(1..2);
 	x = 1+ (true == false);
 	y = y + 10;
 	y = p + 50;
+	y = -true *10;
+	pal = not 5 or not 4;
+	pal = a+true;
+	a = 2 % true;
+	y = true == (false and 5);
+	pal = 1 >> true;
+	p = 1..2<>1..true;
     write res
+	
 end

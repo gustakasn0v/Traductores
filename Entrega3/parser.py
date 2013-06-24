@@ -162,6 +162,8 @@ class InstFuncion(indentable):
     self.tipo = "None"
     if self.ok:
       self.tipo = "int"
+    else:
+      print "Error: Linea %d, Columna %d: La funcion \"%s\" recibe una expresion de tipo \"range\" y se le esta pasando una expresion de tipo \"%s\"" % (1,1,self.funcion,self.var.tipo)
   def printArbol(self):
     print
     self.printIndent(),
@@ -373,59 +375,81 @@ class Operacion(indentable):
 
     if right != "":
       if self.opr=="+" or self.opr == "*" or self.opr==">" or self.opr==">=" or self.opr=="<" or self.opr=="<=":
-	self.ok = self.left.ok and self.right.ok and self.left.tipo==self.right.tipo and (self.left.tipo=="int" or self.left.tipo=="range")
+	self.ok = self.left.ok and self.right.ok and ((self.left.tipo==self.right.tipo and (self.left.tipo=="int" or self.left.tipo=="range")) or (self.opr == '*' and self.left.tipo == "range" and self.right.tipo == "int" ))
 	self.tipo = "None"
 	if self.ok:
 	  if self.opr==">" or self.opr==">=" or self.opr=="<" or self.opr=="<=":
 	    self.tipo = "bool"
 	  else:
 	    self.tipo = self.left.tipo
-	
+	else:
+	  if self.opr==">" or self.opr==">=" or self.opr=="<" or self.opr=="<=":
+	    print "Error: Linea %d, Columna %d: El operador %s compara dos expresiones de tipo \"int\" o de tipo rango y se le estan pasando las expresiones de tipo \"%s\" y tipo \"%s\" respectivamente." % (1,1,self.opr,self.left.tipo,self.right.tipo)
+	  else:
+	    if self.opr=="*":
+	      print "Error: Linea %d, Columna %d: El operador * opera sobre dos expresiones de tipo \"int\" o una de tipo \"range\" y la otrade tipo \"int\" y se le estan pasando las expresiones de tipo \"%s\" y tipo \"%s\" respectivamente." % (1,1,self.left.tipo,self.right.tipo)
+	    else:
+	      print "Error: Linea %d, Columna %d: El operador + opera sobre dos expresiones de tipo \"int\" o dos de tipo \"range\" y se le estan pasando las expresiones de tipo \"%s\" y tipo \"%s\" respectivamente." % (1,1,self.left.tipo,self.right.tipo)
       elif self.opr=="-" or self.opr=="/" or self.opr=="%":
 	self.ok = self.left.ok and self.right.ok and self.left.tipo==self.right.tipo and (self.left.tipo=="int")
 	self.tipo = "None"
 	if self.ok:
 	  self.tipo = self.left.tipo
-	
+	else:
+	  print "Error: Linea %d, Columna %d: El operador %s opera sobre dos expresiones de tipo \"int\" y se le estan pasando las expresiones de tipo \"%s\" y tipo \"%s\" respectivamente." % (1,1,self.opr,self.left.tipo,self.right.tipo)
       elif self.opr=="and" or self.opr=="or":
 	self.ok = self.left.ok and self.right.ok and self.left.tipo==self.right.tipo and (self.left.tipo=="bool")
 	self.tipo = "None"
 	if self.ok:
 	  self.tipo = self.left.tipo
-	
+	else:
+	  print "Error: Linea %d, Columna %d: El operador %s opera sobre dos expresiones de tipo \"bool\" y se le estan pasando las expresiones de tipo \"%s\" y tipo \"%s\" respectivamente." % (1,1,self.opr,self.left.tipo,self.right.tipo)
+	  
       elif self.opr=="==" or self.opr=="/=": 
 	self.ok = self.left.ok and self.right.ok and self.left.tipo==self.right.tipo
 	self.tipo = "None"
 	if self.ok:
 	  self.tipo = "bool"
+	else:
+	  print "Error: Linea %d, Columna %d: El operador %s opera sobre dos expresiones de tipo \"bool\" y se le estan pasando las expresiones de tipo \"%s\" y tipo \"%s\" respectivamente." % (1,1,self.opr,self.left.tipo,self.right.tipo)
       
       elif self.opr==">>":
 	self.ok = self.left.ok and self.right.ok and self.left.tipo=="int" and self.right.tipo=="range"
 	self.tipo = "None"
 	if self.ok:
 	  self.tipo = "bool"
+	else:
+	   print "Error: Linea %d, Columna %d: El operador >> opera sobre una expresion de tipo \"int\" y una de tipo \"range\" y se le estan pasando las expresiones de tipo \"%s\" y tipo \"%s\" respectivamente." % (1,1,self.left.tipo,self.right.tipo)
 	
       elif self.opr=="..":
 	self.ok = self.left.ok and self.right.ok and self.left.tipo==self.right.tipo and (self.left.tipo=="int")
 	self.tipo = "None"
 	if self.ok:
 	  self.tipo = "range"
+	else:
+	  print "Error: Linea %d, Columna %d: El operador .. opera sobre dos expresiones de tipo \"int\" y se le estan pasando las expresiones de tipo \"%s\" y tipo \"%s\" respectivamente." % (1,1,self.left.tipo,self.right.tipo)
 	
       elif self.opr=="<>":
 	self.ok = self.left.ok and self.right.ok and self.left.tipo==self.right.tipo and (self.left.tipo=="range")
 	self.tipo = "None"
 	if self.ok:
 	  self.tipo = "range"
-	
+	else:
+	  print "Error: Linea %d, Columna %d: El operador <> opera sobre dos expresiones de tipo \"range\" y se le estan pasando las expresiones de tipo \"%s\" y tipo \"%s\" respectivamente." % (1,1,self.left.tipo,self.right.tipo)
 	
     elif self.opr != "":
       if self.opr=="-":
 	self.ok = self.left.ok and self.left.tipo == "int"
 	self.tipo = "int"
+	if not self.ok:
+	  print "Error: Linea %d, Columna %d: El operador \"-\" unario debe estar seguido de una expresion de tipo \"int\"" % (1,1)
+	  self.tipo = "None"
       else:
 	self.ok = self.left.ok and self.left.tipo == "bool"
 	self.tipo = "bool"
-      
+	if not self.ok:
+	  print "Error: Linea %d, Columna %d: El operador \"not\" debe estar seguido de una expresion de tipo \"bool\"" % (1,1)
+	  self.tipo="None"
     else:
       if type(self.left)==str and self.left!="true" and self.left!="false":
 	no = False
