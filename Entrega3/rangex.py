@@ -11,7 +11,13 @@ import sys
 import SymTable
 from lexer import tokens, find_column
 
+# Variable global que representa una lista de las tablas de símbolos de cada
+# bloque. En el código, se recorre de derecha a izquierda para representar la
+# precedencia de las declaraciones de variables
 listaTablas = []
+
+# Variable que representa si hubo un error en la verificación estática del
+# programa. Si ocurrió un error, no se imprime el AST
 error = 0
 
 #Esta es una clase que sera utilizada para herencia posteriormente
@@ -26,12 +32,10 @@ class indentable:
       retorno = retorno + '  '
     return str(retorno)
   
-  
-class verificable:
-  listaVariables = []
-  def verify(self):
-    pass
 
+# Método que determina si una variable fue declarada o no. Si fue declarada,
+# retorna la instancia de declaración de dicha variable, respetando la 
+# precedencia de las declaraciones
 
 def fueDeclarada(id):
   global listaTablas
@@ -623,115 +627,10 @@ def p_Operacion_binaria(p):
 	global error
 	error = 1
 
-#def p_Expresion(p):
-  #'''Expresion : Operacion_binaria
-  #| Operacion_booleana 
-  #| Rango'''
-  #p[0] = p[1]
-
-##Regla que permite reconocer una operacion booleana en 
-##rangeX
-#def p_Operacion_booleana(p):
-  #''' Operacion_booleana : Operacion_binaria Opr_bool Operacion_binaria
-  #| Operacion_booleana AND Operacion_booleana 
-  #| Operacion_booleana OR Operacion_booleana 
-  #| Operacion_binaria IN Rango
-  #| LPAREN Operacion_booleana RPAREN
-  #| Operacion_booleana EQEQ Operacion_booleana
-  #| Operacion_booleana NEQEQ Operacion_booleana
-  #| Operacion_binaria EQEQ Operacion_binaria
-  #| Operacion_binaria NEQEQ Operacion_binaria
-  #| TRUE
-  #| FALSE
-  #| VAR_IDENTIFIER
-  #| NOT Operacion_booleana '''
-
-  #if len(p)>=3:
-    ##Revisa si la operacion no esta entre parentesis y no es un not
-    #if p[1]!='(' and p[1]!="not":
-      #p[0] = Operacion(p[1],p[2],p[3])
-    ##Si la operacion es un not se hace una operacion unaria con la 
-    ##expresion reconocida de segunda
-    #elif p[1]=="not":
-      #p[0] = Operacion(p[2],p[1])
-    ##La expresion reconocida esta entre parentesis y por lo tanto
-    ##Le asigno a p el valor del valor que esta en medio de los parentesis
-    #else:
-      #p[0]=p[2]
-  #else: 
-    #p[0] = Operacion(p[1])
-
-##Regla de la gramatica utilizada para reconocer los operadores no 
-##asociativos de rangeX
-#def p_Opr_bool(p):
-  #''' Opr_bool : GREAT
-  #| LESS
-  #| GREATEQ
-  #| LESSEQ '''
-  #p[0] = p[1]
-
-##Regla de la gramatica utilizada para reconocer una operacion
-##aritmetica
-#def p_Operacion_binaria(p):
-  #''' Operacion_binaria : Operacion_binaria PLUS Term
-  #| Operacion_binaria MINUS Term
-  #| Term'''
-  #if len(p)>=3:
-    #p[0] = Operacion(p[1],p[2],p[3])
-  #else:
-    #p[0] = p[1]
-
-##Regla del parser utilizada para reconocer una multiplicacion,
-##una division o una operacion de modulo
-#def p_Term(p):
-  #'''Term : Term TIMES Factor
-  #| Term DIVIDE Factor
-  #| Term MOD Factor
-  #| Factor'''
-  #if len(p) ==4:
-    #p[0] = Operacion(p[1],p[2],p[3])
-  #elif len(p)==5:
-    #p[0] = Operacion(Operacion(p[2],p[1]),p[3],p[4])
-  #else:
-	  #p[0] = p[1]
-
-##Regla de la gramatica utilizada para reconocer un numero, una variable,
-##algun menos unario con una expresion o una expresion entre parentesis
-#def p_Factor(p):
-  #''' Factor : NUMBER
-  #| VAR_IDENTIFIER
-  #| LPAREN Operacion_binaria RPAREN
-  #| Inst_Funcion
-  #| MINUS Factor %prec UMINUS '''
-  #if len(p)==4:
-    #p[0] = p[2]
-  #elif len(p)==3:
-    #p[0] = Operacion(p[2],p[1])
-  #elif type(p[1]) != str and type(p[1])!= int:  
-    #p[0]= p[1]
-  #else:
-    #p[0] = Operacion(p[1])
-
-    
-##Regla de la gramatica utilizada para reoconocer un rango
-#def p_Rango(p):
-  #''' Rango : Operacion_binaria RANGE Operacion_binaria
-  #| Rango PLUS Rango
-  #| Rango TIMES Operacion_binaria
-  #| Rango INTERSECTION Rango 
-  #| LPAREN Rango RPAREN
-  #| VAR_IDENTIFIER '''
-  #if len(p)>=3:
-   #if p[1]!='(':
-      #p[0] = Operacion(p[1],p[2],p[3])
-   #else:
-     #p[0] = p[2]
-  #else:
-    #p[0] = Operacion(p[1])
 
 #Clase utilizada para representar una instruccion de salida
 #aceptada por rangeX
-class Lectura(indentable,verificable):
+class Lectura(indentable):
   def __init__(self,var):
     self.variable = var
     self.listaVariables.append(var)
@@ -1053,7 +952,7 @@ def main():
   parser = yacc.yacc()
 
   if (len(sys.argv) != 2):
-      print("Usage: python parser.py nombreArchivo")
+      print("Usage: python rangex.py nombreArchivo")
       return -1
     
   # Se abre el archivo con permisos de lectura

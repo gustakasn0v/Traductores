@@ -1,8 +1,13 @@
 # -*- coding: utf-8 -*-
 # Proyecto Traductores e Interpretadores. Entrega 2
+# Clase para la tabla de símbolos
 # Realizado por:
 # Wilmer Bandres. 1010055
 # Gustavo El Khoury. 1010226
+
+# Clase para la delcaración de una variable
+# Almacena el tipo de la variable, su iddentificador,
+# su nivel de indentacion al imprimirse y su posición en el archivo
 
 class variable():
   def __init__(self,id,type,block = None):
@@ -24,14 +29,15 @@ class variable():
     
   def setType(self,type):
     self.type = type
-    
+
   def __eq__(self,otro):
     return self.id == otro.id
   
   def __str__(self):
     return self.indent + "variable: " + str(self.id) + " | tipo: " + str(self.type)
   
-
+# Clase para la tabla de símbolos. Almacena una lista de variables, y una indentación
+# que se usa al imprimirse
 class SymTable():
   def __init__(self):
     self.lista = []
@@ -45,9 +51,6 @@ class SymTable():
       self.lista.append(var)
     return error
     
-    
-      
-    
   def delete(self,var):
     if self.isMember(var.id,0):
       self.lista.remove(var)
@@ -55,6 +58,7 @@ class SymTable():
   def update(self,var):
     pass
   
+  # El parametro verbose indica si debe imprimirse errores en pantalla
   def isMember(self,var,verbose):
     try:
       self.lista.index(variable(var,''))
@@ -70,6 +74,10 @@ class SymTable():
     else:
       return None
     
+  # Este procedimiento hacer merge dos tablas de símblos. Si hay símbolos
+  # repetidos, retorna una tupla con la posición de la variable repetida. De
+  # lo contrario retorna None
+  
   def merge(self,nuevaTabla):
     error = None
     for i in nuevaTabla.lista:
