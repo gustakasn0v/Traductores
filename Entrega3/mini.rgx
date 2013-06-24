@@ -1,0 +1,5 @@
+program
+begin
+	declare x as int
+	x = rtoi(4..2)
+end

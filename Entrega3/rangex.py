@@ -168,6 +168,7 @@ def p_Inst(p):
 #a una funcion
 class InstFuncion(indentable):
   def __init__(self,func,var):
+    global error
     self.funcion = func
     self.var = var
     self.ok = self.var.ok and self.var.tipo =="range"
@@ -177,6 +178,7 @@ class InstFuncion(indentable):
     elif self.var.tipo != 'None':
       pos = self.getPosition()
       print "Error: Linea %d, Columna %d: La funcion \"%s\" recibe una expresion de tipo \"range\" y se le esta pasando una expresion de tipo \"%s\"" % (pos[0],pos[1],self.funcion,self.var.tipo)
+      error = 1
   def printArbol(self):
     print
     self.printIndent(),
@@ -344,20 +346,26 @@ class Asignacion(indentable):
 def p_Inst_Asignacion(p):
   '''Inst_Asignacion : VAR_IDENTIFIER EQUAL Expresion'''
   p[0] = Asignacion(p[1],p[3])
+  global error
   # Verifico que la variable a asignar haya sido declarada,
   # y si su tipo coincide con el tipo de la expresion
   existente = fueDeclarada(p[1])
   col = find_column(p.slice[1].lexer.lexdata,p.slice[1])
   if existente is None:
     print '''Error: Linea %d, columna %d: Variable "%s" no declarada'''  % (p.lineno(1),col,p[1])
+    error = 1
   else:
     if existente.blocked == 1:
       print '''Error: Linea %d, columna %d: Variable "%s" es el indice de un bloque FOR, y no puede modificarse'''% (p.lineno(1),col,p[1])
+      error = 1
     elif existente.type != p[3].tipo and p[3].tipo != 'None':
+      error = 1
       print 'Error: Linea '+str(p.lineno(1))+', columna ' + str(col) + ':',
       print 'A la variable "'+p[1]+'"',
       print 'de tipo "' + existente.type  + '" no se le puede asignar',
       print 'una expresion de tipo "' + p[3].tipo + '"'
+    elif p[3].tipo == 'None':
+      error = 1
       
   
 
@@ -604,6 +612,7 @@ def p_Operacion_binaria(p):
   | TRUE
   | FALSE
   '''
+  global error
   if len(p)>=5:
     p[0] = Operacion(InstFuncion(p[1],p[3]))
   elif len(p)>=4:
@@ -624,7 +633,6 @@ def p_Operacion_binaria(p):
       if retorno is None:
 	col = find_column(p.slice[1].lexer.lexdata,p.slice[1])
 	print 'Error: Linea '+str(p.lineno(1))+', columna '+str(col)+': Variable "'+p[1]+'" no declarada'
-	global error
 	error = 1
 
 
@@ -633,7 +641,7 @@ def p_Operacion_binaria(p):
 class Lectura(indentable):
   def __init__(self,var):
     self.variable = var
-    self.listaVariables.append(var)
+    #self.listaVariables.append(var)
   
   def printArbol(self):
     self.printIndent(),
@@ -645,26 +653,18 @@ def p_Inst_Lectura(p):
   '''Inst_Lectura : INST_READ VAR_IDENTIFIER '''
   p[0] = Lectura(p[2])
   global listaTablas
+  global error
   check = 0
   retorno = fueDeclarada(p[2])
   if retorno is None:
     col = find_column(p.slice[2].lexer.lexdata,p.slice[2])
     print 'Error: Linea '+str(p.lineno(2))+', columna '+ str(col)+': Variable "'+p[2]+'" no declarada'
-    global error
     error = 1
   elif retorno.blocked:
     col = find_column(p.slice[1].lexer.lexdata,p.slice[1])
     print 'Error: Linea '+str(p.lineno(2))+', columna '+ str(col)+': Variable "'+p[2]+'"',
     print 'es el indice de un bloque FOR, y no puede modificarse'
-  #for i in range(len(listaTablas),0,-1):
-    #tabla = listaTablas[i-1]
-    #if (tabla.isMember(p[0].variable,0)):
-      #check = 1
-      #break
-  #if not check:
-    #print 'Error: Linea '+str(p.lineno(2))+': Variable "'+p[2]+'" no declarada'
-    #global error
-    #error = 1
+    error = 1
   
   
 #Clase utilizada para representar una instruccion de lectura
