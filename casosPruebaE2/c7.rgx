@@ -1,0 +1,84 @@
+// Usa todas las instrucciones del lenguaje
+// Falta que use todos los operadores
+program begin
+    declare a, bt, bb, bl as int;
+            b as range
+    writeln "\\\\comienza\n", "escribe un valor para \"a\" (entero)";
+    read a;
+    write "ahora para un rango llamado b ";
+    read b;
+
+    bt = top(b);
+    bb = bottom(b);
+    bl = length(b);
+
+    writeln b, "\ntop(b)= ", bt, "\nbottom(b)= ", bb, "\nlength(b)= ", bl;
+    if bt == bb then
+        writeln "rtoi(b)= ", rtoi(b)
+    ;
+
+    if a < 0 then write "por que tan negativo"
+    else begin
+        // ahora b es un entero
+        declare b as int;
+                c as bool;
+                d as range
+        write "menos mal que pusiste ", a;
+        writeln "... dame un valor para d (rango)";
+        read d;
+
+        writeln "... y para b (entero)";
+        read b;
+        c = true;
+        b = 1;
+
+        for x in a do
+            begin
+                write c, " -> ";
+                c = not c;
+                if c then
+                    b = 2 + b * 10
+                else
+                    b = (b % 10) * 10
+            end
+        ;
+        writeln "";
+
+        if c then
+            write "eres demasiado buena vibra... "
+        ;
+
+        case b of
+          0..12 -> writeln "bobo";
+          8..20 -> begin
+                       write "mete un numero pues ";
+                       read b;
+                       if b % 3 == 0 then
+                           if b % 2 == 1 then
+                               if b % 5 == 0 then
+                                   write "¿cómo lo lograste?"
+                               else
+                                   write "casi lo logras"
+                           else
+                               write "sabía que serías una decepción."
+                       ;
+                       writeln "\nun numerote: ", b % 11 * 100 / 12 * 4 + b % 100
+                   end;
+          10..100 -> writeln "¿quién lo diría?";
+        end;
+
+        if b >> 10..12 then
+            writeln "en las tres!"
+        ;
+
+        while b > 0 and not c or b % 10 + 1 >> d do
+            begin
+                write b,", ";
+                b = b / 2
+            end
+        ;
+        writeln ""
+    end
+    ;
+    writeln "\\\\termina"
+end

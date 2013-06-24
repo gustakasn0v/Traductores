@@ -1,0 +1,38 @@
+// Programa:  Fibonacci. Version Iterativa: Exponenciacion al cuadrado.
+// Condicion: No tiene errores sintacticos.
+program
+  begin
+    declare a, b, c, d as int;
+            n, i    as int
+    
+    read n;
+ 
+    i = n - 1;
+    a = 1;
+    b = 0;
+    c = 0;
+    d = 1;
+ 
+    if (n <= 0) 
+    then
+      writeln "fibonacci es: ", 0
+    else
+	    begin
+        while (i > 0) do
+        begin 
+          declare t as int
+
+          while (i % 2 == 0) do 
+          begin
+            c = c*c + d*d;
+            d = t;
+            i = i / 2
+          end;
+          t = d*(b + a) + c*b;
+          a = d*b + c*a;
+          b = t;
+          i = i - 1
+        end
+      end;
+      writeln "fibonacci es: ", a + b
+  end

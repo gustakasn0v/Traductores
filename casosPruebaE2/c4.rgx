@@ -1,0 +1,25 @@
+// Programa:  Expresiones 
+// Condicion: No tiene errores de sintaxis.
+program
+  begin
+    declare a, b, c as int;
+            x, w, y as range;
+            p, q, r as bool
+    
+    a = 0;
+
+    x = a..(a+1);
+
+    p = false;
+    
+    q = ((p and not p) and (a >> x));
+  
+    r = (length(x) == (a+1)) or (length(x) > 1);
+
+    b = a + a * - a / a;
+
+    w = x * x + x;
+
+    r = 3 + true - (0..0)
+  end
+

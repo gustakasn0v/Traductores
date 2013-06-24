@@ -1,0 +1,4 @@
+// Programa:  Hola Mundo
+// Condicion: No tiene errores de sintaxis
+program
+  writeln "ola Mundo, ke ase?"

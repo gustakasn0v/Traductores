@@ -1,0 +1,5 @@
+// Programa:  Ola ke ase?
+// Condicion: Tiene un error sintactico. Pues necesita de un bloque para encerrar ambas instrucciones
+program
+ writeln "ola ke ase?";
+ writeln "ase tradutore o ke ase?"

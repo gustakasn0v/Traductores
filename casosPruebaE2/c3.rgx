@@ -1,0 +1,6 @@
+//Programa:  Ola ke ase?
+//Condicion: Tiene errores sintacticos:
+//             - la palabra reservada 'program' no esta al comienzo.
+//             - necesita de un bloque para encerrar ambas instrucciones
+writeln "ola ke ase?";
+writeln "ase tradutore o ke ase?"
