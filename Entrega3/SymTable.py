@@ -8,6 +8,7 @@ class variable():
   def __init__(self,id,type,block = None):
     self.id = id
     self.type = type
+    self.indent = ''
     self.lineno = -1
     self.colno = -1
     if block is None:
@@ -28,12 +29,13 @@ class variable():
     return self.id == otro.id
   
   def __str__(self):
-    return "variable: " + str(self.id) + " | tipo: " + str(self.type)
+    return self.indent + "variable: " + str(self.id) + " | tipo: " + str(self.type)
   
 
 class SymTable():
   def __init__(self):
     self.lista = []
+    self.indent=''
     
   def insert(self,var):
     error = 0
@@ -78,10 +80,13 @@ class SymTable():
     return error
 	
   def __str__(self):
-    retorno = ''
+    retorno = self.indent + '  ' + 'Tabla de simbolos:\n'
+    
     for i in self.lista:
+      i.indent = self.indent + '    '
       retorno += str(i)
       retorno += '\n'
+    retorno += self.indent + '    '+'---\n'
     return retorno
 
 #lista = SymTable()

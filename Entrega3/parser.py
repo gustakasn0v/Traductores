@@ -20,9 +20,12 @@ class indentable:
   #este atributo indica cuantos espacios se deben hacer
   level = 0
   def printIndent(self):
+    retorno = ''
     for i in range(self.level):
       print('  '),
-    return ''
+      retorno = retorno + str('  ')
+    return str(retorno)
+  
   
 class verificable:
   listaVariables = []
@@ -51,7 +54,7 @@ def p_program(p):
 #Posee una metodo llamado printArbol que como se dijo en el README
 #Es una funcion que se encuentra en todas las clases y se utiliza
 #Para imprimir recursivamente el AST
-class bloque(indentable):
+class bloque(indentable):  
   def __init__(self,nombre,contenido):
     self.nombre = nombre
     self.contenido = contenido
@@ -59,8 +62,10 @@ class bloque(indentable):
     
     
   def printArbol(self):
-    self.printIndent(),
+    indentacion=self.printIndent()
     print self.nombre
+    self.tabla.indent = indentacion
+    print str(self.tabla)
     for i in self.contenido:
       i.level = self.level+1
       i.printArbol()
@@ -80,11 +85,14 @@ def p_Bloque_Inst(p):
       if p[3]=='end':
 	p[0] = bloque('BLOQUE',[p[2]])
       else:
+	p[0] = bloque('BLOQUE',[p[2],p[3]])
+	
 	try:
-	  listaTablas.pop()
+	  pass
+	  p[0].tabla = listaTablas.pop()
 	except IndexError:
 	  pass
-	p[0] = bloque('BLOQUE',[p[2],p[3]])
+	
     elif len(p)==3:
       p[0] = bloque('UNICA INSTRUCCION',[p[1],p[2]])
     else:
@@ -971,7 +979,7 @@ class forc(indentable):
       print "\tidentificador: ",
       print self.var
       self.printIndent()
-      print "\tRango:"
+      print "\tRango:",
       
       self.rango.level = self.level+2
       self.rango.printArbol()
