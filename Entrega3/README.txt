@@ -73,3 +73,9 @@ atributo público slice de las YaccProduction, que contiene una pila con las ins
 de los tokens que fueron usados al reducir dicha regla. Esto es vital
 para imprimir los errores.
 
+
+En adición a realizar las verificaciones estáticas que se solicitaron, el
+programa también valida las expresiones que se encuentran dentro de una
+instrucción rtoi, top, bottom y length, validando que resulten en rangos.
+Además, verifica que su uso en una expresión permita que la expresión sea
+válida
