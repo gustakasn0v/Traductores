@@ -906,6 +906,12 @@ def p_Variable_For(p):
   
   # Se crea una tabla de simbolos con una entrada para la variable del for
   # Se bloquea la modificacion de dicha variable
+  global error
+  anterior = fueDeclarada(p[1])
+  if anterior is not None:
+    col = find_column(p.slice[1].lexer.lexdata,p.slice[1])
+    print '''Error: Linea %d, columna %d: Variable del FOR "%s"ya fue declarada'''  % (p.lineno(1),col,p[1])
+    error = 1
   tabla = SymTable.SymTable()
   tabla.insert(SymTable.variable(p[1],'int',1))
   listaTablas.append(tabla)
