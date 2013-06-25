@@ -87,7 +87,7 @@ def p_Bloque_Inst(p):
     | INST_BEGIN Inst_Declare Lista_Inst INST_END
     | INST_BEGIN Inst_Declare INST_END'''
     if p[1]=='begin':
-      if p[3]=='end':
+      if p[3]=='end' and not isinstance(p[2],bloqueDeclaracion):
 	p[0] = bloque('BLOQUE',[p[2]])
 	p[0].tabla = None
       else:
