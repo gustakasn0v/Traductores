@@ -1,0 +1,9 @@
+program
+    begin
+        declare i as int
+
+        for i in 1..3 do 
+        begin
+            declare i as bool
+        end
+    end

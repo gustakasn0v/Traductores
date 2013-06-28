@@ -1,0 +1,45 @@
+// (a ** b) % c
+program
+  begin  
+    declare 
+       a, b, c, c, res as int;
+       h, b, e, res1 as int;
+	p as range;
+	y as int;
+	pal as bool
+
+    read q;
+    read b;
+    read c;
+    caass = a+as1;
+    if a+as1 == 0 then
+    begin
+      declare
+	a1, a2 as int
+      read a1
+    end;
+    
+    //read a1;
+    // Exponenciacion simple O(n)
+    res = 1;
+    for x in (0..b) do 
+    begin
+      read x;
+      x = 1;
+      res = (res*a)%c
+    end;
+    //read x;
+	x = 1 + bottom(true);
+	a = bla + ble+ rtoi(1..2);
+	x = 1+ (true == false);
+	y = y + 10;
+	y = p + 50;
+	y = -true *10;
+	pal = not 5 or not 4;
+	pal = a+true;
+	a = 2 % true;
+	y = true == (false and 5);
+	pal = 1 >> true;
+	p = 1..2<>1..true;
+    write res
+end
