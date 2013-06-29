@@ -10,6 +10,7 @@ import ply.lex as lex
 import sys
 import SymTable
 from lexer import tokens, find_column
+import inspect
 
 # Variable global que representa una lista de las tablas de símbolos de cada
 # bloque. En el código, se recorre de derecha a izquierda para representar la
@@ -63,6 +64,12 @@ class bloque(indentable):
     self.nombre = nombre
     self.contenido = contenido
     self.level=0
+  
+  def __iter__(self):
+    for i in self.contenido:
+      if isinstance(i,listaInstrucciones):
+	return iter(i)
+    return iter([])
     
     
   def printArbol(self):
@@ -110,7 +117,10 @@ def p_Bloque_Inst(p):
 class listaInstrucciones(indentable):
   def __init__(self,listaInst):
     self.listaInst = listaInst
-    
+  
+  def __iter__(self):
+    return iter(self.listaInst)
+  
   def printArbol(self):
     for i in self.listaInst:
       i.level = self.level
@@ -952,8 +962,54 @@ def p_error(p):
     print p.value
     yacc.restart()
 
+#
+## Seccion para la ejecucion del codigo de RangeX a traves de Python
+#
 
-# Build the parser
+# Procedimiento que se encarga de ejecutar bloques de instrucciones
+def executeBlock(root):
+  print 'Nuevo bloque'
+  global listaTablas
+  listaTablas.append(root.tabla)
+  for i in root:
+    executeInstruction(i,root.tabla)
+  listaTablas.pop()
+    
+def executeInstruction(i,tabla):
+  nombre = i.__class__.__name__
+  function = methodDict[str(nombre)]
+  if len(inspect.getargspec(function).args) == 1:
+    function(i)
+  else:
+    function(i,tabla)
+    
+
+def executeAsignacion(i,tabla):
+  print 'Esta es una asignacion a ' + i.variable 
+  instanciaVariable = fueDeclarada(i.variable)
+  try:
+    print str(instanciaVariable.valor)
+  except AttributeError:
+    pass
+  #variable.valor = i.expresion.valor
+  instanciaVariable.valor = 42
+
+def executeIf(i):
+  print 'Este es un if'
+  
+def executeSalida(i):
+  print 'Esta es una Salida'
+
+
+# Variable global con un diccionario de los metodos que se ejecutan
+# para cada instruccion de RangeX  
+methodDict = {
+  'bloque':executeBlock,  
+  'Asignacion':executeAsignacion,
+  'Salida':executeSalida,
+  'ifc':executeIf
+  }
+
 def main():
   parser = yacc.yacc()
 
@@ -967,7 +1023,8 @@ def main():
   try:
     global error
     if not error:
-      result.printArbol()
+      #result.printArbol()
+      executeBlock(result)
   except AttributeError:
     return
 if __name__ == '__main__':
