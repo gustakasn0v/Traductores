@@ -81,6 +81,14 @@ class bloque(indentable):
     for i in self.contenido:
       i.level = self.level+1
       i.printArbol()
+  
+  def ejecutar(self):
+    print 'Nuevo bloque'
+    global listaTablas
+    listaTablas.append(self.tabla)
+    for i in self:
+      print i.__class__.__name__
+      i.ejecutar()
     
     
 #Regla del parser que define lo que es un bloque de instrucciones
@@ -353,6 +361,15 @@ class Asignacion(indentable):
     self.expresion.level = self.level
     self.expresion.printArbol()
     
+  def ejecutar(self):
+    instancia = fueDeclarada(self.variable)
+    try:
+      print self.expresion.valor
+      instancia.valor = self.expresion.valor
+    except AttributeError:
+      print 'Valor de la expresion no seteado'
+      
+    
 #Regla de la gramatica utilizada para reconocer una asignacion
 def p_Inst_Asignacion(p):
   '''Inst_Asignacion : VAR_IDENTIFIER EQUAL Expresion'''
@@ -402,6 +419,10 @@ precedence = (
 #en rangeX, esta misma clase representa operaciones binarias,
 #unarias y variables o numeros
 class Operacion(indentable):
+  # Metodo que calcula el valor de una expresion
+  def calculaValor(self):
+    pass
+  
   def __init__(self,left,opr="",right=""):
     self.left = left
     self.opr = opr
@@ -647,6 +668,14 @@ def p_Operacion_binaria(p):
 	error = 1
 
 
+# Clase usada para representar un rango de RangeX
+
+class rango():
+  def __init__(self,inicio,fin):
+    self.inicio = inicio
+    self.fin = fin
+    
+    
 #Clase utilizada para representar una instruccion de salida
 #aceptada por rangeX
 class Lectura(indentable):
@@ -656,6 +685,44 @@ class Lectura(indentable):
   def printArbol(self):
     self.printIndent(),
     print "Read de la variable: " + self.variable
+  
+  def ejecutar(self):
+    valor = raw_input()
+    instanciaVariable = fueDeclarada(self.variable)
+    if instanciaVariable.type == 'int':
+      try:
+	# Almaceno el valor en la variable
+	instanciaVariable.valor = int(valor)
+      except ValueError:
+	print 'El valor introducido no es un entero'
+	raise
+      
+    elif instanciaVariable.type == 'bool':
+      if valor != 'true' and valor != 'true':
+	raise ValueError('Valor de la lectura no coincde con el tipo de la variable')
+      else:
+	# Almaceno el valor en la variable
+	instanciaVariable.valor = valor
+	
+    elif instanciaVariable.type == 'range':
+      
+      dosPuntos = 1
+      pos = valor.rfind('..')
+      if pos == -1:
+	pos = valor.rfind(',')
+	if pos == -1:
+	  raise ValueError('Valor de la lectura no coincide con el tipo de la variable')
+	else:
+	  dosPuntos = 0
+      try:
+	inicio = int(valor[:pos])
+	fin = int(valor[pos+1+dosPuntos:])
+	if inicio > fin:
+	  raise ValueError
+	# Almaceno el valor en la variable
+	instanciaVariable.valor = rango(inicio,fin)
+      except ValueError:
+	print 'Rango mal definido'
     
 #Regla de la gramatica utilizada para reconocer una instruccion
 #de lectura
@@ -708,6 +775,19 @@ class Salida(indentable):
 	print "Valor: "
       self.printIndent()
       i.printArbol()
+      
+  def ejecutar(self):
+    for i in self.lista:
+      if isinstance(i,Operacion):
+	Operacion.calculaValor()
+	print i.valor + ', ',
+      else:
+	print i.val.cad + ', ',
+    if self.tipo == 'WRITELN':
+      print
+	
+    
+      
 
       
 #Esta clase se usa para facilitar la implementacion de las clases
@@ -967,48 +1047,48 @@ def p_error(p):
 #
 
 # Procedimiento que se encarga de ejecutar bloques de instrucciones
-def executeBlock(root):
-  print 'Nuevo bloque'
-  global listaTablas
-  listaTablas.append(root.tabla)
-  for i in root:
-    executeInstruction(i,root.tabla)
-  listaTablas.pop()
+#def executeBlock(root):
+  #print 'Nuevo bloque'
+  #global listaTablas
+  #listaTablas.append(root.tabla)
+  #for i in root:
+    #executeInstruction(i,root.tabla)
+  #listaTablas.pop()
     
-def executeInstruction(i,tabla):
-  nombre = i.__class__.__name__
-  function = methodDict[str(nombre)]
-  if len(inspect.getargspec(function).args) == 1:
-    function(i)
-  else:
-    function(i,tabla)
+#def executeInstruction(i,tabla):
+  #nombre = i.__class__.__name__
+  #function = methodDict[str(nombre)]
+  #if len(inspect.getargspec(function).args) == 1:
+    #function(i)
+  #else:
+    #function(i,tabla)
     
 
-def executeAsignacion(i,tabla):
-  print 'Esta es una asignacion a ' + i.variable 
-  instanciaVariable = fueDeclarada(i.variable)
-  try:
-    print str(instanciaVariable.valor)
-  except AttributeError:
-    pass
-  #variable.valor = i.expresion.valor
-  instanciaVariable.valor = 42
+#def executeAsignacion(i,tabla):
+  #print 'Esta es una asignacion a ' + i.variable 
+  #instanciaVariable = fueDeclarada(i.variable)
+  #try:
+    #print str(instanciaVariable.valor)
+  #except AttributeError:
+    #pass
+  ##variable.valor = i.expresion.valor
+  #instanciaVariable.valor = 42
 
-def executeIf(i):
-  print 'Este es un if'
+#def executeIf(i):
+  #print 'Este es un if'
   
-def executeSalida(i):
-  print 'Esta es una Salida'
+#def executeSalida(i):
+  #print 'Esta es una Salida'
 
 
-# Variable global con un diccionario de los metodos que se ejecutan
-# para cada instruccion de RangeX  
-methodDict = {
-  'bloque':executeBlock,  
-  'Asignacion':executeAsignacion,
-  'Salida':executeSalida,
-  'ifc':executeIf
-  }
+## Variable global con un diccionario de los metodos que se ejecutan
+## para cada instruccion de RangeX  
+#methodDict = {
+  #'bloque':executeBlock,  
+  #'Asignacion':executeAsignacion,
+  #'Salida':executeSalida,
+  #'ifc':executeIf
+  #}
 
 def main():
   parser = yacc.yacc()
@@ -1024,7 +1104,7 @@ def main():
     global error
     if not error:
       #result.printArbol()
-      executeBlock(result)
+      result.ejecutar()
   except AttributeError:
     return
 if __name__ == '__main__':

@@ -1,0 +1,6 @@
+program
+begin
+	declare x as range
+	read x;
+	write "x"
+end
