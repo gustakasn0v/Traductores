@@ -34,7 +34,12 @@ class variable():
     return self.id == otro.id
   
   def __str__(self):
-    return self.indent + "variable: " + str(self.id) + " | tipo: " + str(self.type)
+    retorno = self.indent + "variable: " + str(self.id) + " | tipo: " + str(self.type)
+    try:
+      retorno = retorno + " | valor: " + str(self.valor)
+    except ValueError:
+      pass
+    return retorno
   
 # Clase para la tabla de símbolos. Almacena una lista de variables, y una indentación
 # que se usa al imprimirse

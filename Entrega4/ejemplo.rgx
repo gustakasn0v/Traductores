@@ -1,6 +1,10 @@
 program
 begin
 	declare x as range
-	read x;
-	write "x"
+	writeln x;
+	for i in 1..5 do
+	begin
+	  writeln "Huevo";
+	  writeln "Pipe"
+	end
 end

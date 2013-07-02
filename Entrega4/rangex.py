@@ -83,11 +83,9 @@ class bloque(indentable):
       i.printArbol()
   
   def ejecutar(self):
-    print 'Nuevo bloque'
     global listaTablas
     listaTablas.append(self.tabla)
     for i in self:
-      print i.__class__.__name__
       i.ejecutar()
     
     
@@ -364,7 +362,7 @@ class Asignacion(indentable):
   def ejecutar(self):
     instancia = fueDeclarada(self.variable)
     try:
-      print self.expresion.valor
+      self.expresion.calculaValor()
       instancia.valor = self.expresion.valor
     except AttributeError:
       print 'Valor de la expresion no seteado'
@@ -421,6 +419,7 @@ precedence = (
 class Operacion(indentable):
   # Metodo que calcula el valor de una expresion
   def calculaValor(self):
+    self.valor = 0
     pass
   
   def __init__(self,left,opr="",right=""):
@@ -699,7 +698,8 @@ class Lectura(indentable):
       
     elif instanciaVariable.type == 'bool':
       if valor != 'true' and valor != 'true':
-	raise ValueError('Valor de la lectura no coincde con el tipo de la variable')
+	print 'Valor de la lectura no coincide con el tipo de la variable'
+	sys.exit(1)
       else:
 	# Almaceno el valor en la variable
 	instanciaVariable.valor = valor
@@ -711,7 +711,8 @@ class Lectura(indentable):
       if pos == -1:
 	pos = valor.rfind(',')
 	if pos == -1:
-	  raise ValueError('Valor de la lectura no coincide con el tipo de la variable')
+	  print 'Valor de la lectura no coincide con el tipo de la variable'
+	  sys.exit(1)
 	else:
 	  dosPuntos = 0
       try:
@@ -778,9 +779,9 @@ class Salida(indentable):
       
   def ejecutar(self):
     for i in self.lista:
-      if isinstance(i,Operacion):
-	Operacion.calculaValor()
-	print i.valor + ', ',
+      if isinstance(i.val,Operacion):	
+	i.val.calculaValor()
+	print str(i.val.valor) + ', ',
       else:
 	print i.val.cad + ', ',
     if self.tipo == 'WRITELN':
@@ -858,6 +859,13 @@ class ifc(indentable):
       print "Bloque del else"
       self.bloque2.level = self.level + 1
       self.bloque2.printArbol()
+      
+  def ejecutar(self):
+    self.cond.calculaValor()
+    if self.cond.valor:
+      self.bloque.ejecutar()
+    elif self.bloque2 != None:
+      self.bloque2.ejecutar()
 
 #Clase utilizada para representar un bloque de control de la
 #instruccion case
@@ -976,7 +984,22 @@ class forc(indentable):
       print "\tBloque de instrucciones:" 
       self.inst.level = self.level + 3
       self.inst.printArbol()
+    
+    def ejecutar(self):
+      self.rango.inferior = 10
+      self.rango.superior = 20
       
+      global listaTablas
+      listaTablas.append(self.tabla)
+      self.rango.calculaValor()
+      # Inicializo el valor de la variable del for
+      self.tabla.lista[0].valor = self.rango.inferior 
+      
+      for i in range(self.rango.inferior,self.rango.superior):
+	self.inst.ejecutar()
+	self.rango.calculaValor()
+	# Incremento el valor de la variable del for
+	self.tabla.lista[0].valor += 1
       
 #Regla del a gramatica utilizada para reconocer una instruccion for
 #en rangeX  
@@ -986,7 +1009,7 @@ def p_Inst_For(p):
   
   # Elimino la tabla de simbolos que contiene la variable del for 
   try:
-    listaTablas.pop()
+    p[0].tabla = listaTablas.pop()
   except IndexError:
     pass
   
