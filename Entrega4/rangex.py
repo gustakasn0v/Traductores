@@ -419,7 +419,13 @@ class Rango:
   def __init__(self,iz,der):
     self.iz = iz
     self.der = der
- 
+  
+  def __eq__(self,otr):
+    return self.iz == otr.iz and self.der == otr.der
+    
+  def __ne__(self,otr):
+    return self.iz != otr.iz or self.der != otr.der
+  
 #Clase utilizada para representar una operacion realizable 
 #en rangeX, esta misma clase representa operaciones binarias,
 #unarias y variables o numeros
@@ -614,13 +620,17 @@ class Operacion(indentable):
       elif self.opr == "or":
 	return self.left.getValor() or self.right.getValor()
 	
+	
       elif self.opr == "==":
 	return self.left.getValor() == self.right.getValor()
+	
 	
       elif self.opr == "/=":
 	return self.left.getValor() != self.right.getValor()
 	
       elif self.opr==">>":
+	tmp = self.right.getValor()
+	return self.left.getValor() >= tmp.iz and self.left.getValor()<= tmp.der
 	
       elif self.opr=="..":
 	if self.left.getValor() > self.right.getValor():
