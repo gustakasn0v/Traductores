@@ -425,6 +425,23 @@ class Rango:
     
   def __ne__(self,otr):
     return self.iz != otr.iz or self.der != otr.der
+    
+  def __add__(self,otr):
+    return Rango(self.iz,otr.der)
+  
+  def __lt__ (self,otr):
+    return self.der<otr.der
+    
+  def __le__ (self,otr):
+    return self.der<=otr.der
+    
+  def __gt__(self,otr):
+    return self.iz>otr.iz
+    
+  def __ge__(self,otr):
+    return self.iz>=otr.iz
+    
+    
   
 #Clase utilizada para representar una operacion realizable 
 #en rangeX, esta misma clase representa operaciones binarias,
@@ -578,12 +595,14 @@ class Operacion(indentable):
 
     if right != "":
       if self.opr == "+" :
-	if self.left.tipo == "int":
-	  return self.left.getValor() + self.right.getValor()
+	return self.left.getValor() + self.right.getValor()
 	  
       elif self.opr == "*" :
 	if self.left.tipo == "int":
 	  return self.left.getValor() * self.right.getValor()
+	else:
+	  tmp = self.right.getValor()
+	  return Rango(tmp*self.left.getValor().iz,tmp*self.right.getValor())
 	  
       elif self.opr == "-":
 	return self.left.getValor() - self.right.getValor()
@@ -639,7 +658,16 @@ class Operacion(indentable):
 	  return Rango(self.left.getValor(),self.right.getValor())
 	
       elif self.opr=="<>":
+	tmp = self.left.getValor()
+	tmp2 = self.right.getValor()
 	
+	if (tmp.iz <= tmp2.der and tmp.iz>=tmp2.iz) or (tmp2.iz <= tmp.der and tmp2.iz>=tmp.iz):
+	  if (tmp.iz <= tmp2.der and tmp.iz>=tmp2.iz):
+	    return Rango(tmp.iz,min(tmp.der,tmp2.der))
+	  else:
+	    return Rango(tmp2.iz,min(tmp.der,tmp2.der))
+	else:
+	  print "Error al interceptar rangos."
 	
     elif self.opr != "":
       if self.opr=="-":
