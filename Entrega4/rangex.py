@@ -204,7 +204,10 @@ class InstFuncion(indentable):
     print "Expresion: " ,
     self.var.level=self.level+1
     self.var.printArbol()
-    
+  
+  def getValor(self):
+    pass
+    #return self.var.valor hay que retornar el valor
   def getPosition(self):
     return self.var.getPosition()
     
@@ -412,7 +415,11 @@ precedence = (
     ('right','UMINUS'),
 ) 
 
-  
+class Rango:
+  def __init__(self,iz,der):
+    self.iz = iz
+    self.der = der
+ 
 #Clase utilizada para representar una operacion realizable 
 #en rangeX, esta misma clase representa operaciones binarias,
 #unarias y variables o numeros
@@ -556,7 +563,117 @@ class Operacion(indentable):
       return (self.lineno,self.colno+1)
     else:
       return self.left.getPosition()
-       
+  
+  #
+  
+  
+  def getValor(self):
+    global listaTablas
+
+    if right != "":
+      if self.opr == "+" :
+	if self.left.tipo == "int":
+	  return self.left.getValor() + self.right.getValor()
+	  
+      elif self.opr == "*" :
+	if self.left.tipo == "int":
+	  return self.left.getValor() * self.right.getValor()
+	  
+      elif self.opr == "-":
+	return self.left.getValor() - self.right.getValor()
+	
+      elif self.opr == "/"
+	tmp = self.right.getValor()
+	if tmp == 0:
+	  print "Error: Division por cero."
+	else
+	  return self.left.getValor() / tmp
+	  
+      elif self.opr == "%":
+	tmp = self.right.getValor()
+	if tmp == 0:
+	  print "Error: Se busca el resto al dividir por cero."
+	else
+	  return self.left.getValor() % tmp
+	  
+      elif self.opr == ">":
+	return self.left.getValor() > self.right.getValor()
+	
+      elif self.opr == ">=":
+	return self.left.getValor() >= self.right.getValor()
+	
+      elif self.opr == "<":
+	return self.left.getValor() < self.right.getValor()
+	
+      elif self.opr == "<=":
+	return self.left.getValor() <= self.right.getValor()
+	
+      elif self.opr == "and":
+	return self.left.getValor() and self.right.getValor()
+	
+      elif self.opr == "or":
+	return self.left.getValor() or self.right.getValor()
+	
+      elif self.opr == "==":
+	return self.left.getValor() == self.right.getValor()
+	
+      elif self.opr == "/=":
+	return self.left.getValor() != self.right.getValor()
+	
+      elif self.opr==">>":
+	
+      elif self.opr=="..":
+	if self.left.getValor() > self.right.getValor():
+	  print "Error al crear Rango, expresion izquierda mayor que la expresion entera de la derecha"
+	else:
+	  return Rango(self.left.getValor(),self.right.getValor())
+	
+      elif self.opr=="<>":
+	
+	
+    elif self.opr != "":
+      if self.opr=="-":
+	return -self.left.getValor()
+      else:
+	return not self.left.getValor()
+    else:
+      if type(self.left)==str and self.left!="true" and self.left!="false":
+	no = False
+	#var = SymTable.variable(self.left,'bool')
+	for i in range(1,len(listaTablas)+1):
+	  if listaTablas[-i].isMember(self.left,0)==1:
+	    tmp = listaTablas[-i].find(self.left)
+	    self.tipo = tmp.type
+	    no = True
+	    break
+	    
+	#Retorno valor de la variable 
+	
+      elif type(self.left)==int:
+	return self.left
+	
+      elif self.left == "true" or self.left == "false":
+	if self.left == "true":
+	  return True
+	else:
+	  return False
+	  
+      else:
+	tmp = self.left.var.getValor()
+	if self.left.funcion == "rtoi":
+	  if tmp.iz == tmp.der:
+	    return tmp.iz
+	  else:
+	    print "Error: El \"range\" no se puede convertir a \"int\" cotas distintas. "
+	elif self.left.funcion == "length":
+	  return tmp.der-tmp.iz
+	elif self.left.funcion == "top":
+	  return tmp.der
+	else:
+	  return tmp.iz
+	   
+	  
+	  ##
     
   def printArbol(self):
     #Este if revisa si la operacion es binaria
