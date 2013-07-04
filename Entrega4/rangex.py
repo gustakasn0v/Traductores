@@ -441,6 +441,9 @@ class Rango:
   def __ge__(self,otr):
     return self.iz>=otr.iz
     
+  def __str__(self):
+    return str(self.iz)+'..'+str(self.der)
+    
     
   
 #Clase utilizada para representar una operacion realizable 
@@ -612,7 +615,7 @@ class Operacion(indentable):
       elif self.opr == "/":
 	tmp = self.right.getValor()
 	if tmp == 0:
-	  print "Error: Division por cero."
+	  print "Error: Intento de division por cero."
 	  sys.exit()
 	else:
 	  return self.left.getValor() / tmp
@@ -620,7 +623,7 @@ class Operacion(indentable):
       elif self.opr == "%":
 	tmp = self.right.getValor()
 	if tmp == 0:
-	  print "Error: Se busca el resto al dividir por cero."
+	  print "Error: Intento de buscar el resto al dividir por cero."
 	  sys.exit()
 	else:
 	  return self.left.getValor() % tmp
@@ -657,7 +660,7 @@ class Operacion(indentable):
 	
       elif self.opr=="..":
 	if self.left.getValor() > self.right.getValor():
-	  print "Error al crear Rango, expresion izquierda mayor que la expresion entera de la derecha"
+	  print "Error: Intento de crear Rango, expresion izquierda mayor que la expresion entera de la derecha"
 	  sys.exit()
 	else:
 	  return Rango(self.left.getValor(),self.right.getValor())
@@ -672,7 +675,7 @@ class Operacion(indentable):
 	  else:
 	    return Rango(tmp2.iz,min(tmp.der,tmp2.der))
 	else:
-	  print "Error al interceptar rangos."
+	  print "Error: Intento de interceptar rangos, subrango vacio."
 	  sys.exit()
 	
     elif self.opr != "":
@@ -713,7 +716,7 @@ class Operacion(indentable):
 	    print "Error: El \"range\" no se puede convertir a \"int\" cotas distintas. "
 	    sys.exit()
 	elif self.left.funcion == "length":
-	  return tmp.der-tmp.iz
+	  return tmp.der-tmp.iz+1
 	elif self.left.funcion == "top":
 	  return tmp.der
 	else:
@@ -938,9 +941,9 @@ class Salida(indentable):
     for i in self.lista:
       if isinstance(i.val,Operacion):	
 	i.val.calculaValor()
-	print str(i.val.valor) + ', ',
+	print str(i.val.valor) + ' ',
       else:
-	print i.val.cad + ', ',
+	print i.val.cad[1:-1] + ' ',
     if self.tipo == 'WRITELN':
       print
 	
