@@ -449,8 +449,7 @@ class Rango:
 class Operacion(indentable):
   # Metodo que calcula el valor de una expresion
   def calculaValor(self):
-    self.valor = 0
-    pass
+    self.valor = self.getValor()
   
   def __init__(self,left,opr="",right=""):
     self.left = left
@@ -593,7 +592,7 @@ class Operacion(indentable):
   def getValor(self):
     global listaTablas
 
-    if right != "":
+    if self.right != "":
       if self.opr == "+" :
 	return self.left.getValor() + self.right.getValor()
 	  
@@ -602,23 +601,28 @@ class Operacion(indentable):
 	  return self.left.getValor() * self.right.getValor()
 	else:
 	  tmp = self.right.getValor()
-	  return Rango(tmp*self.left.getValor().iz,tmp*self.right.getValor())
+	  if tmp >= 0:
+	    return Rango(tmp*self.left.getValor().iz,tmp*self.left.getValor().der)
+	  else:
+	    return Rango(tmp*self.left.getValor().der,tmp*self.left.getValor().iz)
 	  
       elif self.opr == "-":
 	return self.left.getValor() - self.right.getValor()
 	
-      elif self.opr == "/"
+      elif self.opr == "/":
 	tmp = self.right.getValor()
 	if tmp == 0:
 	  print "Error: Division por cero."
-	else
+	  sys.exit()
+	else:
 	  return self.left.getValor() / tmp
 	  
       elif self.opr == "%":
 	tmp = self.right.getValor()
 	if tmp == 0:
 	  print "Error: Se busca el resto al dividir por cero."
-	else
+	  sys.exit()
+	else:
 	  return self.left.getValor() % tmp
 	  
       elif self.opr == ">":
@@ -654,6 +658,7 @@ class Operacion(indentable):
       elif self.opr=="..":
 	if self.left.getValor() > self.right.getValor():
 	  print "Error al crear Rango, expresion izquierda mayor que la expresion entera de la derecha"
+	  sys.exit()
 	else:
 	  return Rango(self.left.getValor(),self.right.getValor())
 	
@@ -668,6 +673,7 @@ class Operacion(indentable):
 	    return Rango(tmp2.iz,min(tmp.der,tmp2.der))
 	else:
 	  print "Error al interceptar rangos."
+	  sys.exit()
 	
     elif self.opr != "":
       if self.opr=="-":
@@ -678,12 +684,14 @@ class Operacion(indentable):
       if type(self.left)==str and self.left!="true" and self.left!="false":
 	no = False
 	#var = SymTable.variable(self.left,'bool')
-	for i in range(1,len(listaTablas)+1):
-	  if listaTablas[-i].isMember(self.left,0)==1:
-	    tmp = listaTablas[-i].find(self.left)
-	    self.tipo = tmp.type
-	    no = True
-	    break
+	tmp = fueDeclarada(self.left)
+	return tmp.valor
+	#for i in range(1,len(listaTablas)+1):
+	  #if listaTablas[-i].isMember(self.left,0)==1:
+	    #tmp = listaTablas[-i].find(self.left)
+	    #self.tipo = tmp.type
+	    #no = True
+	    #break
 	    
 	#Retorno valor de la variable 
 	
@@ -703,6 +711,7 @@ class Operacion(indentable):
 	    return tmp.iz
 	  else:
 	    print "Error: El \"range\" no se puede convertir a \"int\" cotas distintas. "
+	    sys.exit()
 	elif self.left.funcion == "length":
 	  return tmp.der-tmp.iz
 	elif self.left.funcion == "top":
@@ -821,13 +830,6 @@ def p_Operacion_binaria(p):
 	print 'Error: Linea '+str(p.lineno(1))+', columna '+str(col)+': Variable "'+p[1]+'" no declarada'
 	error = 1
 
-
-# Clase usada para representar un rango de RangeX
-
-class rango():
-  def __init__(self,inicio,fin):
-    self.inicio = inicio
-    self.fin = fin
     
     
 #Clase utilizada para representar una instruccion de salida
@@ -876,7 +878,7 @@ class Lectura(indentable):
 	if inicio > fin:
 	  raise ValueError
 	# Almaceno el valor en la variable
-	instanciaVariable.valor = rango(inicio,fin)
+	instanciaVariable.valor = Rango(inicio,fin)
       except ValueError:
 	print 'Rango mal definido'
     
@@ -1141,8 +1143,8 @@ class forc(indentable):
       self.inst.printArbol()
     
     def ejecutar(self):
-      self.rango.inferior = 10
-      self.rango.superior = 20
+      self.rango.inferior = self.rango.getValor().iz
+      self.rango.superior = self.rango.getValor().der
       
       global listaTablas
       listaTablas.append(self.tabla)
