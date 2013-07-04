@@ -566,7 +566,7 @@ class Operacion(indentable):
 	  #error = 1
 	else:
 	  self.ok = True
-      elif type(self.left)==int:
+      elif type(self.left)==int or type(self.left)==long:
 	self.ok = True
 	self.tipo = "int"
       elif self.left == "true" or self.left == "false":
@@ -597,6 +597,9 @@ class Operacion(indentable):
 
     if self.right != "":
       if self.opr == "+" :
+	if self.left.tipo == "int" and self.left.getValor() + self.right.getValor() > 2**31-1:
+	  print "Error: Resultado no puede representarse en 32 bits."
+	  sys.exit()
 	return self.left.getValor() + self.right.getValor()
 	  
       elif self.opr == "*" :
@@ -830,7 +833,7 @@ def p_Operacion_binaria(p):
       retorno = fueDeclarada(p[1])
       if retorno is None:
 	col = find_column(p.slice[1].lexer.lexdata,p.slice[1])
-	print 'Error: Linea '+str(p.lineno(1))+', columna '+str(col)+': Variable "'+p[1]+'" no declarada'
+	print 'Error: Linea '+str(p.lineno(1))+', columna '+str(col)+': Variable "'+str(p[1])+'" no declarada'
 	error = 1
 
     
@@ -941,9 +944,9 @@ class Salida(indentable):
     for i in self.lista:
       if isinstance(i.val,Operacion):	
 	i.val.calculaValor()
-	print str(i.val.valor) + ' ',
+	print str(i.val.valor),
       else:
-	print i.val.cad[1:-1] + ' ',
+	print i.val.cad[1:-1],
     if self.tipo == 'WRITELN':
       print
 	
@@ -1036,6 +1039,9 @@ class bloqueControl(indentable):
   def printArbol(self):
     self.contenido.printArbol()
     
+  def ejecutar(self):
+    self.contenido.ejecutar()
+    
 #Regla del la gramatica utilizada para reconocer un bloque de control
 def p_Bloque_Control(p):
   '''Bloque_Control : Inst
@@ -1067,12 +1073,21 @@ class case(indentable):
     
     self.lista.level = self.level +1
     self.lista.printArbol()
+    
+  def ejecutar(self):
+    tmp = self.var.getValor()
+    for i in self.lista:
+      if tmp >= i.rango.getValor().iz and tmp <= i.rango.getValor().der:
+	i.bloque.ejecutar()
 
 #Clase utilizada para representar una lista de casos dentro de una 
 #instruccion case
 class listaCasos(indentable):
   def __init__(self,listCase):
     self.lista = listCase
+    
+  def __iter__(self):
+    return iter(self.lista)
     
   def printArbol(self):
     for elemento in self.lista:
@@ -1100,6 +1115,9 @@ class casos(indentable):
       
     self.bloque.level = self.level
     self.bloque.printArbol()
+    
+  #def ejecutar(self):
+    
 
 #Regla del parser utilizada para reconocer una instruccion case
 #de rangeX
@@ -1147,7 +1165,7 @@ class forc(indentable):
     
     def ejecutar(self):
       self.rango.inferior = self.rango.getValor().iz
-      self.rango.superior = self.rango.getValor().der
+      self.rango.superior = self.rango.getValor().der+1
       
       global listaTablas
       listaTablas.append(self.tabla)
