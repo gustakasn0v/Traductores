@@ -1,0 +1,15 @@
+Alcance antes:
+0 1 2
+Alcance despues:
+false true false
+Alcance despues:
+-12..-2 2..12
+Leccion aprendida: reportar los errores que aparecen en la definicion.
+Alcance despues:
+-12..12
+-12..12
+-2..2
+Se acerca un error:
+true
+true
+Error: la variable "i" no ha sido inicializada.

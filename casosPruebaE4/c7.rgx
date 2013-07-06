@@ -1,0 +1,17 @@
+program
+begin
+	declare a, b as int
+
+	write "Ingrese numeros para calcular el maximo comun divisor.","\n";
+	write "a: "; read a;
+	write "\nb: "; read b;
+
+	while (not (b == 0)) do
+	begin
+		if (a <= b) then
+			b = b - a
+		else
+			a = a - b
+	end;
+	writeln "Maximo Comun Divisor entre ", a, " y ", b, " es: ", a 
+end

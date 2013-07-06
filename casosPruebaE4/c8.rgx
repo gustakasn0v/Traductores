@@ -1,0 +1,35 @@
+program
+begin
+	declare top_,bottom_ as int;
+					range1, range2 as range
+
+	begin
+		declare numero1, numero2 as int
+
+		writeln "Ingrese dos numeros.";
+		write "Numero 1: "; read numero1; write "\n";
+		write "Numero 2: "; read numero2; write "\n";
+
+		if (numero1 < numero2) then
+			begin
+				top_    = numero2;
+				bottom_ = numero1
+			end
+		else
+			if (numero1 == numero2) then 
+				range1 = numero1..numero2
+			else
+				begin
+					top_    = numero1;
+					bottom_ = numero2
+				end
+		end;
+		
+		write "Ingrese rango: ";read range2;write "\n";
+	
+		range1 = range2 * (-14);
+
+
+		for i in (1..30) + ((bottom_..top_) + (range1 + range2)) do
+			writeln "Variable \"i\" es igual a :", i, "."
+end

@@ -1,0 +1,76 @@
+program
+	begin
+		declare clave1, clave2, clave, cuenta as int
+		
+		cuenta = 100000;
+		writeln "Bienvenido al cajero automático.";
+		write "Ingrese su nueva clave: ";
+		read clave1;
+		write "Ingrese de nuevo su clave: ";
+		read clave2;
+		while (clave1 /= clave2) do
+		begin
+			writeln "Claves no coinciden. Intente de nuevo.";
+			write "Ingrese su nueva clave: ";
+			read clave1;
+			write "\n";
+			write "Ingrese de nuevo su clave: ";
+			read clave2
+		end;
+		clave = clave1;
+		writeln "\nSaldo Inicial: ", cuenta;
+		begin
+			declare operacion as bool;
+					opcion as int
+
+			operacion = true;
+
+			while (operacion) do
+			begin
+				writeln "Que desea hacer?";
+				writeln "Ingrese un numero entre 1 y 3 para Retiro.";
+				writeln "Ingrese un numero entre 4 y 6 para  Deposito.";
+				writeln "Ingrese un numero entre 7 y 9 para  Consulta.";
+				writeln "Ingrese un numero entre 10 y 12 para  Salir.";
+				write "Ingrese opcion:"; read opcion;
+				write "\n";
+
+				case opcion of 
+					1..3 -> 
+						begin 
+							declare retiro as int
+							write "Monto a retirar: "; read retiro;
+							if (retiro > cuenta) then
+								writeln "Error en la transaccion. Se abortara la operacion."
+							else
+								if cuenta - retiro <= 0 then 
+									cuenta = 0
+								else
+									cuenta = cuenta - retiro
+						end;
+					4..6 -> 
+						begin 
+							declare deposito as int
+							write "Monto a depositar: "; read deposito; 
+							if (deposito < 0) then
+								writeln "Error en la transaccion. Se abortara la operacion."
+							else
+								cuenta = cuenta + deposito
+						end;
+					7..9 -> 
+						write "Su ";
+					10..12 -> 
+						begin
+							operacion = false;
+							writeln "Gracias por usar su RangeX-cajero automatico.";
+							writeln "Hasta pronto (la revision del proyecto)."
+						end;
+
+				end;
+				if (opcion <= 0 or opcion > 12) then 
+					writeln "Opcion invalida. Intente de nuevo."
+				else
+					writeln "Saldo Actual: ", cuenta
+			end
+		end
+	end

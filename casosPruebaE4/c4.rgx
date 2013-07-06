@@ -1,0 +1,50 @@
+program
+begin
+  declare a, b, c as int;
+          d, e, f as range;
+          g, h, i as bool
+  
+  a = 0;
+  b = 1;
+  c = 2;
+  writeln "Alcance antes:";
+  write a, " ";
+  write b, " ";
+  writeln c;
+  
+  begin
+  	declare a, b, c as bool
+
+  	a = false;
+  	b = true;
+  	c = not((false or true) and true);
+  	writeln "Alcance despues:";
+  	write a, " ";
+  	write b, " ";
+  	writeln c
+  end;
+  begin
+  	declare a, b as range
+
+  	a = c..(c+10);
+  	b = a * (-1);
+  	writeln "Alcance despues:";
+  	writeln b, " ", a; //Ud decide cual formato de salida usar: .. o ,
+
+  	d = a + b;
+  	e = b + a;
+  	f = top(b)..bottom(a);
+    writeln "Leccion aprendida: reportar los errores que aparecen en la definicion.";
+  	writeln "Alcance despues:";
+  	writeln d;
+  	writeln e;
+  	writeln f
+  end;
+  g = true and (not false);
+  h = g or (not g);
+  writeln "Se acerca un error:";
+  writeln g;
+  writeln h;
+  writeln i
+end
+

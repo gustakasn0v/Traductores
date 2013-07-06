@@ -1,0 +1,23 @@
+program
+begin
+  declare i, j, n as int
+
+  i = 0;
+  j = 1;
+  write "Ingrese un numero: ";
+  read n; // La salida sera hasta n = 4
+
+  if (n == 0) then
+    writeln "Fibonacci de ", 0, " es ", 1
+  else
+    for k in 0..(n-1) do 
+    begin
+    	declare l as int
+
+    	l = i + j;
+    	i = j;
+    	j = l;
+      writeln "Fibonacci de ", k + 1, " es ", j
+    end
+end
+

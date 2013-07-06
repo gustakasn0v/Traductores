@@ -39,9 +39,11 @@ class indentable:
 # precedencia de las declaraciones
 
 def fueDeclarada(id):
+  
   global listaTablas
   for i in range(1,len(listaTablas)+1):
-    if listaTablas[-i].isMember(id,0)==1:
+    
+    if listaTablas[-i] is not None and listaTablas[-i].isMember(id,0)==1:
       tmp = listaTablas[-i].find(id)
       return tmp
   return None
@@ -84,9 +86,14 @@ class bloque(indentable):
   
   def ejecutar(self):
     global listaTablas
-    listaTablas.append(self.tabla)
+    agregada = 0
+    if self.tabla is not None:
+      agregada = 1
+      listaTablas.append(self.tabla)
     for i in self:
       i.ejecutar()
+    if agregada == 1:
+      self.tabla = listaTablas.pop()
     
     
 #Regla del parser que define lo que es un bloque de instrucciones
@@ -592,14 +599,16 @@ class Operacion(indentable):
   #
   
   
-  def getValor(self):
+  def getValor(self,instancia = None):
     global listaTablas
 
     if self.right != "":
       if self.opr == "+" :
-	if self.left.tipo == "int" and self.left.getValor() + self.right.getValor() > 2**31-1:
+	if isinstance(self.left.getValor(1),Rango) and isinstance(self.right.getValor(1),Rango):
+	  return Rango(min(self.left.getValor(1).iz,self.right.getValor(1).iz),max(self.left.getValor(1).der,self.right.getValor(1).der))
+	elif self.left.tipo == "int" and self.left.getValor() + self.right.getValor() > 2**31-1:
 	  print "Error: Resultado no puede representarse en 32 bits."
-	  sys.exit()
+	  sys.exit(1)
 	return self.left.getValor() + self.right.getValor()
 	  
       elif self.opr == "*" :
@@ -619,7 +628,7 @@ class Operacion(indentable):
 	tmp = self.right.getValor()
 	if tmp == 0:
 	  print "Error: Intento de division por cero."
-	  sys.exit()
+	  sys.exit(1)
 	else:
 	  return self.left.getValor() / tmp
 	  
@@ -627,7 +636,7 @@ class Operacion(indentable):
 	tmp = self.right.getValor()
 	if tmp == 0:
 	  print "Error: Intento de buscar el resto al dividir por cero."
-	  sys.exit()
+	  sys.exit(1)
 	else:
 	  return self.left.getValor() % tmp
 	  
@@ -664,7 +673,7 @@ class Operacion(indentable):
       elif self.opr=="..":
 	if self.left.getValor() > self.right.getValor():
 	  print "Error: Intento de crear Rango, expresion izquierda mayor que la expresion entera de la derecha"
-	  sys.exit()
+	  sys.exit(1)
 	else:
 	  return Rango(self.left.getValor(),self.right.getValor())
 	
@@ -679,7 +688,7 @@ class Operacion(indentable):
 	    return Rango(tmp2.iz,min(tmp.der,tmp2.der))
 	else:
 	  print "Error: Intento de interceptar rangos, subrango vacio."
-	  sys.exit()
+	  sys.exit(1)
 	
     elif self.opr != "":
       if self.opr=="-":
@@ -691,7 +700,12 @@ class Operacion(indentable):
 	no = False
 	#var = SymTable.variable(self.left,'bool')
 	tmp = fueDeclarada(self.left)
-	return tmp.valor
+	try:
+	  return tmp.valor
+	except AttributeError:
+	  print 'Error: La variable "'+self.left+'" no esta inicializada'
+	  sys.exit(1)
+       
 	#for i in range(1,len(listaTablas)+1):
 	  #if listaTablas[-i].isMember(self.left,0)==1:
 	    #tmp = listaTablas[-i].find(self.left)
@@ -717,13 +731,16 @@ class Operacion(indentable):
 	    return tmp.iz
 	  else:
 	    print "Error: El \"range\" no se puede convertir a \"int\" cotas distintas. "
-	    sys.exit()
+	    sys.exit(1)
 	elif self.left.funcion == "length":
 	  return tmp.der-tmp.iz+1
 	elif self.left.funcion == "top":
 	  return tmp.der
 	else:
-	  return tmp.iz
+	  if instancia is None:
+	    return tmp.iz
+	  else:
+	    return tmp
 	   
 	  
 	  ##
