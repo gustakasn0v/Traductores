@@ -1000,9 +1000,14 @@ def p_Lista_Aux(p):
 #en rangeX
 class ifc(indentable):
   def __init__(self,cond,bloque,bloque2=None):
+    global error
     self.cond = cond
     self.bloque = bloque
     self.bloque2 = bloque2
+    if self.cond.tipo != 'bool':
+	pos = self.cond.left.getPosition()
+	print "Error: Linea %d, Columna %d: La expresion del If debe ser booleana" % (pos[0],pos[1])
+	error = 1
     
   def printArbol(self):
     self.printIndent()
@@ -1143,9 +1148,14 @@ def p_Casos(p):
 #por rangeX
 class forc(indentable):
     def __init__(self,var,rango,inst):
+      global error
       self.var = var
       self.rango = rango
       self.inst = inst
+      if self.rango.tipo != 'range':
+	pos = self.rango.left.getPosition()
+	print "Error: Linea %d, Columna %d: La expresion del For debe ser un rango" % (pos[0],pos[1])
+	error = 1
       
     def printArbol(self):
       self.printIndent()
@@ -1213,8 +1223,13 @@ def p_Variable_For(p):
 #Clase utilizada para representar una instruccion while en rangeX
 class whilec(indentable):
     def __init__(self,cond,inst):
+      global error
       self.cond = cond
       self.inst = inst
+      if self.cond.tipo != 'bool':
+	pos = self.cond.left.getPosition()
+	print "Error: Linea %d, Columna %d: La expresion del While debe ser booleana" % (pos[0],pos[1])
+	error = 1
       
     def printArbol(self):
       self.printIndent()
@@ -1226,6 +1241,12 @@ class whilec(indentable):
       #self.printIndent(),
       self.inst.level = self.level+1
       self.inst.printArbol()
+      
+    def ejecutar(self):
+      self.cond.calculaValor()
+      while self.cond.valor:
+	self.inst.ejecutar()
+	self.cond.calculaValor()
 
 #Regla de la gramatica que reconoce una instruccion while en rangeX
 def p_Inst_While(p):

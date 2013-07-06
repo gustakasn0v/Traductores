@@ -1,10 +1,21 @@
 program
 begin
-	declare x as range
+	declare x as int
+	read x;
 	writeln x;
-	for i in 1..5 do
+	while x+10 do
 	begin
-	  writeln "Huevo";
-	  writeln "Pipe"
+	  writeln "Lo tengo grande";
+	  x = x+1
+	end;
+	
+	for i in 1..2 do
+	begin
+	  writeln "Todo"
+	end;
+	
+	if x+1 then
+	begin
+	  writeln "Falla"
 	end
 end
